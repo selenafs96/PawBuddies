@@ -4,9 +4,4 @@
 
 Hola que tal
 
-
-
-* bbdd
-* organización
-* funcionaldiad
-* 
+Todo bien
