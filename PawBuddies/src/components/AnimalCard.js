@@ -1,8 +1,57 @@
 // components/AnimalCard.js
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 
 export default function AnimalCard({ nombre, edad, imagen }) {
+  const { width } = useWindowDimensions();
+  const scale = width / 375; // 375 es el ancho base de referencia (iPhone 8)
+
+  // Función para escalar tamaños
+  const scaleFont = (size) => size * scale;
+  const scaleSize = (size) => size * scale;
+
+  const styles = StyleSheet.create({
+    card: {
+      backgroundColor: '#FFFFFF',
+      borderRadius: scaleSize(12),
+      overflow: 'hidden',
+      flex: 1,
+      margin: scaleSize(5),
+    },
+    imagen: {
+      width: '100%',
+      height: scaleSize(95),
+      resizeMode: 'cover',
+    },
+    info: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: scaleSize(8),
+    },
+    nombre: {
+      fontWeight: '600',
+      fontSize: scaleFont(14),
+      color: '#222',
+    },
+    edad: {
+      fontSize: scaleFont(12),
+      color: '#888',
+      marginTop: scaleSize(2),
+    },
+    boton: {
+      backgroundColor: '#3DBDB0',
+      borderRadius: scaleSize(20),
+      paddingHorizontal: scaleSize(14),
+      paddingVertical: scaleSize(5),
+    },
+    botonTexto: {
+      color: '#FFFFFF',
+      fontSize: scaleFont(12),
+      fontWeight: '600',
+    },
+  });
+
   return (
     <View style={styles.card}>
       <Image source={{ uri: imagen }} style={styles.imagen} />
@@ -18,45 +67,3 @@ export default function AnimalCard({ nombre, edad, imagen }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    overflow: 'hidden',
-    flex: 1,
-    margin: 6,
-  },
-  imagen: {
-    width: '100%',
-    height: 130,
-    resizeMode: 'cover',
-  },
-  info: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 8,
-  },
-  nombre: {
-    fontWeight: '600',
-    fontSize: 14,
-    color: '#222',
-  },
-  edad: {
-    fontSize: 12,
-    color: '#888',
-    marginTop: 2,
-  },
-  boton: {
-    backgroundColor: '#3DBDB0',
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    paddingVertical: 5,
-  },
-  botonTexto: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-});
