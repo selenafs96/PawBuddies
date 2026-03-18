@@ -1,5 +1,5 @@
 // screens/AdoptaScreen.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,28 +8,25 @@ import {
   StyleSheet,
   SafeAreaView,
   useWindowDimensions,
+  Alert,
 } from 'react-native';
 import AnimalCard from '../components/AnimalCard';
 import { Image } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { supabase, getPublicUrl } from '../lib/supabase';
 
-const animales = [
+// Datos de ejemplo para el modo "offline" / sin conexión.
+// Cuando la app esté lista con Supabase, se reemplazará por datos reales.
+const ejemploAnimales = [
   { id: '1', nombre: 'Luna', edad: '2 años', tipo: 'perro', imagen: 'https://placedog.net/400/300?id=1' },
   { id: '2', nombre: 'Misi', edad: '3 años', tipo: 'gato', imagen: 'https://placekitten.com/400/300' },
   { id: '3', nombre: 'Rocky', edad: '1 año', tipo: 'gato', imagen: 'https://placekitten.com/401/300' },
   { id: '4', nombre: 'Toby', edad: '4 años', tipo: 'perro', imagen: 'https://placedog.net/400/300?id=2' },
-  { id: '5', nombre: 'Bono', edad: '5 años', tipo: 'perro', imagen: 'https://placedog.net/400/300?id=3' },
-  { id: '6', nombre: 'Nala', edad: '2 años', tipo: 'gato', imagen: 'https://placekitten.com/402/300' },
-  { id: '7', nombre: 'Max', edad: '6 meses', tipo: 'gato', imagen: 'https://placekitten.com/403/300' },
-  { id: '8', nombre: 'Cleo', edad: '3 años', tipo: 'perro', imagen: 'https://placedog.net/400/300?id=4' },
-  { id: '9', nombre: 'Bella', edad: '2 años', tipo: 'gato', imagen: 'https://placekitten.com/404/300' },
-  { id: '10', nombre: 'Charlie', edad: '1 año', tipo: 'perro', imagen: 'https://placedog.net/400/300?id=5' },
-  { id: '11', nombre: 'Sophie', edad: '4 años', tipo: 'gato', imagen: 'https://placekitten.com/405/300' },
-  { id: '12', nombre: 'Oliver', edad: '3 años', tipo: 'perro', imagen: 'https://placedog.net/400/300?id=6' },
-  { id: '13', nombre: 'Emma', edad: '2 años', tipo: 'gato', imagen: 'https://placekitten.com/406/300' },
-  { id: '14', nombre: 'Leo', edad: '1 año', tipo: 'perro', imagen: 'https://placedog.net/400/300?id=7' },
-  { id: '15', nombre: 'Mia', edad: '5 años', tipo: 'gato', imagen: 'https://placekitten.com/407/300' },
-  { id: '16', nombre: 'Jack', edad: '2 años', tipo: 'perro', imagen: 'https://placedog.net/400/300?id=8' },
 ];
+
+// Cambia este nombre por el bucket que uses en Supabase Storage.
+const SUPABASE_BUCKET = 'animal-images';
+
 
 export default function AdoptaScreen() {
   const { width } = useWindowDimensions();
@@ -41,8 +38,44 @@ export default function AdoptaScreen() {
   const NAV_HEIGHT = scaleSize(50);
 
   const [filtro, setFiltro] = useState('todos'); // 'todos' | 'perro' | 'gato'
+  const [animales, setAnimales] = useState(ejemploAnimales);
+  const [loading, setLoading] = useState(false);
 
-  const animalesFiltrados = animales.filter(a =>
+  const fetchAnimales = async () => {
+    setLoading(true);
+    const { data, error } = await supabase.from('animals').select('*');
+
+    if (error) {
+      console.warn('Error al cargar animales desde Supabase:', error.message);
+      setLoading(false);
+      return;
+    }
+
+    const datosConImagen = data.map((item) => {
+      const publicUrl =
+        item.imagen ||
+        (item.image_path
+          ? getPublicUrl(SUPABASE_BUCKET, item.image_path)
+          : undefined);
+
+      return {
+        id: item.id?.toString() ?? `${Math.random()}`,
+        nombre: item.nombre,
+        edad: item.edad,
+        tipo: item.tipo,
+        imagen: publicUrl,
+      };
+    });
+
+    setAnimales(datosConImagen);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAnimales();
+  }, []);
+
+  const animalesFiltrados = animales.filter((a) =>
     filtro === 'todos' ? true : a.tipo === filtro
   );
 
