@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { supabase } from './lib/supabase.js'
 import { useEffect, useState } from 'react';
+import { AdoptableAnimalDetail } from './src/screens/AdoptableAnimalDetail.js';
 
 export default function App() {
 
@@ -20,12 +21,18 @@ export default function App() {
     }
   }
   return (
-    <View style={styles.container}>
-      {data.map((item, index) => (
-        <Text key={item.id_protectora}>{item.nombre}: {item.presentacion}</Text>
-      ))}
-      <StatusBar style="auto" />
-    </View>
+    <>
+      {/* <View style={styles.container}>
+        {data.map((item, index) => (
+          <Text key={item.id_protectora}>{item.nombre}: {item.presentacion}</Text>
+        ))}
+        <StatusBar style="auto" />
+      </View> */}
+      <View>
+        <AdoptableAnimalDetail />
+      </View>
+    </>
+
   );
 }
 
