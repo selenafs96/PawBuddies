@@ -20,7 +20,7 @@ export default function AnimalCard({ nombre, edad, imagen }) {
     },
     imagen: {
       width: '100%',
-      height: scaleSize(95),
+      height: scaleSize(125),
       resizeMode: 'cover',
     },
     info: {
