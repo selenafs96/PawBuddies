@@ -23,3 +23,26 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 export function getPublicUrl(bucket, path) {
   return supabase.storage.from(bucket).getPublicUrl(path).data.publicUrl;
 }
+
+/**
+ * Sube un archivo local (URI) al bucket indicado y devuelve la ruta en el bucket.
+ * @param {string} bucket - Nombre del bucket en Supabase Storage.
+ * @param {string} path - Ruta en el bucket donde se guardará el archivo.
+ * @param {string} fileUri - URI local (expo) del archivo.
+ */
+export async function uploadFile(bucket, path, fileUri) {
+  // Expo ImagePicker devuelve un URI local. Con fetch podemos convertirlo a blob.
+  const response = await fetch(fileUri);
+  const blob = await response.blob();
+
+  const { data, error } = await supabase.storage.from(bucket).upload(path, blob, {
+    cacheControl: '3600',
+    upsert: false,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
