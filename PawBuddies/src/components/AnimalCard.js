@@ -30,11 +30,13 @@ export default function AnimalCard({ nombre, edad, imagen }) {
       padding: scaleSize(8),
     },
     nombre: {
+      fontFamily: 'TiltNeon',
       fontWeight: '600',
       fontSize: scaleFont(14),
       color: '#222',
     },
     edad: {
+      fontFamily: 'TiltNeon',
       fontSize: scaleFont(12),
       color: '#888',
       marginTop: scaleSize(2),
@@ -46,6 +48,7 @@ export default function AnimalCard({ nombre, edad, imagen }) {
       paddingVertical: scaleSize(5),
     },
     botonTexto: {
+      fontFamily: 'TiltNeon',
       color: '#FFFFFF',
       fontSize: scaleFont(12),
       fontWeight: '600',

@@ -124,6 +124,7 @@ export default function AdoptaScreen() {
       backgroundColor: '#FFFFFF',
     },
     titulo: {
+      fontFamily: 'TiltNeon',
       color: '#222222',
       fontSize: scaleFont(20),
       fontWeight: '600',

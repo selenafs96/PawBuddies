@@ -13,11 +13,3 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     detectSessionInUrl: false,
   },
 });
-
-export function getPublicUrl(bucket, path) {
-  if (!bucket || !path) return undefined;
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from(bucket).getPublicUrl(path);
-  return publicUrl;
-}

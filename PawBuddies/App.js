@@ -1,6 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text } from 'react-native';
+import { useFonts } from 'expo-font';
 import AdoptaScreen from './src/screens/AdoptaScreen';
 
 class ErrorBoundary extends React.Component {
@@ -29,6 +30,14 @@ class ErrorBoundary extends React.Component {
 }
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    TiltNeon: require('./assets/fonts/TiltNeon-Regular.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <ErrorBoundary>
