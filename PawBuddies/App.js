@@ -1,24 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { useFonts } from 'expo-font';
-import AdoptaScreen from './src/screens/AdoptaScreen';
+import { supabase } from './lib/supabase.js'
+import { useEffect, useState } from 'react';
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    TiltNeon: require('./assets/fonts/TiltNeon-Regular.ttf'),
-  });
 
-  if (!fontsLoaded) return null;
+  const [data, setData] = useState([]);
 
-  Text.defaultProps = Text.defaultProps || {};
-  Text.defaultProps.style = {
-    ...(Text.defaultProps.style || {}),
-    fontFamily: 'TiltNeon',
-  };
+  useEffect(() => {
+    fetchData()
+  }, []);
 
+  async function fetchData() {
+    const {data: result, error} = await supabase.from('protectora').select('*');
+    if (error) {
+      console.log(error);
+    } else {
+      setData(result);
+    }
+  }
   return (
     <View style={styles.container}>
-      <AdoptaScreen />
+      <Text>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
     </View>
   );
