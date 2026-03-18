@@ -38,6 +38,7 @@ export default function AdoptaScreen() {
   // Función para escalar tamaños
   const scaleFont = (size) => size * scale;
   const scaleSize = (size) => size * scale;
+  const NAV_HEIGHT = scaleSize(50);
 
   const [filtro, setFiltro] = useState('todos'); // 'todos' | 'perro' | 'gato'
 
@@ -72,6 +73,7 @@ export default function AdoptaScreen() {
       backgroundColor: '#3DBDB0',
       paddingHorizontal: scaleSize(25),
       paddingTop: scaleSize(12),
+      paddingBottom: NAV_HEIGHT,
     },
     filtrosRow: {
       flexDirection: 'row',
@@ -112,7 +114,7 @@ export default function AdoptaScreen() {
       tintColor: '#FFFFFF',
     },
     grid: {
-      paddingBottom: 100,
+      paddingBottom: scaleSize(16),
     },
     bottomNav: {
       flexDirection: 'row',
@@ -196,7 +198,7 @@ export default function AdoptaScreen() {
             numColumns={2}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.grid}
-            ListFooterComponent={<View style={{ height:10 }} />}
+            ListFooterComponent={<View style={{ height: scaleSize(16) }} />}
           />
 
         </View>
