@@ -21,7 +21,9 @@ export default function App() {
   }
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      {data.map((item, index) => (
+        <Text key={item.id_protectora}>{item.nombre}: {item.presentacion}</Text>
+      ))}
       <StatusBar style="auto" />
     </View>
   );
