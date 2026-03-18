@@ -1,29 +1,39 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { supabase } from './lib/supabase.js'
-import { useEffect, useState } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import AdoptaScreen from './src/screens/AdoptaScreen';
+
+class ErrorBoundary extends React.Component {
+  state = { error: null };
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
+  componentDidCatch(error, info) {
+    console.error('ErrorBoundary caught:', error, info);
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorTitle}>Error en la app</Text>
+          <Text style={styles.errorText}>{String(this.state.error)}</Text>
+        </View>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 export default function App() {
-
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    fetchData()
-  }, []);
-
-  async function fetchData() {
-    const {data: result, error} = await supabase.from('protectora').select('*');
-    if (error) {
-      console.log(error);
-    } else {
-      setData(result);
-    }
-  }
   return (
     <View style={styles.container}>
-      {data.map((item, index) => (
-        <Text key={item.id_protectora}>{item.nombre}: {item.presentacion}</Text>
-      ))}
+      <ErrorBoundary>
+        <AdoptaScreen />
+      </ErrorBoundary>
       <StatusBar style="auto" />
     </View>
   );
@@ -33,5 +43,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  errorTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 12,
+  },
+  errorText: {
+    textAlign: 'center',
   },
 });

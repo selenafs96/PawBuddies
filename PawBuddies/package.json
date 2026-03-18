@@ -11,13 +11,17 @@
   "dependencies": {
     "@expo/metro": "^54.2.0",
     "@expo/metro-runtime": "~55.0.6",
+    "@supabase/supabase-js": "^2.36.0",
     "expo": "~55.0.5",
     "expo-constants": "~55.0.7",
+    "expo-image-picker": "~55.0.13",
     "expo-status-bar": "~55.0.4",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-native": "0.83.2",
     "react-native-web": "^0.21.0",
+    "react-native-url-polyfill": "^1.0.12",
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "runtime": "^0.9.10"
   },
   "private": true

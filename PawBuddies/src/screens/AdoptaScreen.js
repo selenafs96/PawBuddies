@@ -1,5 +1,5 @@
 // screens/AdoptaScreen.js
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,18 +8,11 @@ import {
   StyleSheet,
   SafeAreaView,
   useWindowDimensions,
-  Alert,
-  Modal,
-  TextInput,
-  ActivityIndicator,
+  Image,
 } from 'react-native';
 import AnimalCard from '../components/AnimalCard';
-import { Image } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import { supabase, getPublicUrl, uploadFile } from '../lib/supabase';
 
-// Datos de ejemplo para el modo "offline" / sin conexión.
-// Cuando la app esté lista con Supabase, se reemplazará por datos reales.
+// Datos de ejemplo para la vista (sin conexión)
 const ejemploAnimales = [
   { id: '1', nombre: 'Luna', edad: '2 años', tipo: 'perro', imagen: 'https://placedog.net/400/300?id=1' },
   { id: '2', nombre: 'Misi', edad: '3 años', tipo: 'gato', imagen: 'https://placekitten.com/400/300' },
@@ -27,143 +20,23 @@ const ejemploAnimales = [
   { id: '4', nombre: 'Toby', edad: '4 años', tipo: 'perro', imagen: 'https://placedog.net/400/300?id=2' },
 ];
 
-// Cambia este nombre por el bucket que uses en Supabase Storage.
-const SUPABASE_BUCKET = 'animal-images';
-
-
 export default function AdoptaScreen() {
   const { width } = useWindowDimensions();
   const scale = width / 375; // 375 es el ancho base de referencia (iPhone 8)
 
-  // Función para escalar tamaños
   const scaleFont = (size) => size * scale;
   const scaleSize = (size) => size * scale;
   const NAV_HEIGHT = scaleSize(50);
 
   const [filtro, setFiltro] = useState('todos'); // 'todos' | 'perro' | 'gato'
-  const [animales, setAnimales] = useState(ejemploAnimales);
-  const [loading, setLoading] = useState(false);
-
-  // Estados para agregar un nuevo animal
-  const [modalVisible, setModalVisible] = useState(false);
-  const [nuevoNombre, setNuevoNombre] = useState('');
-  const [nuevoEdad, setNuevoEdad] = useState('');
-  const [nuevoTipo, setNuevoTipo] = useState('perro');
-  const [selectedImageUri, setSelectedImageUri] = useState(null);
-  const [uploading, setUploading] = useState(false);
-
-  const fetchAnimales = async () => {
-    setLoading(true);
-    const { data, error } = await supabase.from('animals').select('*');
-
-    if (error) {
-      console.warn('Error al cargar animales desde Supabase:', error.message);
-      setLoading(false);
-      return;
-    }
-
-    const datosConImagen = data.map((item) => {
-      const publicUrl =
-        item.imagen ||
-        (item.image_path
-          ? getPublicUrl(SUPABASE_BUCKET, item.image_path)
-          : undefined);
-
-      return {
-        id: item.id?.toString() ?? `${Math.random()}`,
-        nombre: item.nombre,
-        edad: item.edad,
-        tipo: item.tipo,
-        imagen: publicUrl,
-      };
-    });
-
-    setAnimales(datosConImagen);
-    setLoading(false);
-  };
-
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permiso denegado', 'Necesitamos permiso para acceder a tus fotos.');
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0.8,
-    });
-
-    if (result.canceled) return;
-
-    const uri = result.assets ? result.assets[0].uri : result.uri;
-    setSelectedImageUri(uri);
-  };
-
-  const handleSaveAnimal = async () => {
-    if (!nuevoNombre.trim() || !nuevoEdad.trim()) {
-      Alert.alert('Faltan datos', 'Completa nombre y edad.');
-      return;
-    }
-
-    if (!selectedImageUri) {
-      Alert.alert('Sin imagen', 'Selecciona una imagen para la mascota.');
-      return;
-    }
-
-    setUploading(true);
-
-    try {
-      const fileExt = selectedImageUri.split('.').pop();
-      const fileName = `animal_${Date.now()}.${fileExt}`;
-      const filePath = `animals/${fileName}`;
-
-      await uploadFile(SUPABASE_BUCKET, filePath, selectedImageUri);
-
-      const { error } = await supabase.from('animals').insert([
-        {
-          nombre: nuevoNombre,
-          edad: nuevoEdad,
-          tipo: nuevoTipo,
-          image_path: filePath,
-        },
-      ]);
-
-      if (error) {
-        throw error;
-      }
-
-      // Refrescar lista
-      await fetchAnimales();
-
-      setModalVisible(false);
-      setNuevoNombre('');
-      setNuevoEdad('');
-      setNuevoTipo('perro');
-      setSelectedImageUri(null);
-    } catch (error) {
-      console.warn('Error guardando animal:', error);
-      Alert.alert('Error', 'No se pudo guardar la mascota.');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAnimales();
-  }, []);
+  const [animales] = useState(ejemploAnimales);
 
   const animalesFiltrados = animales.filter((a) =>
     filtro === 'todos' ? true : a.tipo === filtro
   );
 
-  // FlatList necesita pares para la grid de 2 columnas
   const renderItem = ({ item }) => (
-    <AnimalCard
-      nombre={item.nombre}
-      edad={item.edad}
-      imagen={item.imagen}
-    />
+    <AnimalCard nombre={item.nombre} edad={item.edad} imagen={item.imagen} />
   );
 
   const styles = StyleSheet.create({
@@ -226,115 +99,6 @@ export default function AdoptaScreen() {
     },
     grid: {
       paddingBottom: scaleSize(16),
-    },
-    addButton: {
-      backgroundColor: '#FFFFFF',
-      paddingVertical: scaleSize(10),
-      paddingHorizontal: scaleSize(12),
-      borderRadius: scaleSize(12),
-      alignItems: 'center',
-      marginBottom: scaleSize(12),
-    },
-    addButtonText: {
-      fontSize: scaleFont(14),
-      fontWeight: '600',
-      color: '#3DBDB0',
-    },
-    modalOverlay: {
-      flex: 1,
-      backgroundColor: 'rgba(0,0,0,0.35)',
-      justifyContent: 'center',
-      padding: scaleSize(20),
-    },
-    modalContent: {
-      backgroundColor: '#FFFFFF',
-      borderRadius: scaleSize(16),
-      padding: scaleSize(20),
-    },
-    modalTitle: {
-      fontSize: scaleFont(18),
-      fontWeight: '700',
-      marginBottom: scaleSize(16),
-      textAlign: 'center',
-    },
-    input: {
-      borderWidth: 1,
-      borderColor: '#E5E5E5',
-      borderRadius: scaleSize(12),
-      paddingHorizontal: scaleSize(12),
-      paddingVertical: scaleSize(10),
-      marginBottom: scaleSize(10),
-      fontSize: scaleFont(14),
-    },
-    tipoRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: scaleSize(12),
-    },
-    tipoBtn: {
-      flex: 1,
-      borderWidth: 1,
-      borderColor: '#3DBDB0',
-      borderRadius: scaleSize(12),
-      paddingVertical: scaleSize(10),
-      alignItems: 'center',
-      marginHorizontal: scaleSize(4),
-    },
-    tipoBtnActive: {
-      backgroundColor: '#3DBDB0',
-    },
-    tipoBtnText: {
-      color: '#3DBDB0',
-      fontWeight: '600',
-      fontSize: scaleFont(14),
-    },
-    tipoBtnTextActive: {
-      color: '#FFFFFF',
-      fontWeight: '600',
-      fontSize: scaleFont(14),
-    },
-    pickImageBtn: {
-      backgroundColor: '#3DBDB0',
-      borderRadius: scaleSize(12),
-      paddingVertical: scaleSize(10),
-      alignItems: 'center',
-      marginBottom: scaleSize(10),
-    },
-    pickImageBtnText: {
-      color: '#FFFFFF',
-      fontSize: scaleFont(14),
-      fontWeight: '600',
-    },
-    previewImage: {
-      width: '100%',
-      height: scaleSize(150),
-      borderRadius: scaleSize(12),
-      marginBottom: scaleSize(12),
-    },
-    modalActions: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    modalBtn: {
-      flex: 1,
-      paddingVertical: scaleSize(10),
-      borderRadius: scaleSize(12),
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    cancelBtn: {
-      backgroundColor: '#F0F0F0',
-      marginRight: scaleSize(8),
-    },
-    saveBtn: {
-      backgroundColor: '#3DBDB0',
-    },
-    modalBtnText: {
-      fontSize: scaleFont(14),
-      fontWeight: '600',
-    },
-    saveBtnText: {
-      color: '#FFFFFF',
     },
     bottomNav: {
       flexDirection: 'row',
@@ -410,125 +174,16 @@ export default function AdoptaScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* BOTÓN AGREGAR ANIMAL */}
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => setModalVisible(true)}
-          >
-            <Text style={styles.addButtonText}>+ Agregar mascota</Text>
-          </TouchableOpacity>
-
           {/* GRID DE ANIMALES */}
           <FlatList
             data={animalesFiltrados}
             renderItem={renderItem}
-            keyExtractor={item => item.id}
+            keyExtractor={(item) => item.id}
             numColumns={2}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.grid}
             ListFooterComponent={<View style={{ height: scaleSize(16) }} />}
           />
-
-          {/* MODAL AGREGAR ANIMAL */}
-          <Modal
-            visible={modalVisible}
-            animationType="slide"
-            transparent
-            onRequestClose={() => setModalVisible(false)}
-          >
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalContent}>
-                <Text style={styles.modalTitle}>Agregar mascota</Text>
-
-                <TextInput
-                  style={styles.input}
-                  placeholder="Nombre"
-                  value={nuevoNombre}
-                  onChangeText={setNuevoNombre}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Edad"
-                  value={nuevoEdad}
-                  onChangeText={setNuevoEdad}
-                />
-
-                <View style={styles.tipoRow}>
-                  <TouchableOpacity
-                    style={[
-                      styles.tipoBtn,
-                      nuevoTipo === 'perro' && styles.tipoBtnActive,
-                    ]}
-                    onPress={() => setNuevoTipo('perro')}
-                  >
-                    <Text
-                      style={
-                        nuevoTipo === 'perro'
-                          ? styles.tipoBtnTextActive
-                          : styles.tipoBtnText
-                      }
-                    >
-                      Perro
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      styles.tipoBtn,
-                      nuevoTipo === 'gato' && styles.tipoBtnActive,
-                    ]}
-                    onPress={() => setNuevoTipo('gato')}
-                  >
-                    <Text
-                      style={
-                        nuevoTipo === 'gato'
-                          ? styles.tipoBtnTextActive
-                          : styles.tipoBtnText
-                      }
-                    >
-                      Gato
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                <TouchableOpacity
-                  style={styles.pickImageBtn}
-                  onPress={pickImage}
-                >
-                  <Text style={styles.pickImageBtnText}>
-                    {selectedImageUri ? 'Cambiar imagen' : 'Seleccionar imagen'}
-                  </Text>
-                </TouchableOpacity>
-
-                {selectedImageUri ? (
-                  <Image
-                    source={{ uri: selectedImageUri }}
-                    style={styles.previewImage}
-                  />
-                ) : null}
-
-                {uploading ? (
-                  <ActivityIndicator size="small" color="#3DBDB0" />
-                ) : (
-                  <View style={styles.modalActions}>
-                    <TouchableOpacity
-                      style={[styles.modalBtn, styles.cancelBtn]}
-                      onPress={() => setModalVisible(false)}
-                    >
-                      <Text style={styles.modalBtnText}>Cancelar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.modalBtn, styles.saveBtn]}
-                      onPress={handleSaveAnimal}
-                    >
-                      <Text style={[styles.modalBtnText, styles.saveBtnText]}>
-                        Guardar
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
-            </View>
-          </Modal>
 
         </View>
       </SafeAreaView>
@@ -551,5 +206,5 @@ export default function AdoptaScreen() {
 
     </View>
   );
-};
+}
 
