@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { supabase } from '../../lib/supabase.js'
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ScrollView } from "react-native-web";
 
 export const AdoptableAnimalDetail = () => {
     
     const [imageUrl, setImageUrl] = useState(null);
+    const insets = useSafeAreaInsets();
     
       useEffect(() => {
         fetchData()
@@ -21,8 +24,10 @@ export const AdoptableAnimalDetail = () => {
       }
 
     return (
-        <View>
+        <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}>
+          <ScrollView>
             <Image source={{uri: imageUrl}} style={styles.image}/>
+          </ScrollView> 
         </View>
     )
 }
