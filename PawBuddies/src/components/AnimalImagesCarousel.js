@@ -14,6 +14,10 @@ const AnimalImagesCarousel = ({ filter, value }) => {
 
   //Para crear un índice para cada imagen
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const MARGIN = 20;
+  const CAROUSEL_WIDTH = windowWidth - (MARGIN * 2);
+
   const handleScroll = (event) => {
     const scrollOffset = event.nativeEvent.contentOffset.x;
     const index = Math.round(scrollOffset / windowWidth);
@@ -21,13 +25,24 @@ const AnimalImagesCarousel = ({ filter, value }) => {
   };
 
   const renderImage = ({ item }) => (
-    <View style={[styles.imageContainer, { width: windowWidth }]}>
+    <View style={ { width: windowWidth }}>
       <Image source={{ uri: item }} style={styles.image} resizeMode="cover" />
     </View>
   );
 
   return (
-    <View style={styles.imageContainer}>
+    <View style={styles.mainContainer}>
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          width: "100%",
+          height: 40,
+          backgroundColor: '#FFFFFF',
+          zIndex: -1,
+        }}
+      />
+      <View>
       <FlatList
         data={imageUrls}
         renderItem={renderImage}
@@ -37,23 +52,23 @@ const AnimalImagesCarousel = ({ filter, value }) => {
         keyExtractor={(item, index) => index.toString()}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        contentContainerStyle={{ backgroundColor: '#3DBDB0' }}
         style={{ height: (windowWidth * 9) / 16 }}
       />
+      </View>
       {imageUrls.length > 1 && (
         <View style={styles.pagination}>
           {imageUrls.map((_, index) => (
             <View
-              key={index}
-              style={[
-                styles.dot,
-                currentIndex === index ? styles.activeDot : styles.inactiveDot,
-              ]}
+            key={index}
+            style={[
+              styles.dot,
+              currentIndex === index ? styles.activeDot : styles.inactiveDot,
+            ]}
             />
           ))}
         </View>
       )}
-    </View>
+      </View>
   );
 };
 
@@ -61,22 +76,22 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+    aspectRatio: 16/9,
+    borderRadius: 10,
   },
-  imageContainer: {
+  mainContainer: {
     width: '100%',
-    aspectRatio: 16 / 9,
-    overflow: 'hidden',
+    backgroundColor: '#3DBDB0',
   },
   pagination: {
     flexDirection: 'row',
     position: 'absolute',
     bottom: 10,
-    height: 10,
     alignSelf: 'center',
   },
   dot: {
-    width: 8,
-    height: 8,
+    width: 6,
+    height: 6,
     borderRadius: 4,
     marginHorizontal: 4,
   },
