@@ -17,7 +17,7 @@ export default function App() {
     //No borrar el SafeAreaProvider, envolver siempre toda la App con este elemento
     <SafeAreaProvider>
       <View style={{ flex: 1 }}>
-        <StatusBar style="auto" />
+        <StatusBar style='auto'/>
         <AdoptableAnimalDetail />
       </View>
     </SafeAreaProvider>

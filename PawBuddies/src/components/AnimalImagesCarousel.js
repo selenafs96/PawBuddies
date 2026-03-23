@@ -8,7 +8,7 @@ import {
 import { useAnimalImages } from '../hooks/useAnimalImages.js';
 import { useState } from 'react';
 
-const AnimalImagesCarousel = ({ filter, value }) => {
+export const AnimalImagesCarousel = ({ filter, value }) => {
   const { width: windowWidth } = useWindowDimensions();
   const { imageUrls } = useAnimalImages({ filter, value });
 
@@ -26,23 +26,14 @@ const AnimalImagesCarousel = ({ filter, value }) => {
 
   const renderImage = ({ item }) => (
     <View style={ { width: windowWidth }}>
-      <Image source={{ uri: item }} style={styles.image} resizeMode="cover" />
+      <View style={styles.imageContainer}>
+        <Image source={{ uri: item }} style={styles.image} resizeMode="cover" />
+      </View>
     </View>
   );
 
   return (
     <View style={styles.mainContainer}>
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          width: "100%",
-          height: 40,
-          backgroundColor: '#FFFFFF',
-          zIndex: -1,
-        }}
-      />
-      <View>
       <FlatList
         data={imageUrls}
         renderItem={renderImage}
@@ -54,7 +45,6 @@ const AnimalImagesCarousel = ({ filter, value }) => {
         scrollEventThrottle={16}
         style={{ height: (windowWidth * 9) / 16 }}
       />
-      </View>
       {imageUrls.length > 1 && (
         <View style={styles.pagination}>
           {imageUrls.map((_, index) => (
@@ -74,14 +64,10 @@ const AnimalImagesCarousel = ({ filter, value }) => {
 
 const styles = StyleSheet.create({
   image: {
-    width: '100%',
-    height: '100%',
-    aspectRatio: 16/9,
-    borderRadius: 10,
+    flex: 1
   },
   mainContainer: {
     width: '100%',
-    backgroundColor: '#3DBDB0',
   },
   pagination: {
     flexDirection: 'row',
@@ -101,6 +87,13 @@ const styles = StyleSheet.create({
   inactiveDot: {
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
+  imageContainer: {
+    width: '100%',
+    height: '100%',
+    aspectRatio: 16/9,
+    borderTopEndRadius: 10,
+    borderTopStartRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: 'white'
+  }
 });
-
-export default AnimalImagesCarousel;
