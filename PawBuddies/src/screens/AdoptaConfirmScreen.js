@@ -120,21 +120,6 @@ export default function AdoptaConfirmScreen({ onVolver }) {
                     </TouchableOpacity>
                 </View>
 
-                {/* BUSCADOR */}
-                <View style={styles.buscadorContainer}>
-                    <Image
-                        source={require('../../assets/icons/arrow_back.png')}
-                        style={styles.iconoPapelera}
-                    />
-                    <TextInput
-                        style={styles.buscadorInput}
-                        placeholder="Busca por el nombre"
-                        placeholderTextColor="#999"
-                        value={busqueda}
-                        onChangeText={setBusqueda}
-                    />
-                </View>
-
                 {/* FILTROS */}
                 <View style={styles.filtrosRow}>
 
@@ -152,19 +137,6 @@ export default function AdoptaConfirmScreen({ onVolver }) {
                             onChangeText={setBusqueda}
                         />
                     </View>
-
-                    {/* TAB */}
-                    <View style={styles.tabs}>
-                        <TouchableOpacity
-                            style={[styles.tab, tab === 'adoptar' && styles.tabActivo]}
-                            onPress={() => setTab('adoptar')}
-                        >
-                            <Text style={[styles.tabTexto, tab === 'adoptar' && styles.tabTextoActivo]}>
-                                Adoptar
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-
                 </View>
 
                 {/* LISTA */}
@@ -255,18 +227,6 @@ const styles = StyleSheet.create({
     },
 
     // Buscador
-    buscadorContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginHorizontal: 20,
-        marginBottom: 12,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 30,
-        borderWidth: 1,
-        borderColor: '#DDD',
-        paddingHorizontal: 16,
-        paddingVertical: 10,
-    },
     buscadorIcono: {
         fontSize: 16,
         marginRight: 8,
@@ -281,11 +241,14 @@ const styles = StyleSheet.create({
     buscadorDentro: {
         flexDirection: 'row',
         alignItems: 'center',
-        flex: 1, // 👈 ocupa el espacio disponible
+        flex: 1,
+        marginHorizontal: 10,
         backgroundColor: '#FFFFFF',
-        borderRadius: 20,
-        paddingHorizontal: 12,
-        paddingVertical: 6,
+        borderRadius: 30,
+        borderWidth: 1,
+        borderColor: '#DDD',
+        paddingHorizontal: 63,
+        paddingVertical: 10,
     },
 
     // Filtros
@@ -293,7 +256,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginHorizontal: 20,
-        marginBottom: 16,
         backgroundColor: '#E8F8F5',
         borderRadius: 12,
         padding: 8,
