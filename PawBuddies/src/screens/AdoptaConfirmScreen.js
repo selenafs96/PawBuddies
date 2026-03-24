@@ -14,16 +14,16 @@ import {
 export default function AdoptaConfirmScreen({ onVolver }) {
 
     const [animalesLista, setAnimalesLista] = useState([
-        { id: '1', nombre: 'Luna', estado: 'Solicitar adopción', solicitado: true, imagen: 'https://placedog.net/400/300?id=1' },
-        { id: '2', nombre: 'Misi', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placekitten.com/400/300' },
-        { id: '3', nombre: 'Rocky', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placedog.net/400/300?id=2' },
-        { id: '4', nombre: 'Toby', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placedog.net/400/300?id=3' },
-        { id: '5', nombre: 'Bono', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placekitten.com/401/300' },
-        { id: '6', nombre: 'Nala', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placekitten.com/402/300' },
+        { id: '1', nombre: 'Luna', estado: '¿Solicitar adopción?', solicitado: true, imagen: 'https://placedog.net/400/300?id=1' },
+        { id: '2', nombre: 'Misi', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://placekitten.com/400/300' },
+        { id: '3', nombre: 'Rocky', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://placedog.net/400/300?id=2' },
+        { id: '4', nombre: 'Toby', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://placedog.net/400/300?id=3' },
+        { id: '5', nombre: 'Bono', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://placekitten.com/401/300' },
+        { id: '6', nombre: 'Nala', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://placekitten.com/402/300' },
     ]);
 
     const [busqueda, setBusqueda] = useState('');
-    const [tab, setTab] = useState('adoptar'); // solo Adoptar ya no hay Acoger
+    const [tab, setTab] = useState('adoptar'); 
     const [seleccionAdoptar, setSeleccionAdoptar] = useState({});
     const [mostrarConfirm, setMostrarConfirm] = useState(false);
     const [isSheetVisible, setIsSheetVisible] = useState(false);
@@ -111,7 +111,7 @@ export default function AdoptaConfirmScreen({ onVolver }) {
                             source={require('../../assets/icons/arrow_back.png')}
                         />
                     </TouchableOpacity>
-                    <Text style={styles.titulo}>¿Adoptas o Acoges?</Text>
+                    <Text style={styles.titulo}>¿Quieres adoptar?</Text>
                     <TouchableOpacity style={{ position: 'absolute', right: 20, opacity: tieneSeleccion(seleccionAdoptar) ? 1 : 0.3 }} onPress={borrarSeleccionados} disabled={!tieneSeleccion(seleccionAdoptar)}>
                         <Image
                             source={require('../../assets/icons/iconoPapelera.png')}
