@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text } from 'react-native';
+import { Platform } from 'react-native';
 import { useFonts } from 'expo-font';
 import AdoptaScreen from './src/screens/AdoptaScreen';
 import AdoptaConfirmScreen from './src/screens/AdoptaConfirmScreen';
@@ -59,6 +60,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    width: Platform.OS === 'web' ? '100vw' : '100%',
   },
   errorContainer: {
     flex: 1,

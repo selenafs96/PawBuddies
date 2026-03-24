@@ -11,16 +11,17 @@ import {
     Animated,
 } from 'react-native';
 
-const animales = [
-    { id: '1', nombre: 'Luna', estado: 'Solicitar adopción', solicitado: true, imagen: 'https://placedog.net/400/300?id=1' },
-    { id: '2', nombre: 'Misi', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placekitten.com/400/300' },
-    { id: '3', nombre: 'Rocky', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placedog.net/400/300?id=2' },
-    { id: '4', nombre: 'Toby', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placedog.net/400/300?id=3' },
-    { id: '5', nombre: 'Bono', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placekitten.com/401/300' },
-    { id: '6', nombre: 'Nala', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placekitten.com/402/300' },
-];
-
 export default function AdoptaConfirmScreen({ onVolver }) {
+
+    const [animalesLista, setAnimalesLista] = useState([
+        { id: '1', nombre: 'Luna', estado: 'Solicitar adopción', solicitado: true, imagen: 'https://placedog.net/400/300?id=1' },
+        { id: '2', nombre: 'Misi', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placekitten.com/400/300' },
+        { id: '3', nombre: 'Rocky', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placedog.net/400/300?id=2' },
+        { id: '4', nombre: 'Toby', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placedog.net/400/300?id=3' },
+        { id: '5', nombre: 'Bono', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placekitten.com/401/300' },
+        { id: '6', nombre: 'Nala', estado: '¿Solicitar adopción/acogida?', solicitado: false, imagen: 'https://placekitten.com/402/300' },
+    ]);
+
     const [busqueda, setBusqueda] = useState('');
     const [tab, setTab] = useState('adoptar'); // solo Adoptar ya no hay Acoger
     const [seleccionAdoptar, setSeleccionAdoptar] = useState({});
@@ -48,7 +49,7 @@ export default function AdoptaConfirmScreen({ onVolver }) {
         }
     }, [mostrarConfirm]);
 
-    const animalesFiltrados = animales.filter(a =>
+    const animalesFiltrados = animalesLista.filter(a =>
         a.nombre.toLowerCase().includes(busqueda.toLowerCase())
     );
 
@@ -93,6 +94,12 @@ export default function AdoptaConfirmScreen({ onVolver }) {
         );
     };
 
+    const borrarSeleccionados = () => {
+        setAnimalesLista(prev => prev.filter(a => !seleccionAdoptar[a.id]));
+        setSeleccionAdoptar({});
+        setMostrarConfirm(false);
+    };
+
     return (
         <View style={styles.wrapper}>
             <SafeAreaView style={styles.safeArea}>
@@ -102,21 +109,23 @@ export default function AdoptaConfirmScreen({ onVolver }) {
                     <TouchableOpacity style={{ position: 'absolute', left: 20 }} onPress={onVolver}>
                         <Image
                             source={require('../../assets/icons/arrow_back.png')}
+                        />
+                    </TouchableOpacity>
+                    <Text style={styles.titulo}>¿Adoptas o Acoges?</Text>
+                    <TouchableOpacity style={{ position: 'absolute', right: 20, opacity: tieneSeleccion(seleccionAdoptar) ? 1 : 0.3 }} onPress={borrarSeleccionados} disabled={!tieneSeleccion(seleccionAdoptar)}>
+                        <Image
+                            source={require('../../assets/icons/iconoPapelera.png')}
                             style={styles.iconoPapelera}
                         />
-                    </TouchableOpacity>    
-                        <Text style={styles.titulo}>¿Adoptas o Acoges?</Text>
-                        <TouchableOpacity style={{ position: 'absolute', right: 20 }}>
-                            <Image
-                                source={require('../../assets/icons/iconoPapelera.png')}
-                                style={styles.iconoPapelera}
-                            />
-                        </TouchableOpacity>
+                    </TouchableOpacity>
                 </View>
 
                 {/* BUSCADOR */}
                 <View style={styles.buscadorContainer}>
-                    <Text style={styles.buscadorIcono}>🔍</Text>
+                    <Image
+                        source={require('../../assets/icons/arrow_back.png')}
+                        style={styles.iconoPapelera}
+                    />
                     <TextInput
                         style={styles.buscadorInput}
                         placeholder="Busca por el nombre"
@@ -128,9 +137,23 @@ export default function AdoptaConfirmScreen({ onVolver }) {
 
                 {/* FILTROS */}
                 <View style={styles.filtrosRow}>
-                    <TouchableOpacity style={styles.filtroIcono}>
-                        <Text style={{ color: '#3DBDB0', fontSize: 18 }}>☰</Text>
-                    </TouchableOpacity>
+
+                    {/* BUSCADOR */}
+                    <View style={styles.buscadorDentro}>
+                        <Image
+                            source={require('../../assets/icons/search.png')}
+                            style={styles.buscadorIcono}
+                        />
+                        <TextInput
+                            style={styles.buscadorInput}
+                            placeholder="Busca por el nombre"
+                            placeholderTextColor="#999"
+                            value={busqueda}
+                            onChangeText={setBusqueda}
+                        />
+                    </View>
+
+                    {/* TAB */}
                     <View style={styles.tabs}>
                         <TouchableOpacity
                             style={[styles.tab, tab === 'adoptar' && styles.tabActivo]}
@@ -141,6 +164,7 @@ export default function AdoptaConfirmScreen({ onVolver }) {
                             </Text>
                         </TouchableOpacity>
                     </View>
+
                 </View>
 
                 {/* LISTA */}
@@ -199,10 +223,12 @@ const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         backgroundColor: '#FFFFFF',
+        width: '100%',
     },
     safeArea: {
         flex: 1,
         backgroundColor: '#FFFFFF',
+        paddingTop: 10,
     },
 
     // Header
@@ -215,6 +241,7 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     titulo: {
+        fontFamily: 'TiltNeon',
         fontSize: 20,
         fontWeight: '600',
         color: '#222',
@@ -246,9 +273,19 @@ const styles = StyleSheet.create({
         color: '#999',
     },
     buscadorInput: {
+        fontFamily: 'TiltNeon',
         flex: 1,
         fontSize: 15,
         color: '#222',
+    },
+    buscadorDentro: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1, // 👈 ocupa el espacio disponible
+        backgroundColor: '#FFFFFF',
+        borderRadius: 20,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
     },
 
     // Filtros
@@ -259,7 +296,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         backgroundColor: '#E8F8F5',
         borderRadius: 12,
-        padding: 6,
+        padding: 8,
         gap: 8,
     },
     filtroIcono: {
@@ -280,11 +317,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     tabTexto: {
+        fontFamily: 'TiltNeon',
         fontSize: 14,
         color: '#888',
         fontWeight: '500',
     },
     tabTextoActivo: {
+        fontFamily: 'TiltNeon',
         color: '#222',
         fontWeight: '600',
     },
@@ -310,16 +349,19 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     animalNombre: {
+        fontFamily: 'TiltNeon',
         fontSize: 16,
         fontWeight: '600',
         color: '#222',
     },
     animalEstado: {
+        fontFamily: 'TiltNeon',
         fontSize: 13,
         color: '#999',
         marginTop: 2,
     },
     animalSolicitado: {
+        fontFamily: 'TiltNeon',
         fontSize: 13,
         color: '#3DBDB0',
         marginTop: 2,
@@ -382,6 +424,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     bottomSheetTexto: {
+        fontFamily: 'TiltNeon',
         fontSize: 16,
         fontWeight: '500',
         color: '#222',
@@ -399,6 +442,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     btnEnviarTexto: {
+        fontFamily: 'TiltNeon',
         color: '#FFFFFF',
         fontSize: 16,
         fontWeight: '600',
@@ -411,6 +455,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     btnAnularTexto: {
+        fontFamily: 'TiltNeon',
         color: '#3DBDB0',
         fontSize: 16,
         fontWeight: '600',
