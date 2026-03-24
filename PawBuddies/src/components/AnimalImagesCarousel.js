@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { useAnimalImages } from '../hooks/useAnimalImages.js';
 import { useState } from 'react';
+import { scaleSize } from '../constants/layout.js';
 
 export const AnimalImagesCarousel = ({ filter, value }) => {
   const { width: windowWidth } = useWindowDimensions();
@@ -68,18 +69,19 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     width: '100%',
+    backgroundColor: '#FFFFFF'
   },
   pagination: {
     flexDirection: 'row',
     position: 'absolute',
-    bottom: 10,
+    bottom: scaleSize(10),
     alignSelf: 'center',
   },
   dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 4,
-    marginHorizontal: 4,
+    width: scaleSize(6),
+    height: scaleSize(6),
+    borderRadius: scaleSize(4),
+    marginHorizontal: scaleSize(4),
   },
   activeDot: {
     backgroundColor: 'white',
@@ -91,8 +93,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     aspectRatio: 16/9,
-    borderTopEndRadius: 10,
-    borderTopStartRadius: 10,
+    borderTopEndRadius: scaleSize(10),
+    borderTopStartRadius: scaleSize(10),
     overflow: 'hidden',
     backgroundColor: 'white'
   }
