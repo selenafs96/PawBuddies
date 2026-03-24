@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text } from 'react-native';
 import { useFonts } from 'expo-font';
 import AdoptaScreen from './src/screens/AdoptaScreen';
+import AdoptaConfirmScreen from './src/screens/AdoptaConfirmScreen';
 
 class ErrorBoundary extends React.Component {
   state = { error: null };
@@ -30,6 +31,8 @@ class ErrorBoundary extends React.Component {
 }
 
 export default function App() {
+  const [pantalla, setPantalla] = useState('confirm');
+
   const [fontsLoaded] = useFonts({
     TiltNeon: require('./assets/fonts/TiltNeon-Regular.ttf'),
   });
@@ -41,7 +44,11 @@ export default function App() {
   return (
     <View style={styles.container}>
       <ErrorBoundary>
-        <AdoptaScreen />
+        {pantalla === 'adopta' ? (
+          <AdoptaScreen onIrAConfirm={() => setPantalla('confirm')} />
+        ) : (
+          <AdoptaConfirmScreen onVolver={() => setPantalla('adopta')} />  
+        )}  
       </ErrorBoundary>
       <StatusBar style="auto" />
     </View>
