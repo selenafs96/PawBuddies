@@ -78,6 +78,8 @@ CREATE TABLE animal (
   nombre TEXT NOT NULL,
   edad SMALLINT,
   genero TEXT NOT NULL,
+  especie TEXT NOT NULL,
+  raza TEXT NOT NULL,
   caracter TEXT,
   presentacion TEXT,
   estado TEXT NOT NULL,
@@ -86,6 +88,7 @@ CREATE TABLE animal (
   id_usuario UUID REFERENCES usuario(id_usuario) ON DELETE CASCADE,
   id_colonia UUID REFERENCES colonia(id_colonia) ON DELETE CASCADE,
   CONSTRAINT check_estado CHECK (estado IN ('Adoptable', 'No Adoptable', 'Adoptado'))
+  CONSTRAINT check_especie CHECK (estado IN ('Perro', 'Gato'))
 );
 
 CREATE TABLE ficha_sanitaria (

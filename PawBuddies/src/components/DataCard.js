@@ -1,11 +1,16 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { scaleFont, scaleSize } from '../constants/layout';
 
-export const DataCard = ({ category, data, style }) => {
+export const DataCard = ({ category, data, style, unidad_medida }) => {
+  
+  if(!unidad_medida) {
+    unidad_medida = ""
+  }
+
   return (
     <View style={[styles.container, style]}>
       <Text style={styles.category}>{category}</Text>
-      <Text style={styles.data}>{data}</Text>
+      <Text style={styles.data}>{`${data} ${unidad_medida}`}</Text>
     </View>
   );
 };
