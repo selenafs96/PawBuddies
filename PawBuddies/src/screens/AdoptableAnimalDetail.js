@@ -18,41 +18,56 @@ export const AdoptableAnimalDetail = () => {
 
   return (
     <View style={styles.mainContainer}>
-      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.scrollContent}
+      >
         <View style={styles.titleContainer}>
-          <TouchableOpacity onPress={() => {}} style={styles.backButton}>
+          <TouchableOpacity
+            onPress={() => {
+              alert('Adiós');
+            }}
+            style={styles.backButton}
+          >
             <Image
-              source={require('../../assets/icons/arrow-back.svg')}
+              source={require('../../assets/icons/arrow_back.png')}
             ></Image>
           </TouchableOpacity>
           <Text style={styles.title}>Detalles del animal</Text>
         </View>
         <AnimalImagesCarousel filter="nombre" value="Luna" />
-        <View style={{ width: '100%' }}>
-          <Text style={styles.secondaryTitle}>Nombre</Text>
+        <View style={{ backgroundColor: '#3DBDB0' }}>
+          <View style={{ width: '100%' }}>
+            <Text style={styles.secondaryTitle}>Nombre</Text>
+          </View>
+          <View style={styles.firstDataRow}>
+            <DataCard category="Género" data="Hembra" />
+            <DataCard category="Edad" data="4" unidad_medida="años" />
+            <DataCard category="Carácter" data="Tranquilo" />
+          </View>
+          <View style={styles.secondDataRow}>
+            <Text style={styles.secondaryTitle}>Presentación</Text>
+            <DataCard category="" data="Muy bueno" style={styles.largeCard} />
+          </View>
+          <View style={{ width: '100%' }}>
+            <Text style={styles.secondaryTitle}>Datos adicionales</Text>
+          </View>
+          <View style={styles.thirdDataSection}>
+            <DataCard
+              category="Protectora"
+              data="PawBuddies"
+              style={styles.wideCard}
+            />
+            <DataCard
+              category="Esterilizado"
+              data="Sí"
+              style={styles.wideCard}
+            />
+            <DataCard category="Especie" data="Perro" style={styles.wideCard} />
+            <DataCard category="Raza" data="Labrador" style={styles.wideCard} />
+          </View>
         </View>
-        <View style={styles.firstDataRow}>
-          <DataCard category="Género" data="Hembra" />
-          <DataCard category="Edad" data="4" unidad_medida="años" />
-          <DataCard category="Carácter" data="Tranquilo" />
-        </View>
-        <View style={styles.secondDataRow}>
-          <Text style={styles.secondaryTitle}>Presentación</Text>
-          <DataCard category="" data="Muy bueno" style={styles.largeCard} />
-        </View>
-        <View style={{ width: '100%' }}>
-          <Text style={styles.secondaryTitle}>Datos adicionales</Text>
-        </View>
-        <View style={styles.thirdDataSection}>
-          <DataCard
-            category="Protectora"
-            data="PawBuddies"
-            style={styles.wideCard}
-          />
-          <DataCard category="Esterilizado" data="Sí" style={styles.wideCard} />
-          <DataCard category="Especie" data="Perro" style={styles.wideCard} />
-          <DataCard category="Raza" data="Labrador" style={styles.wideCard} />
-        </View>
+        <View style={styles.bottomView}></View>
       </ScrollView>
       <Pressable
         style={styles.adoptameButton}
@@ -70,14 +85,13 @@ const createStyles = (insets) =>
   StyleSheet.create({
     mainContainer: {
       flex: 1,
-      backgroundColor: '#3DBDB0',
+      backgroundColor: '#FFFFFF',
       width: '100%',
     },
     scrollContainer: {
-      paddingTop: insets.top,
       flex: 1,
       width: '100%',
-      backgroundColor: '#3DBDB0',
+      backgroundColor: '#FFFFFF',
       alignContent: 'center',
       alignSelf: 'center',
       maxWidth: 500,
@@ -85,7 +99,6 @@ const createStyles = (insets) =>
     scrollContent: {
       flexGrow: 1,
       paddingTop: insets.top,
-      paddingBottom: insets.bottom + scaleSize(80),
     },
     secondaryTitle: {
       fontFamily: 'TiltNeon',
@@ -124,7 +137,7 @@ const createStyles = (insets) =>
     thirdDataSection: {
       width: '100%',
       backgroundColor: '#3DBDB0',
-      gap: scaleSize(15)
+      gap: scaleSize(15),
     },
     largeCard: {
       marginLeft: scaleSize(10),
@@ -137,6 +150,7 @@ const createStyles = (insets) =>
       marginRight: scaleSize(10),
       width: '95%',
       height: scaleSize(60),
+      marginBottom: scaleSize(10)
     },
     backButton: {
       position: 'absolute',
@@ -152,8 +166,8 @@ const createStyles = (insets) =>
       borderRadius: scaleSize(20),
       paddingHorizontal: scaleSize(14),
       paddingVertical: scaleSize(5),
-      width: '60%',
-      height: scaleSize(40),
+      width: '70%',
+      height: scaleSize(43),
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -161,6 +175,11 @@ const createStyles = (insets) =>
       fontFamily: 'TiltNeon',
       color: '#3DBDB0',
       fontWeight: 'bold',
-      fontSize: scaleFont(18),
+      fontSize: scaleFont(20),
     },
+    bottomView: {
+      width: '100%',
+      height: 50,
+      backgroundColor: '#3DBDB0'
+    }
   });

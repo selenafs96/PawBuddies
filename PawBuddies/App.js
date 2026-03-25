@@ -2,6 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text } from 'react-native';
 import { useFonts } from 'expo-font';
 import AdoptaScreen from './src/screens/AdoptaScreen';
+import React from 'react';
+import { AdoptableAnimalDetail } from './src/screens/AdoptableAnimalDetail';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 class ErrorBoundary extends React.Component {
   state = { error: null };
@@ -38,12 +41,14 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <ErrorBoundary>
-        <AdoptaScreen />
-      </ErrorBoundary>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <View style={styles.container}>
+        <ErrorBoundary>
+          <AdoptaScreen />
+        </ErrorBoundary>
+        <StatusBar style="dark" />
+      </View>
+    </SafeAreaProvider>
   );
 }
 
