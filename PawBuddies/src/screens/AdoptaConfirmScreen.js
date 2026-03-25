@@ -14,12 +14,12 @@ import {
 export default function AdoptaConfirmScreen({ onVolver }) {
 
     const [animalesLista, setAnimalesLista] = useState([
-        { id: '1', nombre: 'Luna', estado: '¿Solicitar adopción?', solicitado: true, imagen: 'https://placedog.net/400/300?id=1' },
-        { id: '2', nombre: 'Misi', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://placekitten.com/400/300' },
-        { id: '3', nombre: 'Rocky', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://placedog.net/400/300?id=2' },
-        { id: '4', nombre: 'Toby', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://placedog.net/400/300?id=3' },
-        { id: '5', nombre: 'Bono', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://placekitten.com/401/300' },
-        { id: '6', nombre: 'Nala', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://placekitten.com/402/300' },
+        { id: '1', nombre: 'Luna', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://eq2imhfmrcc.exactdn.com/wp-content/uploads/2016/08/golden-retriever-650x471.jpg?strip=all' },
+        { id: '2', nombre: 'Misi', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://images.ctfassets.net/denf86kkcx7r/4IPlg4Qazd4sFRuCUHIJ1T/f6c71da7eec727babcd554d843a528b8/gatocomuneuropeo-97?fm=webp&w=913' },
+        { id: '3', nombre: 'Rocky', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://eq2imhfmrcc.exactdn.com/wp-content/uploads/2016/08/poodle-caniche.jpg?strip=all' },
+        { id: '4', nombre: 'Toby', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://eq2imhfmrcc.exactdn.com/wp-content/uploads/2016/08/bichon-frise.jpg?strip=all' },
+        { id: '5', nombre: 'Bono', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://eq2imhfmrcc.exactdn.com/wp-content/uploads/2016/08/boston-terrier.jpg?strip=all' },
+        { id: '6', nombre: 'Nala', estado: '¿Solicitar adopción?', solicitado: false, imagen: 'https://img.freepik.com/foto-gratis/primer-disparo-vertical-lindo-gato-europeo-pelo-corto_181624-34587.jpg?semt=ais_hybrid&w=740&q=80' },
     ]);
 
     const [busqueda, setBusqueda] = useState('');
@@ -75,7 +75,7 @@ export default function AdoptaConfirmScreen({ onVolver }) {
                 <View style={styles.animalInfo}>
                     <Text style={styles.animalNombre}>{item.nombre}</Text>
                     {adoptado ? (
-                        <Text style={styles.animalSolicitado}>✓✓ Solicitar adopción</Text>
+                        <Text style={styles.animalSolicitado}>✓ Solicitar adopción</Text>
                     ) : (
                         <Text style={styles.animalEstado}>{item.estado}</Text>
                     )}
