@@ -1,10 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text } from 'react-native';
-import { useFonts } from 'expo-font';
-import AdoptaScreen from './src/screens/AdoptaScreen';
 import React from 'react';
-import { AdoptableAnimalDetail } from './src/screens/AdoptableAnimalDetail';
+import { StyleSheet, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Slot } from 'expo-router';
+import { useFonts } from 'expo-font';
+import { StatusBar } from 'expo-status-bar';
 
 class ErrorBoundary extends React.Component {
   state = { error: null };
@@ -30,10 +29,9 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
-
-export default function App() {
+const RootLayout = () => {
   const [fontsLoaded] = useFonts({
-    TiltNeon: require('./assets/fonts/TiltNeon-Regular.ttf'),
+    TiltNeon: require('../assets/fonts/TiltNeon-Regular.ttf'),
   });
 
   if (!fontsLoaded) {
@@ -42,15 +40,16 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <View style={styles.container}>
-        <ErrorBoundary>
-          <AdoptaScreen />
-        </ErrorBoundary>
-        <StatusBar style="dark" />
-      </View>
+      <StatusBar style="auto" />
+      <ErrorBoundary>
+        <Text>_layout</Text>
+        <Slot />
+      </ErrorBoundary>
     </SafeAreaProvider>
   );
-}
+};
+
+export default RootLayout;
 
 const styles = StyleSheet.create({
   container: {
