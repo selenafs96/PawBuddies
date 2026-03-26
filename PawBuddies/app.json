@@ -3,6 +3,12 @@
     "name": "PawBuddies",
     "slug": "PawBuddies",
     "version": "1.0.0",
+    "scheme": "pawbuddies",
+    "extra": {
+      "router": {
+        "origin": false
+      }
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -24,6 +30,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
