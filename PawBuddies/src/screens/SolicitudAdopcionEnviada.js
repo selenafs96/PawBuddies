@@ -1,0 +1,81 @@
+import { View, Image, StyleSheet, Text, Pressable } from 'react-native';
+import { scaleFont, scaleSize } from '../constants/layout';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+export const SolicitudAdopcionEnviada = () => {
+  const insets = useSafeAreaInsets();
+  const styles = createStyles(insets);
+
+  return (
+    <View style={styles.mainContainer}>
+      <View
+        style={styles.circle}
+      />
+      <Text style={styles.title}>PawBuddies</Text>
+      <Image
+        source={require('../../assets/icons/logo_principal.png')}
+        style={styles.logo}
+      />
+      <Image source={require('../../assets/icons/casa_pata_turquesa.png')} />
+      <Text style={styles.text}>¡Solicitud enviada!</Text>
+      <Pressable
+        style={styles.volverButton}
+        onPress={() => {
+          alert('Hola');
+        }}
+      >
+        <Text style={styles.buttonText}>Volver</Text>
+      </Pressable>
+    </View>
+  );
+};
+
+const createStyles = (insets) =>
+  StyleSheet.create({
+    mainContainer: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    circle: {
+      position: 'absolute',
+      top: insets.top > 0 ? insets.top : scaleSize(-220),
+      width: scaleSize(450),
+      height: scaleSize(450),
+      borderRadius: scaleSize(450) / 2,
+      backgroundColor: '#3DBDB0',
+    },
+    text: {
+      marginTop: 10,
+      fontFamily: 'TiltNeon',
+      fontSize: scaleFont(20),
+    },
+    title: {
+      color: '#fff',
+      fontFamily: 'TiltNeon',
+      fontSize: scaleFont(20),
+      position: 'absolute',
+      top: insets.top > 0 ? insets.top : scaleSize(130),
+    },
+    volverButton: {
+      position: 'absolute',
+      bottom: insets.bottom > 0 ? insets.bottom : scaleSize(10),
+      alignSelf: 'center',
+      backgroundColor: '#3DBDB0',
+      borderRadius: 5,
+      paddingHorizontal: scaleSize(14),
+      paddingVertical: scaleSize(5),
+      width: '85%',
+      height: scaleSize(43),
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonText: {
+      color: '#fff',
+    },
+    logo: {
+      position: 'absolute',
+      top: insets.top > 0 ? insets.top : scaleSize(40),
+    },
+  });

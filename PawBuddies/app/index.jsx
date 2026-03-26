@@ -1,12 +1,8 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-
+import { AdoptableAnimalDetail } from '../src/screens/AdoptableAnimalDetail.js'
 
 const PawBuddies = () => {
   return (
-    <View>
-      <Text style={{ fontFamily: 'TiltNeon' }}>PawBuddies</Text>
-    </View>
+    <AdoptableAnimalDetail />
   )
 }
 
