@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     paddingRight: scaleSize(15),
     backgroundColor: '#e8f7f6',
     borderRadius: scaleSize(10),
-    width: '28%',
+    minWidth: '28%',
     height: '100%',
     alignItems: 'start',
     alignContent: 'center',

@@ -36,7 +36,7 @@ export const AdoptableAnimalDetail = () => {
           <Text style={styles.title}>Detalles del animal</Text>
         </View>
         <AnimalImagesCarousel filter="nombre" value="Luna" />
-        <View style={{ backgroundColor: '#3DBDB0' }}>
+        <View style={{ backgroundColor: '#3DBDB0', paddingHorizontal: scaleSize(15) }}>
           <View style={{ width: '100%' }}>
             <Text style={styles.secondaryTitle}>Nombre</Text>
           </View>
@@ -124,7 +124,7 @@ const createStyles = (insets) =>
     },
     firstDataRow: {
       flexDirection: 'row',
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
       width: '100%',
       backgroundColor: '#3DBDB0',
       marginBottom: scaleSize(20),

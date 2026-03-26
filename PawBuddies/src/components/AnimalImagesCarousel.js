@@ -26,7 +26,7 @@ export const AnimalImagesCarousel = ({ filter, value }) => {
   };
 
   const renderImage = ({ item }) => (
-    <View style={ { width: windowWidth }}>
+    <View style={ { width: windowWidth, backgroundColor: '#3DBDB0' }}>
       <View style={styles.imageContainer}>
         <Image source={{ uri: item }} style={styles.image} resizeMode="cover" />
       </View>
@@ -93,9 +93,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     aspectRatio: 16/9,
-    borderTopEndRadius: scaleSize(10),
-    borderTopStartRadius: scaleSize(10),
+    borderBottomStartRadius: scaleSize(10),
+    borderBottomEndRadius: 10,
     overflow: 'hidden',
-    backgroundColor: 'white'
+    backgroundColor: '#FFFFFF'
   }
 });
