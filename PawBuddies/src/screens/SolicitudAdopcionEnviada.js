@@ -9,16 +9,9 @@ export const SolicitudAdopcionEnviada = () => {
   return (
     <View style={styles.mainContainer}>
       <View
-        style={{
-          position: 'absolute',
-          top: insets.top > 0 ? insets.top : scaleSize(-190),
-          width: 450,
-          height: 450,
-          borderRadius: 450 / 2,
-          backgroundColor: '#3DBDB0',
-        }}
+        style={styles.circle}
       />
-      <Text style = {styles.title}>PawBuddies</Text>
+      <Text style={styles.title}>PawBuddies</Text>
       <Image
         source={require('../../assets/icons/logo_principal.png')}
         style={styles.logo}
@@ -45,17 +38,25 @@ const createStyles = (insets) =>
       alignItems: 'center',
       justifyContent: 'center',
     },
+    circle: {
+      position: 'absolute',
+      top: insets.top > 0 ? insets.top : scaleSize(-220),
+      width: scaleSize(450),
+      height: scaleSize(450),
+      borderRadius: scaleSize(450) / 2,
+      backgroundColor: '#3DBDB0',
+    },
     text: {
       marginTop: 10,
       fontFamily: 'TiltNeon',
       fontSize: scaleFont(20),
     },
     title: {
-        color: '#fff',
-        fontFamily: 'TiltNeon',
-        fontSize: scaleFont(20),
-        position: 'absolute',
-        top: insets.top > 0 ? insets.top : scaleSize(130),
+      color: '#fff',
+      fontFamily: 'TiltNeon',
+      fontSize: scaleFont(20),
+      position: 'absolute',
+      top: insets.top > 0 ? insets.top : scaleSize(130),
     },
     volverButton: {
       position: 'absolute',
