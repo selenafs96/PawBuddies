@@ -26,7 +26,6 @@ class ErrorBoundary extends React.Component {
         </View>
       );
     }
-
     return this.props.children;
   }
 }
@@ -48,8 +47,8 @@ export default function App() {
         {pantalla === 'adopta' ? (
           <AdoptaScreen onIrAConfirm={() => setPantalla('confirm')} />
         ) : (
-          <AdoptaConfirmScreen onVolver={() => setPantalla('adopta')} />  
-        )}  
+          <AdoptaConfirmScreen onVolver={() => setPantalla('adopta')} />
+        )}
       </ErrorBoundary>
       <StatusBar style="auto" />
     </View>
