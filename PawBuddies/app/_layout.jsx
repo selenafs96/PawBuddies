@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Slot } from 'expo-router';
 import { useFonts } from 'expo-font';
@@ -28,9 +28,8 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
-const RootLayout = () => {
-  const [pantalla, setPantalla] = useState('confirm');
 
+const RootLayout = () => {
   const [fontsLoaded] = useFonts({
     TiltNeon: require('../assets/fonts/TiltNeon-Regular.ttf'),
   });
@@ -43,13 +42,7 @@ const RootLayout = () => {
     <SafeAreaProvider>
       <StatusBar style="auto" />
       <ErrorBoundary>
-        <Text>_layout</Text>
         <Slot />
-        {pantalla === 'adopta' ? (
-          <AdoptaScreen onIrAConfirm={() => setPantalla('confirm')} />
-        ) : (
-          <AdoptaConfirmScreen onVolver={() => setPantalla('adopta')} />
-        )}
       </ErrorBoundary>
     </SafeAreaProvider>
   );
@@ -58,11 +51,6 @@ const RootLayout = () => {
 export default RootLayout;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    width: Platform.OS === 'web' ? '100vw' : '100%',
-  },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
