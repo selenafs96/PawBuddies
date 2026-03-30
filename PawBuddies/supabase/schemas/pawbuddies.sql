@@ -78,13 +78,17 @@ CREATE TABLE animal (
   nombre TEXT NOT NULL,
   edad SMALLINT,
   genero TEXT NOT NULL,
+  especie TEXT NOT NULL,
+  raza TEXT NOT NULL,
   caracter TEXT,
   presentacion TEXT,
-  estado TEXT,
-  url_foto TEXT,
+  estado TEXT NOT NULL,
+  url_foto TEXT[] DEFAULT '{}',
   id_protectora UUID REFERENCES protectora(id_protectora) ON DELETE CASCADE NOT NULL,
   id_usuario UUID REFERENCES usuario(id_usuario) ON DELETE CASCADE,
-  id_colonia UUID REFERENCES colonia(id_colonia) ON DELETE CASCADE
+  id_colonia UUID REFERENCES colonia(id_colonia) ON DELETE CASCADE,
+  CONSTRAINT check_estado CHECK (estado IN ('Adoptable', 'No Adoptable', 'Adoptado')),
+  CONSTRAINT check_especie CHECK (estado IN ('Perro', 'Gato'))
 );
 
 CREATE TABLE ficha_sanitaria (
