@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Slot } from 'expo-router';
 import { useFonts } from 'expo-font';
@@ -42,7 +42,6 @@ const RootLayout = () => {
     <SafeAreaProvider>
       <StatusBar style="auto" />
       <ErrorBoundary>
-        <Text>_layout</Text>
         <Slot />
       </ErrorBoundary>
     </SafeAreaProvider>
