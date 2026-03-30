@@ -9,120 +9,32 @@ import {
   useWindowDimensions,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import AnimalCard from '../components/AnimalCard';
-
-// Datos de ejemplo para la vista (sin conexión)
-const ejemploAnimales = [
-  {
-    id: '1',
-    nombre: 'Luna',
-    edad: '2 años',
-    tipo: 'perro',
-    imagen: 'https://placedog.net/400/300?id=1',
-  },
-  {
-    id: '2',
-    nombre: 'Misi',
-    edad: '3 años',
-    tipo: 'gato',
-    imagen: 'https://placekitten.com/400/300',
-  },
-  {
-    id: '3',
-    nombre: 'Rocky',
-    edad: '1 año',
-    tipo: 'gato',
-    imagen: 'https://placekitten.com/401/300',
-  },
-  {
-    id: '4',
-    nombre: 'Toby',
-    edad: '4 años',
-    tipo: 'perro',
-    imagen: 'https://placedog.net/400/300?id=2',
-  },
-  {
-    id: '5',
-    nombre: 'Luna',
-    edad: '2 años',
-    tipo: 'perro',
-    imagen: 'https://placedog.net/400/300?id=1',
-  },
-  {
-    id: '6',
-    nombre: 'Misi',
-    edad: '3 años',
-    tipo: 'gato',
-    imagen: 'https://placekitten.com/400/300',
-  },
-  {
-    id: '7',
-    nombre: 'Rocky',
-    edad: '1 año',
-    tipo: 'gato',
-    imagen: 'https://placekitten.com/401/300',
-  },
-  {
-    id: '8',
-    nombre: 'Toby',
-    edad: '4 años',
-    tipo: 'perro',
-    imagen: 'https://placedog.net/400/300?id=2',
-  },
-  {
-    id: '9',
-    nombre: 'Luna',
-    edad: '2 años',
-    tipo: 'perro',
-    imagen: 'https://placedog.net/400/300?id=1',
-  },
-  {
-    id: '10',
-    nombre: 'Misi',
-    edad: '3 años',
-    tipo: 'gato',
-    imagen: 'https://placekitten.com/400/300',
-  },
-  {
-    id: '11',
-    nombre: 'Rocky',
-    edad: '1 año',
-    tipo: 'gato',
-    imagen: 'https://placekitten.com/401/300',
-  },
-  {
-    id: '12',
-    nombre: 'Toby',
-    edad: '4 años',
-    tipo: 'perro',
-    imagen: 'https://placedog.net/400/300?id=2',
-  },
-];
+import { useAnimales } from '../hooks/useAnimales';
 
 export default function AdoptaScreen() {
   const { width } = useWindowDimensions();
-  const scale = width / 375; // 375 es ancho base (iPhone 8)
-
+  const scale = width / 375;
   const scaleFont = (size) => size * scale;
   const scaleSize = (size) => size * scale;
   const NAV_HEIGHT = scaleSize(50);
 
-  const [filtro, setFiltro] = useState('todos'); // 'todos' | 'perro' | 'gato'
+  const [filtro, setFiltro] = useState('todos');
+  const { animales, loading, error } = useAnimales(filtro);
 
+  // Mapea cada animal a las props que espera AnimalCard
   const renderItem = ({ item }) => (
-    <AnimalCard nombre={item.nombre} edad={item.edad} imagen={item.imagen} />
-  );
-
-  const animalesFiltrados = ejemploAnimales.filter((a) =>
-    filtro === 'todos' ? true : a.tipo === filtro
+    <AnimalCard
+      nombre={item.nombre}
+      edad={item.edad ? `${item.edad} años` : 'Edad desconocida'}
+      imagen={item.url_foto?.[0] ?? null}  // primera foto del array, o null
+    />
   );
 
   const styles = StyleSheet.create({
-    safeArea: {
-      flex: 1,
-      backgroundColor: '#FFFFFF',
-    },
+    safeArea: { flex: 1, backgroundColor: '#FFFFFF' },
     titulo: {
       fontFamily: 'TiltNeon',
       color: '#222222',
@@ -148,11 +60,7 @@ export default function AdoptaScreen() {
       marginBottom: scaleSize(12),
       position: 'relative',
     },
-    filtrosCenter: {
-      flexDirection: 'row',
-      gap: scaleSize(10),
-      justifyContent: 'center',
-    },
+    filtrosCenter: { flexDirection: 'row', gap: scaleSize(10), justifyContent: 'center' },
     filtroBtn: {
       backgroundColor: '#FFFFFF',
       padding: scaleSize(10),
@@ -161,66 +69,26 @@ export default function AdoptaScreen() {
       justifyContent: 'center',
     },
     filtroTodosBtn: {
-      position: 'absolute',
-      right: 0,
-      padding: scaleSize(10),
-      alignItems: 'center',
-      justifyContent: 'center',
+      position: 'absolute', right: 0,
+      padding: scaleSize(10), alignItems: 'center', justifyContent: 'center',
     },
-    filtroActivo: {
-      backgroundColor: '#2A9A7D',
-    },
-    filtroIcono: {
-      width: scaleSize(24),
-      height: scaleSize(24),
-      resizeMode: 'contain',
-      tintColor: '#3DBDB0',
-    },
-    filtroIconoActivo: {
-      tintColor: '#FFFFFF',
-    },
+    filtroActivo: { backgroundColor: '#2A9A7D' },
+    filtroIcono: { width: scaleSize(24), height: scaleSize(24), resizeMode: 'contain', tintColor: '#3DBDB0' },
+    filtroIconoActivo: { tintColor: '#FFFFFF' },
+    centrado: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    errorTexto: { fontFamily: 'TiltNeon', color: '#FFFFFF', fontSize: scaleFont(14), textAlign: 'center' },
     bottomNav: {
-      flexDirection: 'row',
-      backgroundColor: '#FFFFFF',
-      borderRadius: scaleSize(50),
-      position: 'absolute',
-      bottom: scaleSize(6),
-      left: scaleSize(70),
-      right: scaleSize(70),
-      height: scaleSize(50),
-      paddingVertical: scaleSize(6),
-      paddingHorizontal: scaleSize(16),
-      justifyContent: 'space-around',
-      alignItems: 'center',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: scaleSize(-1) },
-      shadowOpacity: 0.06,
-      shadowRadius: scaleSize(5),
-      elevation: 4,
+      flexDirection: 'row', backgroundColor: '#FFFFFF', borderRadius: scaleSize(50),
+      position: 'absolute', bottom: scaleSize(6), left: scaleSize(70), right: scaleSize(70),
+      height: scaleSize(50), paddingVertical: scaleSize(6), paddingHorizontal: scaleSize(16),
+      justifyContent: 'space-around', alignItems: 'center',
+      shadowColor: '#000', shadowOffset: { width: 0, height: scaleSize(-1) },
+      shadowOpacity: 0.06, shadowRadius: scaleSize(5), elevation: 4,
     },
-    navItem: {
-      padding: scaleSize(6),
-      borderRadius: scaleSize(14),
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    navActivo: {
-      backgroundColor: '#3DBDB0',
-      borderRadius: scaleSize(34),
-      width: scaleSize(34),
-      height: scaleSize(34),
-    },
-    bottomIconoImg: {
-      width: scaleSize(18),
-      height: scaleSize(18),
-      resizeMode: 'contain',
-    },
-    bottomIconoImgActivo: {
-      width: scaleSize(18),
-      height: scaleSize(18),
-      resizeMode: 'contain',
-      tintColor: '#FFFFFF',
-    },
+    navItem: { padding: scaleSize(6), borderRadius: scaleSize(14), alignItems: 'center', justifyContent: 'center' },
+    navActivo: { backgroundColor: '#3DBDB0', borderRadius: scaleSize(34), width: scaleSize(34), height: scaleSize(34) },
+    bottomIconoImg: { width: scaleSize(18), height: scaleSize(18), resizeMode: 'contain' },
+    bottomIconoImgActivo: { width: scaleSize(18), height: scaleSize(18), resizeMode: 'contain', tintColor: '#FFFFFF' },
   });
 
   return (
@@ -229,6 +97,7 @@ export default function AdoptaScreen() {
         <Text style={styles.titulo}>Adopta</Text>
 
         <View style={styles.container}>
+          {/* Filtros */}
           <View style={styles.filtrosRow}>
             <View style={styles.filtrosCenter}>
               <TouchableOpacity
@@ -240,7 +109,6 @@ export default function AdoptaScreen() {
                   style={[styles.filtroIcono, filtro === 'perro' && styles.filtroIconoActivo]}
                 />
               </TouchableOpacity>
-
               <TouchableOpacity
                 style={[styles.filtroBtn, filtro === 'gato' && styles.filtroActivo]}
                 onPress={() => setFiltro(filtro === 'gato' ? 'todos' : 'gato')}
@@ -251,11 +119,7 @@ export default function AdoptaScreen() {
                 />
               </TouchableOpacity>
             </View>
-
-            <TouchableOpacity
-              style={styles.filtroTodosBtn}
-              onPress={() => setFiltro('todos')}
-            >
+            <TouchableOpacity style={styles.filtroTodosBtn} onPress={() => setFiltro('todos')}>
               <Image
                 source={require('../../assets/icons/filter_list.png')}
                 style={[styles.filtroIcono, filtro === 'todos' && styles.filtroIconoActivo]}
@@ -263,18 +127,34 @@ export default function AdoptaScreen() {
             </TouchableOpacity>
           </View>
 
-          <FlatList
-            data={animalesFiltrados}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            numColumns={2}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.grid}
-            ListFooterComponent={<View style={{ height: scaleSize(16) }} />}
-          />
+          {/* Contenido */}
+          {loading ? (
+            <View style={styles.centrado}>
+              <ActivityIndicator size="large" color="#FFFFFF" />
+            </View>
+          ) : error ? (
+            <View style={styles.centrado}>
+              <Text style={styles.errorTexto}>Error al cargar animales:{'\n'}{error}</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={animales}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id_animal}
+              numColumns={2}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: scaleSize(16) }}
+              ListEmptyComponent={
+                <View style={styles.centrado}>
+                  <Text style={styles.errorTexto}>No hay animales disponibles</Text>
+                </View>
+              }
+            />
+          )}
         </View>
       </SafeAreaView>
 
+      {/* Bottom Nav */}
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem}>
           <Image source={require('../../assets/icons/home.png')} style={styles.bottomIconoImg} />
@@ -292,4 +172,3 @@ export default function AdoptaScreen() {
     </View>
   );
 }
-
