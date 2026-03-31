@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   container: {
-    paddingBottom: scaleSize(5),
+    paddingBottom: scaleSize(10),
     paddingTop: scaleSize(10),
     paddingLeft: scaleSize(15),
     paddingRight: scaleSize(15),

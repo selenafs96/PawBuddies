@@ -1,6 +1,14 @@
 // components/AnimalCard.js
+import { Link } from 'expo-router';
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  useWindowDimensions,
+} from 'react-native';
 
 export default function AnimalCard({ nombre, edad, imagen }) {
   const { width } = useWindowDimensions();
@@ -63,9 +71,11 @@ export default function AnimalCard({ nombre, edad, imagen }) {
           <Text style={styles.nombre}>{nombre}</Text>
           <Text style={styles.edad}>{edad}</Text>
         </View>
-        <TouchableOpacity style={styles.boton}>
-          <Text style={styles.botonTexto}>Ver</Text>
-        </TouchableOpacity>
+        <Link href='/(animals)/detail'>
+          <TouchableOpacity style={styles.boton}>
+            <Text style={styles.botonTexto}>Ver</Text>
+          </TouchableOpacity>
+        </Link>
       </View>
     </View>
   );

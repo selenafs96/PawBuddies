@@ -1,5 +1,5 @@
 // screens/AdoptaScreen.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import AnimalCard from '../components/AnimalCard';
-import { useAnimales } from '../hooks/useAnimales';
+import AnimalCard from '../../../src/components/AnimalCard';
+import { useAnimales } from '../../../src/hooks/useAnimales';
 
 export default function AdoptaScreen() {
   const { width } = useWindowDimensions();
@@ -105,7 +105,7 @@ export default function AdoptaScreen() {
                 onPress={() => setFiltro(filtro === 'perro' ? 'todos' : 'perro')}
               >
                 <Image
-                  source={require('../../assets/icons/Dog.png')}
+                  source={require('../../../assets/icons/Dog.png')}
                   style={[styles.filtroIcono, filtro === 'perro' && styles.filtroIconoActivo]}
                 />
               </TouchableOpacity>
@@ -114,14 +114,14 @@ export default function AdoptaScreen() {
                 onPress={() => setFiltro(filtro === 'gato' ? 'todos' : 'gato')}
               >
                 <Image
-                  source={require('../../assets/icons/Cat.png')}
+                  source={require('../../../assets/icons/Cat.png')}
                   style={[styles.filtroIcono, filtro === 'gato' && styles.filtroIconoActivo]}
                 />
               </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.filtroTodosBtn} onPress={() => setFiltro('todos')}>
               <Image
-                source={require('../../assets/icons/filter_list.png')}
+                source={require('../../../assets/icons/filter_list.png')}
                 style={[styles.filtroIcono, filtro === 'todos' && styles.filtroIconoActivo]}
               />
             </TouchableOpacity>
@@ -157,16 +157,16 @@ export default function AdoptaScreen() {
       {/* Bottom Nav */}
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem}>
-          <Image source={require('../../assets/icons/home.png')} style={styles.bottomIconoImg} />
+          <Image source={require('../../../assets/icons/home.png')} style={styles.bottomIconoImg} />
         </TouchableOpacity>
         <TouchableOpacity style={[styles.navItem, styles.navActivo]}>
-          <Image source={require('../../assets/icons/patas.png')} style={styles.bottomIconoImgActivo} />
+          <Image source={require('../../../assets/icons/patas.png')} style={styles.bottomIconoImgActivo} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem}>
-          <Image source={require('../../assets/icons/corazon.png')} style={styles.bottomIconoImg} />
+          <Image source={require('../../../assets/icons/corazon.png')} style={styles.bottomIconoImg} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem}>
-          <Image source={require('../../assets/icons/perfil.png')} style={styles.bottomIconoImg} />
+          <Image source={require('../../../assets/icons/perfil.png')} style={styles.bottomIconoImg} />
         </TouchableOpacity>
       </View>
     </View>
