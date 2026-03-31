@@ -16,9 +16,6 @@ export const AnimalImagesCarousel = ({ filter, value }) => {
   //Para crear un índice para cada imagen
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const MARGIN = 20;
-  const CAROUSEL_WIDTH = windowWidth - (MARGIN * 2);
-
   const handleScroll = (event) => {
     const scrollOffset = event.nativeEvent.contentOffset.x;
     const index = Math.round(scrollOffset / windowWidth);
