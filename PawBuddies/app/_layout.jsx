@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Slot } from 'expo-router';
 import { useFonts } from 'expo-font';
@@ -25,10 +25,10 @@ class ErrorBoundary extends React.Component {
         </View>
       );
     }
-
     return this.props.children;
   }
 }
+
 const RootLayout = () => {
   const [fontsLoaded] = useFonts({
     TiltNeon: require('../assets/fonts/TiltNeon-Regular.ttf'),
@@ -42,7 +42,6 @@ const RootLayout = () => {
     <SafeAreaProvider>
       <StatusBar style="auto" />
       <ErrorBoundary>
-        <Text>_layout</Text>
         <Slot />
       </ErrorBoundary>
     </SafeAreaProvider>
@@ -52,10 +51,6 @@ const RootLayout = () => {
 export default RootLayout;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
