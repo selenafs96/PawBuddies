@@ -2,7 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   Image,
   Pressable,
   ScrollView,
@@ -11,6 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scaleFont, scaleSize } from '../constants/layout.js';
 import { AnimalImagesCarousel } from '../components/AnimalImagesCarousel.js';
 import { DataCard } from '../components/DataCard.js';
+import { BackButton } from '../components/BackButton.js';
 
 export const AdoptableAnimalDetail = () => {
   const insets = useSafeAreaInsets();
@@ -23,20 +23,23 @@ export const AdoptableAnimalDetail = () => {
         contentContainerStyle={styles.scrollContent}
       >
         <View style={styles.titleContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              alert('Adiós');
-            }}
-            style={styles.backButton}
-          >
-            <Image
-              source={require('../../assets/icons/arrow_back.png')}
-            ></Image>
-          </TouchableOpacity>
+          <BackButton />
           <Text style={styles.title}>Detalles del animal</Text>
         </View>
-        <AnimalImagesCarousel filter="nombre" value="Luna" />
-        <View style={{ backgroundColor: '#3DBDB0', paddingHorizontal: scaleSize(15) }}>
+        <AnimalImagesCarousel
+          filter="id_animal"
+          value="b51116cd-2bed-44c9-bca0-f2b5f95dd6cd"
+        />
+        <Image
+          source={require('../../assets/icons/fav.png')}
+          style={styles.favButton}
+        />
+        <View
+          style={{
+            backgroundColor: '#3DBDB0',
+            paddingHorizontal: scaleSize(15),
+          }}
+        >
           <View style={{ width: '100%' }}>
             <Text style={styles.secondaryTitle}>Nombre</Text>
           </View>
@@ -150,13 +153,7 @@ const createStyles = (insets) =>
       marginRight: scaleSize(10),
       width: '95%',
       height: scaleSize(60),
-      marginBottom: scaleSize(10)
-    },
-    backButton: {
-      position: 'absolute',
-      left: scaleSize(5),
-      zIndex: 1,
-      padding: scaleSize(10),
+      marginBottom: scaleSize(10),
     },
     adoptameButton: {
       position: 'absolute',
@@ -179,7 +176,14 @@ const createStyles = (insets) =>
     },
     bottomView: {
       width: '100%',
-      height: 50,
-      backgroundColor: '#3DBDB0'
-    }
+      height: scaleSize(50),
+      backgroundColor: '#3DBDB0',
+    },
+    favButton: {
+      position: 'absolute',
+      width: scaleSize(35),
+      height: scaleSize(35),
+      left: scaleSize(320),
+      top: scaleSize(45),
+    },
   });

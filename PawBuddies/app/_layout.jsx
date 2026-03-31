@@ -42,7 +42,6 @@ const RootLayout = () => {
     <SafeAreaProvider>
       <StatusBar style="auto" />
       <ErrorBoundary>
-        <Text>_layout</Text>
         <Slot />
       </ErrorBoundary>
     </SafeAreaProvider>
