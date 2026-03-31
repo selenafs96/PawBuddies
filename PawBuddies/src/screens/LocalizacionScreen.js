@@ -38,6 +38,28 @@ export default function LocalizacionScreen({ onVolver, onSiguiente }) {
         setTags(tags.filter((tag) => tag !== tagToRemove));
     };
 
+    const handleSiguiente = () => {
+        // Preparamos el objeto con la información recolectada
+        const datosLocalizacion = {
+            ciudades: tags,        // Array de strings: ["Barcelona", "08030"]
+            radioKm: distancia,    // Number: 23
+        };
+
+        // Validamos que al menos haya una ubicación (opcional)
+        if (tags.length === 0) {
+            alert("Por favor, introduce al menos una ciudad o código postal.");
+            return;
+        }
+
+        // Enviamos los datos a la función que maneja la navegación
+        onSiguiente(datosLocalizacion);
+    };
+
+    // ... en el botón Siguiente ...
+    <TouchableOpacity style={styles.btnSiguiente} onPress={handleSiguiente}>
+        <Text style={styles.btnTextSiguiente}>Siguiente</Text>
+    </TouchableOpacity>
+
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -214,7 +236,7 @@ export default function LocalizacionScreen({ onVolver, onSiguiente }) {
                             </TouchableOpacity>
                         ))}
                     </View>
-                    
+
                     {/* Sección Radio */}
                     <Text style={styles.sectionTitle}>Radio</Text>
                     <Text style={styles.label}>
