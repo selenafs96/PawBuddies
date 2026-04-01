@@ -19,5 +19,5 @@ Cambiado:
 
 Estructura de rutas:
 - para que funcione la navegación entre pantallas de expo router, las pantallas tienen que estar en la estructura de carpetas "app". Para las rutas dinamicas, el archivo de la pantalla tiene que llamarse  "[algo].js" (rutas dinámicas es, por ejemplo, que cogerá el id del animal del que seleccione el botón "Ver" en la pantalla de la Lista de animales y lo utilizará para acceder a la pantalla Detalles del animal con ese id en concreto).
-- Cuando queremos que al hacer click en un componente redirija a otra pantalla (como el botón Ver de la lista), hay que envolver ese componente en un <Link href="*indicar aquí la ruta de la pantalla a la que queremos ir" asChild>*componente*</Link>
+- Cuando queremos que al hacer click en un componente redirija a otra pantalla (como el botón Ver de la lista), hay que envolver ese componente en un <Link href="*indicar aquí la ruta de la pantalla a la que queremos ir" asChild>*componente*</Link
 - Cuando es una ruta dinámica, en el href se le indican dos cosas: pathname (que sería la ruta) y params (que sería el id del animal que queremos ver).
