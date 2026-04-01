@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,22 +8,27 @@ import {
   ScrollView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useLocalSearchParams } from 'expo-router';
+
 import { scaleFont, scaleSize } from '../../../src/constants/layout.js';
 import { AnimalImagesCarousel } from '../../../src/components/AnimalImagesCarousel.js';
 import { DataCard } from '../../../src/components/DataCard.js';
 import { BackButton } from '../../../src/components/BackButton.js';
-import { useAdoptableAnimalDetails } from '../../../src/hooks/useAdoptableAnimalDetails.js';
+import { useAnimals } from '../../../src/hooks/useAnimals.js';
 
 export default function AdoptableAnimalDetail() {
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
+  const { id_animal } = useLocalSearchParams();
 
-  const { adoptableAnimalDetails } = useAdoptableAnimalDetails({
-    filter: 'id_animal',
-    value: 'b51116cd-2bed-44c9-bca0-f2b5f95dd6cd',
-  });
+  const { animals, loading, error, fetchAnimalById } = useAnimals();
 
-  console.log('DATA:', JSON.stringify(adoptableAnimalDetails));
+  useEffect(() => {
+    fetchAnimalById(id_animal);
+  }, []);
+
+  if (loading) return <Text style={styles.informativeMessages}>Cargando...</Text>;
+  if (!animals) return <Text style={styles.informativeMessages}>Animal no encontrado</Text>;
 
   return (
     <View style={styles.mainContainer}>
@@ -35,8 +41,7 @@ export default function AdoptableAnimalDetail() {
           <Text style={styles.title}>Detalles del animal</Text>
         </View>
         <AnimalImagesCarousel
-          filter="id_animal"
-          value="b51116cd-2bed-44c9-bca0-f2b5f95dd6cd"
+          imageUrls={animals.url_foto}
         />
         <Image
           source={require('../../../assets/icons/fav.png')}
@@ -49,27 +54,22 @@ export default function AdoptableAnimalDetail() {
           }}
         >
           <View style={{ width: '100%' }}>
-            <Text style={styles.secondaryTitle}>
-              {adoptableAnimalDetails.nombre}
-            </Text>
+            <Text style={styles.secondaryTitle}>{animals.nombre}</Text>
           </View>
           <View style={styles.firstDataRow}>
-            <DataCard category="Género" data={adoptableAnimalDetails.genero} />
+            <DataCard category="Género" data={animals.genero} />
             <DataCard
               category="Edad"
-              data={adoptableAnimalDetails.edad}
+              data={animals.edad}
               unidad_medida="años"
             />
-            <DataCard
-              category="Especie"
-              data={adoptableAnimalDetails.especie}
-            />
+            <DataCard category="Especie" data={animals.especie} />
           </View>
           <View style={styles.secondDataRow}>
             <Text style={styles.secondaryTitle}>Presentación</Text>
             <DataCard
               category=""
-              data={adoptableAnimalDetails.presentacion}
+              data={animals.presentacion}
               style={styles.largeCard}
             />
           </View>
@@ -84,17 +84,17 @@ export default function AdoptableAnimalDetail() {
             />
             <DataCard
               category="Esterilizado"
-              data={adoptableAnimalDetails.esterilizado}
+              data={animals.esterilizado}
               style={styles.wideCard}
             />
             <DataCard
               category="Raza"
-              data={adoptableAnimalDetails.raza}
+              data={animals.raza}
               style={styles.wideCard}
             />
             <DataCard
               category="Carácter"
-              data={adoptableAnimalDetails.caracter}
+              data={animals.caracter}
               style={styles.tallWideCard}
             />
           </View>
@@ -223,4 +223,10 @@ const createStyles = (insets) =>
       left: scaleSize(320),
       top: scaleSize(45),
     },
+    informativeMessages: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#FFFFFF'
+    }
   });

@@ -1,6 +1,5 @@
 // components/AnimalCard.js
 import { Link } from 'expo-router';
-import React from 'react';
 import {
   View,
   Text,
@@ -10,7 +9,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 
-export default function AnimalCard({ nombre, edad, imagen }) {
+export default function AnimalCard({ id_animal, nombre, edad, imagen }) {
   const { width } = useWindowDimensions();
   const scale = width / 375; // 375 es el ancho base de referencia (iPhone 8)
 
@@ -71,7 +70,13 @@ export default function AnimalCard({ nombre, edad, imagen }) {
           <Text style={styles.nombre}>{nombre}</Text>
           <Text style={styles.edad}>{edad}</Text>
         </View>
-        <Link href='/(animals)/detail'>
+        <Link
+          href={{
+            pathname: `/(animals)/detail/[id_animal]`,
+            params: { id_animal: id_animal },
+          }}
+          asChild
+        >
           <TouchableOpacity style={styles.boton}>
             <Text style={styles.botonTexto}>Ver</Text>
           </TouchableOpacity>

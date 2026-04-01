@@ -5,13 +5,11 @@ import {
   Image,
   useWindowDimensions,
 } from 'react-native';
-import { useAnimalImages } from '../hooks/useAnimalImages.js';
 import { useState } from 'react';
 import { scaleSize } from '../constants/layout.js';
 
-export const AnimalImagesCarousel = ({ filter, value }) => {
+export const AnimalImagesCarousel = ({ imageUrls = [] }) => {
   const { width: windowWidth } = useWindowDimensions();
-  const { imageUrls } = useAnimalImages({ filter, value });
 
   //Para crear un índice para cada imagen
   const [currentIndex, setCurrentIndex] = useState(0);

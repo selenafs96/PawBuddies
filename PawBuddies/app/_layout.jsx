@@ -5,29 +5,29 @@ import { Slot } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 
-class ErrorBoundary extends React.Component {
-  state = { error: null };
+// class ErrorBoundary extends React.Component {
+//   state = { error: null };
 
-  static getDerivedStateFromError(error) {
-    return { error };
-  }
+//   static getDerivedStateFromError(error) {
+//     return { error };
+//   }
 
-  componentDidCatch(error, info) {
-    console.error('ErrorBoundary caught:', error, info);
-  }
+//   componentDidCatch(error, info) {
+//     console.error('ErrorBoundary caught:', error, info);
+//   }
 
-  render() {
-    if (this.state.error) {
-      return (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorTitle}>Error en la app</Text>
-          <Text style={styles.errorText}>{String(this.state.error)}</Text>
-        </View>
-      );
-    }
-    return this.props.children;
-  }
-}
+//   render() {
+//     if (this.state.error) {
+//       return (
+//         <View style={styles.errorContainer}>
+//           <Text style={styles.errorTitle}>Error en la app</Text>
+//           <Text style={styles.errorText}>{String(this.state.error)}</Text>
+//         </View>
+//       );
+//     }
+//     return this.props.children;
+//   }
+// }
 
 const RootLayout = () => {
   const [fontsLoaded] = useFonts({
@@ -41,9 +41,9 @@ const RootLayout = () => {
   return (
     <SafeAreaProvider>
       <StatusBar style="auto" />
-      <ErrorBoundary>
+      {/* <ErrorBoundary> */}
         <Slot />
-      </ErrorBoundary>
+      {/* </ErrorBoundary> */}
     </SafeAreaProvider>
   );
 };
