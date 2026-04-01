@@ -1,10 +1,10 @@
-import { AdoptableAnimalDetail } from '../src/screens/AdoptableAnimalDetail.js'
-import AdoptaScreen from '../src/screens/AdoptaScreen.js'
+import AdoptaScreen from "./(animals)/list/index.jsx";
 
 const PawBuddies = () => {
-  return (
-    <AdoptaScreen />
-  )
-}
 
-export default PawBuddies
+  return (
+    <AdoptaScreen/>
+  );
+};
+
+export default PawBuddies;
