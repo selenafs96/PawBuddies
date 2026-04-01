@@ -1,10 +1,9 @@
-import AdoptaScreen from "./(animals)/list/index.jsx";
+import AdoptaScreen from '../src/screens/AdoptaScreen.js'
 
 const PawBuddies = () => {
-
   return (
-    <AdoptaScreen/>
-  );
-};
+    <AdoptaScreen />
+  )
+}
 
-export default PawBuddies;
+export default PawBuddies
