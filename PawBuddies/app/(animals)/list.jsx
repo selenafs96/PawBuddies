@@ -6,32 +6,30 @@ import {
   FlatList,
   StyleSheet,
   SafeAreaView,
-  useWindowDimensions,
   Image,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import AnimalCard from '../../../src/components/AnimalCard';
-import { useAnimals } from '../../../src/hooks/useAnimals';
-import { scaleFont, scaleSize } from '../../../src/constants/layout';
+import AnimalCard from '../../src/components/AnimalCard';
+import { useAnimals } from '../../src/hooks/useAnimals';
+import { scaleFont, scaleSize } from '../../src/constants/layout';
 
 export default function AdoptaScreen() {
-  const { width } = useWindowDimensions();
   const NAV_HEIGHT = scaleSize(50);
 
   const [especie, setEspecie] = useState('todos');
   const [estado, setEstado] = useState('todos')
-  const { animals, loading, error, fetchAnimalByFilter } = useAnimals();
+  const { animals, loading, error, fetchAnimalByEspecieEstado } = useAnimals();
 
   useEffect(() => {
-    fetchAnimalByFilter(especie, 'Adoptable');
+    fetchAnimalByEspecieEstado(especie, 'Adoptable');
   }, [estado, especie]);
 
 
   // Mapea cada animal a las props que espera AnimalCard
   const renderItem = ({ item }) => (
     <AnimalCard
-      id_animal={item.id_animal} //TODO NUEVO
+      id_animal={item.id_animal}
       nombre={item.nombre}
       edad={item.edad ? `${item.edad} años` : 'Edad desconocida'}
       imagen={item.url_foto?.[0] ?? null} // primera foto del array, o null
@@ -162,7 +160,7 @@ export default function AdoptaScreen() {
                 }
               >
                 <Image
-                  source={require('../../../assets/icons/Dog.png')}
+                  source={require('../../assets/icons/Dog.png')}
                   style={[
                     styles.filtroIcono,
                     especie === 'Perro' && styles.filtroIconoActivo,
@@ -177,7 +175,7 @@ export default function AdoptaScreen() {
                 onPress={() => setEspecie(especie === 'Gato' ? 'todos' : 'Gato')}
               >
                 <Image
-                  source={require('../../../assets/icons/Cat.png')}
+                  source={require('../../assets/icons/Cat.png')}
                   style={[
                     styles.filtroIcono,
                     especie === 'Gato' && styles.filtroIconoActivo,
@@ -190,7 +188,7 @@ export default function AdoptaScreen() {
               onPress={() => setEspecie('todos')}
             >
               <Image
-                source={require('../../../assets/icons/filter_list.png')}
+                source={require('../../assets/icons/filter_list.png')}
                 style={[
                   styles.filtroIcono,
                   especie === 'todos' && styles.filtroIconoActivo,
@@ -235,25 +233,25 @@ export default function AdoptaScreen() {
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem}>
           <Image
-            source={require('../../../assets/icons/home.png')}
+            source={require('../../assets/icons/home.png')}
             style={styles.bottomIconoImg}
           />
         </TouchableOpacity>
         <TouchableOpacity style={[styles.navItem, styles.navActivo]}>
           <Image
-            source={require('../../../assets/icons/patas.png')}
+            source={require('../../assets/icons/patas.png')}
             style={styles.bottomIconoImgActivo}
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem}>
           <Image
-            source={require('../../../assets/icons/corazon.png')}
+            source={require('../../assets/icons/corazon.png')}
             style={styles.bottomIconoImg}
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem}>
           <Image
-            source={require('../../../assets/icons/perfil.png')}
+            source={require('../../assets/icons/perfil.png')}
             style={styles.bottomIconoImg}
           />
         </TouchableOpacity>

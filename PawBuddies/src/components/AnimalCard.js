@@ -72,7 +72,7 @@ export default function AnimalCard({ id_animal, nombre, edad, imagen }) {
         </View>
         <Link
           href={{
-            pathname: `/(animals)/detail/[id_animal]`,
+            pathname: `/(animals)/[id_animal]`,
             params: { id_animal: id_animal },
           }}
           asChild

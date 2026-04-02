@@ -1,4 +1,4 @@
-import AdoptaScreen from "./(animals)/list/index.jsx";
+import AdoptaScreen from "./(animals)/list.jsx";
 
 const PawBuddies = () => {
 

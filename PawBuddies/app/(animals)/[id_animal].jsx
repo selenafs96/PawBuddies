@@ -10,25 +10,51 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 
-import { scaleFont, scaleSize } from '../../../src/constants/layout.js';
-import { AnimalImagesCarousel } from '../../../src/components/AnimalImagesCarousel.js';
-import { DataCard } from '../../../src/components/DataCard.js';
-import { BackButton } from '../../../src/components/BackButton.js';
-import { useAnimals } from '../../../src/hooks/useAnimals.js';
+import { scaleFont, scaleSize } from '../../src/constants/layout.js';
+import { AnimalImagesCarousel } from '../../src/components/AnimalImagesCarousel.js';
+import { DataCard } from '../../src/components/DataCard.js';
+import { BackButton } from '../../src/components/BackButton.js';
+import { useAnimals } from '../../src/hooks/useAnimals.js';
+import { useShelter } from '../../src/hooks/useShelter.js';
+import { useHealthRecord } from '../../src/hooks/useHealthRecord.js';
 
 export default function AdoptableAnimalDetail() {
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
   const { id_animal } = useLocalSearchParams();
 
-  const { animals, loading, error, fetchAnimalById } = useAnimals();
+  const { animals, loading, fetchAnimalById } = useAnimals();
+  const { shelters, shelterLoading, fetchShelterById } =
+    useShelter();
+  const {
+    healthRecords,
+    healthRecordLoading,
+    fetchHealthRecordById,
+  } = useHealthRecord();
+
+  //Usamos dos useEffect porque la función fetch es asíncrona, y el useEffect ejecuta todo a la vez, no de manera secuencial
+  useEffect(() => {
+    if (id_animal) {
+      fetchAnimalById(id_animal);
+    }
+  }, [id_animal]);
+
+  console.log(animals);
 
   useEffect(() => {
-    fetchAnimalById(id_animal);
-  }, []);
+    if (animals && animals.id_protectora) {
+      fetchShelterById(animals.id_protectora);
+    }
 
-  if (loading) return <Text style={styles.informativeMessages}>Cargando...</Text>;
-  if (!animals) return <Text style={styles.informativeMessages}>Animal no encontrado</Text>;
+    if (animals && animals.id_animal) {
+      fetchHealthRecordById(animals.id_animal);
+    }
+  }, [animals]);
+
+  if (loading || healthRecordLoading || shelterLoading)
+    return <Text style={styles.informativeMessages}>Cargando...</Text>;
+  if (!animals || !shelters || !healthRecords)
+    return <Text style={styles.informativeMessages}>No encontrado</Text>;
 
   return (
     <View style={styles.mainContainer}>
@@ -40,11 +66,9 @@ export default function AdoptableAnimalDetail() {
           <BackButton />
           <Text style={styles.title}>Detalles del animal</Text>
         </View>
-        <AnimalImagesCarousel
-          imageUrls={animals.url_foto}
-        />
+        <AnimalImagesCarousel imageUrls={animals.url_foto} />
         <Image
-          source={require('../../../assets/icons/fav.png')}
+          source={require('../../assets/icons/fav.png')}
           style={styles.favButton}
         />
         <View
@@ -79,12 +103,12 @@ export default function AdoptableAnimalDetail() {
           <View style={styles.thirdDataSection}>
             <DataCard
               category="Protectora"
-              data="PawBuddies"
+              data={shelters.nombre}
               style={styles.wideCard}
             />
             <DataCard
               category="Esterilizado"
-              data={animals.esterilizado}
+              data={healthRecords.esterilizacion}
               style={styles.wideCard}
             />
             <DataCard
@@ -227,6 +251,6 @@ const createStyles = (insets) =>
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#FFFFFF'
-    }
+      backgroundColor: '#FFFFFF',
+    },
   });
