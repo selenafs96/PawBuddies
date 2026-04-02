@@ -19,7 +19,7 @@ export const AnimalRepository = {
     return data;
   },
 
-  async getByFilter(especie, estado) {
+  async getByEspecieEstado(especie, estado) {
     let query = supabase.from('animal').select('*');
 
     if (estado && estado !== 'todos') {

@@ -32,9 +32,9 @@ export function useAnimals(filtro = 'todos') {
     }
   };
 
-    const fetchAnimalByFilter = async (especie, estado) => {
+    const fetchAnimalByEspecieEstado = async (especie, estado) => {
     try {
-      const data = await AnimalRepository.getByFilter(especie, estado);
+      const data = await AnimalRepository.getByEspecieEstado(especie, estado);
       setAnimals(data);
       setError(null);
     } catch (err) {
@@ -45,5 +45,5 @@ export function useAnimals(filtro = 'todos') {
     }
   };
 
-  return { animals, loading, fetchAnimals, fetchAnimalById, fetchAnimalByFilter, error };
+  return { animals, loading, fetchAnimals, fetchAnimalById, fetchAnimalByEspecieEstado };
 }
