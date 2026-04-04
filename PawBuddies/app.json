@@ -3,11 +3,17 @@
     "name": "PawBuddies",
     "slug": "PawBuddies",
     "version": "1.0.0",
+    "scheme": "pawbuddies",
+    "extra": {
+      "router": {
+        "origin": false
+      }
+    },
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icons/Logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/icons/Logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,13 +23,16 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
+        "foregroundImage": "./assets/icons/logo_principal.png"
+      },
+      "package": "com.anonymous.PawBuddies"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-font",
+      "expo-router"
+    ]
   }
 }
