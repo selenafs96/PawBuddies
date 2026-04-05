@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { scaleFont, scaleSize } from '../src/constants/layout';
+import { scaleFont, scaleSize } from '../../src/constants/layout';
 import { Stack } from 'expo-router';
-import { BackButton } from '../src/components/BackButton';
-import { BottomNav } from '../src/components/BottomNav';
+import { BackButton } from '../../src/components/BackButton';
+import { BottomNav } from '../../src/components/BottomNav';
 
 export default function DetalleNoticia() {
   const styles = StyleSheet.create({
