@@ -218,7 +218,7 @@ export default function DetalleNoticia() {
 
           <TouchableOpacity>
             <Image
-              source={require('../assets/icons/share.png')}
+              source={require('../../assets/icons/share.png')}
               style={styles.shareButton}
             />
           </TouchableOpacity>
@@ -233,14 +233,14 @@ export default function DetalleNoticia() {
 
             <TouchableOpacity style={styles.floatingBtnLeft}>
               <Image
-                source={require('../assets/icons/megusta.png')}
+                source={require('../../assets/icons/megusta.png')}
                 style={styles.favButton}
               />
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.floatingBtn}>
               <Image
-                source={require('../assets/icons/guardar.png')}
+                source={require('../../assets/icons/guardar.png')}
                 style={styles.favButton}
               />
             </TouchableOpacity>
@@ -309,3 +309,14 @@ export default function DetalleNoticia() {
     </View>
   );
 }
+
+// DEBUG PÁGINA DETALLENOTICIA EXPO ROUTE
+/*import { View, Text } from 'react-native';
+
+export default function DetalleNoticia() {
+  return (
+    <View>
+      <Text>FUNCIONA</Text>
+    </View>
+  );
+}*/

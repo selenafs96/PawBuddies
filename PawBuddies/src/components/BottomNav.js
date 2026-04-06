@@ -1,69 +1,71 @@
 import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { useRouter, usePathname } from 'expo-router';
+import { useRouter, useSegments } from 'expo-router';
 import { scaleSize } from '../constants/layout';
 
 export const BottomNav = () => {
   const router = useRouter();
-  const pathname = usePathname();
+  const segments = useSegments();
 
-  const isActive = (route) => pathname.includes(route);
+  // Detecta en qué sección estás
+  const activeSection = segments?.[0];
+
+  const isNoticias = activeSection === '(noticias)';
+  const isAnimals = activeSection === '(animals)';
 
   return (
     <View style={styles.bottomNav}>
 
-      {/* HOME */}
+      {/* NOTICIAS */}
       <TouchableOpacity
-        style={[styles.navItem, isActive('/home') && styles.navActivo]}
-        onPress={() => router.push('/home')}
+        style={[styles.navItem, isNoticias && styles.navActivo]}
+        onPress={() => router.push({
+            pathname: '/(noticias)/[id_noticia]',
+            params: { id_noticia: '123' },
+          })
+        }
       >
         <Image
           source={require('../../assets/icons/home.png')}
           style={[
             styles.icon,
-            isActive('/home') && styles.iconActive
+            isNoticias && styles.iconActive
           ]}
         />
       </TouchableOpacity>
 
       {/* ANIMALES */}
       <TouchableOpacity
-        style={[styles.navItem, isActive('/animals') && styles.navActivo]}
+        style={[styles.navItem, isAnimals && styles.navActivo]}
         onPress={() => router.push('/(animals)/list')}
       >
         <Image
           source={require('../../assets/icons/patas.png')}
           style={[
             styles.icon,
-            isActive('/animals') && styles.iconActive
+            isAnimals && styles.iconActive
           ]}
         />
       </TouchableOpacity>
 
       {/* FAVORITOS */}
       <TouchableOpacity
-        style={[styles.navItem, isActive('/favoritos') && styles.navActivo]}
-        onPress={() => router.push('/favoritos')}
+        style={styles.navItem}
+        onPress={() => console.log('Futuros favoritos')}
       >
         <Image
           source={require('../../assets/icons/corazon.png')}
-          style={[
-            styles.icon,
-            isActive('/favoritos') && styles.iconActive
-          ]}
+          style={styles.icon}
         />
       </TouchableOpacity>
 
       {/* PERFIL */}
       <TouchableOpacity
-        style={[styles.navItem, isActive('/perfil') && styles.navActivo]}
-        onPress={() => router.push('/perfil')}
+        style={styles.navItem}
+        onPress={() => console.log('Futuro perfil')}
       >
         <Image
           source={require('../../assets/icons/perfil.png')}
-          style={[
-            styles.icon,
-            isActive('/perfil') && styles.iconActive
-          ]}
+          style={styles.icon}
         />
       </TouchableOpacity>
 

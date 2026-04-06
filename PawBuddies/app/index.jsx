@@ -1,10 +1,5 @@
-import AdoptaScreen from "./(animals)/list.jsx";
+import { Redirect } from 'expo-router';
 
-const PawBuddies = () => {
-
-  return (
-    <AdoptaScreen/>
-  );
-};
-
-export default PawBuddies;
+export default function Index() {
+  return <Redirect href="/(noticias)/123" />;
+}
