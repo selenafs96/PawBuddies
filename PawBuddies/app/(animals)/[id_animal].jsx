@@ -12,7 +12,7 @@ import { useLocalSearchParams } from 'expo-router';
 
 import { scaleFont, scaleSize } from '../../src/constants/layout.js';
 import { AnimalImagesCarousel } from '../../src/components/AnimalImagesCarousel.js';
-import { DataCard } from '../../src/components/DataCard.js';
+import { AnimalDataCard } from '../../src/components/AnimalDataCard.js';
 import { BackButton } from '../../src/components/BackButton.js';
 import { useAnimals } from '../../src/hooks/useAnimals.js';
 import { useShelter } from '../../src/hooks/useShelter.js';
@@ -75,17 +75,17 @@ export default function AdoptableAnimalDetail() {
             <Text style={styles.secondaryTitle}>{animals.nombre}</Text>
           </View>
           <View style={styles.firstDataRow}>
-            <DataCard category="Género" data={animals.genero} />
-            <DataCard
+            <AnimalDataCard category="Género" data={animals.genero} />
+            <AnimalDataCard
               category="Edad"
               data={animals.edad}
               unidad_medida="años"
             />
-            <DataCard category="Especie" data={animals.especie} />
+            <AnimalDataCard category="Especie" data={animals.especie} />
           </View>
           <View style={styles.secondDataRow}>
             <Text style={styles.secondaryTitle}>Presentación</Text>
-            <DataCard
+            <AnimalDataCard
               category=""
               data={animals.presentacion}
               style={styles.largeCard}
@@ -95,22 +95,22 @@ export default function AdoptableAnimalDetail() {
             <Text style={styles.secondaryTitle}>Datos adicionales</Text>
           </View>
           <View style={styles.thirdDataSection}>
-            <DataCard
+            <AnimalDataCard
               category="Protectora"
               data={shelters.nombre}
               style={styles.wideCard}
             />
-            <DataCard
+            <AnimalDataCard
               category="Esterilizado"
               data={healthRecords.esterilizacion}
               style={styles.wideCard}
             />
-            <DataCard
+            <AnimalDataCard
               category="Raza"
               data={animals.raza}
               style={styles.wideCard}
             />
-            <DataCard
+            <AnimalDataCard
               category="Carácter"
               data={animals.caracter}
               style={styles.tallWideCard}
@@ -148,7 +148,6 @@ const createStyles = (insets) =>
     },
     scrollContent: {
       flexGrow: 1,
-      paddingTop: insets.top,
     },
     secondaryTitle: {
       fontFamily: 'TiltNeon',
@@ -207,7 +206,7 @@ const createStyles = (insets) =>
     wideCard: {
       marginLeft: scaleSize(10),
       marginRight: scaleSize(10),
-      width: '95%',
+      width: '100%',
       height: scaleSize(60),
       marginBottom: scaleSize(10),
     },
@@ -247,8 +246,9 @@ const createStyles = (insets) =>
       position: 'absolute',
       width: scaleSize(35),
       height: scaleSize(35),
-      left: scaleSize(320),
+      right: scaleSize(20),
       top: scaleSize(45),
+      zIndex: 10
     },
     informativeMessages: {
       flex: 1,

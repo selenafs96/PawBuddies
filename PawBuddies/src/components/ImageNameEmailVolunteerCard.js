@@ -29,15 +29,13 @@ const AVATAR_SIZE = scaleSize(60);
 const createStyles = (insets) =>
   StyleSheet.create({
     mainContainer: {
-      flex: 1,
       width: '100%',
-      paddingLeft: scaleSize(40),
       paddingTop: scaleSize(20),
     },
     row: {
       flexDirection: 'row',
       alignItems: 'center',
-      width: '70%',
+      width: '100%',
       gap: scaleSize(10)
     },
     imageContainer: {

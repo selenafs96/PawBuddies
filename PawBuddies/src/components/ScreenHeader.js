@@ -8,17 +8,15 @@ export default function ScreenHeader({title}) {
   const styles = createStyles(insets);
 
   return (
-    <View style={styles.mainContainer}>
       <View style={styles.titleContainer}>
         <View style={styles.leftColumn}>
           <BackButton />
         </View>
         <View style={styles.centerColumn}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>{title}</Text>
         </View>
         <View style={styles.rightColumn} />
       </View>
-    </View>
   );
 }
 
