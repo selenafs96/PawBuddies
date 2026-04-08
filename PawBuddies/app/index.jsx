@@ -10,13 +10,11 @@ const PawBuddies = () => {
 
 export default PawBuddies;*/
 
-import EditAnimalScreen from "./(animals)/EditAnimalScreen.jsx";
+import AnimalAdoptadoScreen from "../src/screens/AnimalAdoptadoScreen.js";
 
-// Para probar la pantalla temporalmente, pasamos el id_animal como prop
-// Una vez que la navegación esté implementada, este archivo volverá a su estado original
 const PawBuddies = () => {
   return (
-    <EditAnimalScreen testId="c0000000-0000-0000-0000-000000000001" />
+    <AnimalAdoptadoScreen id_usuario="b0000000-0000-0000-0000-000000000001" />
   );
 };
 
