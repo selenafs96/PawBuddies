@@ -7,16 +7,18 @@ import {
   Pressable,
   Linking,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { scaleFont, scaleSize } from '../constants/layout.js';
 import { AnimalImagesCarousel } from '../components/AnimalImagesCarousel.js';
 import { DataCard } from '../components/DataCard.js';
+import { BackButton } from '../components/BackButton.js';
 import { useAdopcion } from '../hooks/useAdopcion.js';
 import { useHealthRecord } from '../hooks/useHealthRecord.js';
 
-
+// Recibe el id_usuario del adoptante autenticado como prop o desde el contexto de sesión.
 export default function AnimalAdoptadoScreen({ id_usuario }) {
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
@@ -57,9 +59,7 @@ export default function AnimalAdoptadoScreen({ id_usuario }) {
 
   const handleOpenDoc = (url) => {
     if (url) {
-      Linking.openURL(url).catch(() =>
-        alert('No se pudo abrir el documento.')
-      );
+      Linking.openURL(url).catch(() => alert('No se pudo abrir el documento.'));
     } else {
       alert('Documento no disponible.');
     }
@@ -70,30 +70,34 @@ export default function AnimalAdoptadoScreen({ id_usuario }) {
       <ScrollView
         style={styles.scrollContainer}
         contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
       >
-        {/* Cabecera */}
+        {/* Cabecera: flecha izquierda + título centrado */}
         <View style={styles.titleContainer}>
+          <BackButton />
           <Text style={styles.title}>Detalles del animal</Text>
+          {/* Spacer para centrar el título visualmente */}
+          <View style={styles.titleSpacer} />
         </View>
 
         {/* Carrusel de imágenes */}
         <AnimalImagesCarousel imageUrls={animal.url_foto} />
 
-        {/* Bloque principal con fondo turquesa */}
+        {/* Bloque turquesa */}
         <View style={styles.tealBlock}>
 
           {/* Nombre */}
-          <Text style={styles.secondaryTitle}>{animal.nombre}</Text>
+          <Text style={styles.sectionTitle}>{animal.nombre}</Text>
 
           {/* Fila: Género / Edad / Tamaño */}
-          <View style={styles.firstDataRow}>
+          <View style={styles.dataRow}>
             <DataCard category="Género" data={animal.genero} />
             <DataCard category="Edad" data={animal.edad} unidad_medida="años" />
-            <DataCard category="Especie" data={animal.especie} />
+            <DataCard category="Tamaño" data={animal.tamano ?? animal.especie} />
           </View>
 
           {/* Sobre el animal */}
-          <Text style={styles.secondaryTitle}>Sobre el animal</Text>
+          <Text style={styles.sectionTitle}>Sobre el animal</Text>
           <DataCard
             category=""
             data={animal.presentacion}
@@ -101,25 +105,42 @@ export default function AnimalAdoptadoScreen({ id_usuario }) {
           />
 
           {/* Documentación */}
-          <Text style={styles.secondaryTitle}>Documentación</Text>
+          <Text style={styles.sectionTitle}>Documentación</Text>
           <View style={styles.docRow}>
+
+            {/* Castración */}
             <Pressable
               style={styles.docCard}
-              onPress={() => handleOpenDoc(healthRecords?.url_cartilla)}
+              onPress={() => handleOpenDoc(healthRecords?.url_castracion)}
             >
-              <Text style={styles.docIcon}>📄</Text>
-              <Text style={styles.docLabel}>Cartilla{'\n'}sanitaria</Text>
+              <Text style={styles.docLabel}>Castración</Text>
+              <View style={styles.docCardInner}>
+                <Text style={styles.docFileName}>document.pdf</Text>
+                <Image
+                  source={require('../../assets/icons/arrow_back.png')}
+                  style={styles.docIcon}
+                />
+              </View>
             </Pressable>
 
+            {/* Vacunas */}
             <Pressable
               style={styles.docCard}
-              onPress={() => handleOpenDoc(adopcion.url_contrato)}
+              onPress={() =>
+                handleOpenDoc(healthRecords?.url_vacunas ?? adopcion.url_contrato)
+              }
             >
-              <Text style={styles.docIcon}>📄</Text>
-              <Text style={styles.docLabel}>Contrato{'\n'}adopción</Text>
+              <Text style={styles.docLabel}>Vacunas</Text>
+              <View style={styles.docCardInner}>
+                <Text style={styles.docFileName}>document.pdf</Text>
+                <Image
+                  source={require('../../assets/icons/arrow_back.png')}
+                  style={styles.docIcon}
+                />
+              </View>
             </Pressable>
+
           </View>
-
         </View>
 
         <View style={styles.bottomView} />
@@ -133,7 +154,6 @@ const createStyles = (insets) =>
     mainContainer: {
       flex: 1,
       backgroundColor: '#FFFFFF',
-      width: '100%',
     },
     centeredContainer: {
       flex: 1,
@@ -144,79 +164,95 @@ const createStyles = (insets) =>
     },
     scrollContainer: {
       flex: 1,
-      width: '100%',
       backgroundColor: '#FFFFFF',
-      alignContent: 'center',
       alignSelf: 'center',
+      width: '100%',
       maxWidth: 500,
     },
     scrollContent: {
       flexGrow: 1,
       paddingTop: insets.top,
     },
+    // ── Cabecera ──
     titleContainer: {
       flexDirection: 'row',
-      backgroundColor: '#FFFFFF',
-      alignContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: scaleSize(15),
+      backgroundColor: '#FFFFFF',
       paddingVertical: scaleSize(8),
     },
     title: {
       fontFamily: 'TiltNeon',
       fontSize: scaleFont(20),
-      paddingTop: scaleSize(5),
-      marginBottom: scaleSize(5),
+      flex: 1,
+      textAlign: 'center',
     },
+    // Mismo ancho que BackButton para centrar el título
+    titleSpacer: {
+      width: scaleSize(44),
+    },
+    // ── Bloque turquesa ──
     tealBlock: {
       backgroundColor: '#3DBDB0',
       paddingHorizontal: scaleSize(15),
+      paddingBottom: scaleSize(10),
     },
-    secondaryTitle: {
+    sectionTitle: {
       fontFamily: 'TiltNeon',
       fontSize: scaleFont(20),
       fontWeight: 'bold',
-      paddingTop: scaleSize(20),
-      paddingLeft: scaleSize(5),
-      paddingBottom: scaleSize(8),
+      paddingTop: scaleSize(18),
+      paddingBottom: scaleSize(10),
     },
-    firstDataRow: {
+    // ── Fila de DataCards (Género / Edad / Tamaño) ──
+    dataRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: '100%',
-      backgroundColor: '#3DBDB0',
-      marginBottom: scaleSize(10),
+      gap: scaleSize(8),
+      marginBottom: scaleSize(4),
     },
+    // ── Card de presentación grande ──
     largeCard: {
       width: '100%',
-      minHeight: scaleSize(120),
+      minHeight: scaleSize(130),
       height: 'auto',
-      marginBottom: scaleSize(10),
+      marginBottom: scaleSize(4),
     },
     // ── Documentación ──
     docRow: {
       flexDirection: 'row',
-      gap: scaleSize(15),
+      gap: scaleSize(12),
+      marginTop: scaleSize(4),
       marginBottom: scaleSize(20),
     },
     docCard: {
       backgroundColor: '#e8f7f6',
       borderRadius: scaleSize(10),
-      paddingVertical: scaleSize(14),
-      paddingHorizontal: scaleSize(18),
-      alignItems: 'center',
-      justifyContent: 'center',
-      minWidth: scaleSize(120),
-    },
-    docIcon: {
-      fontSize: scaleFont(28),
-      marginBottom: scaleSize(6),
+      paddingVertical: scaleSize(12),
+      paddingHorizontal: scaleSize(14),
+      flex: 1,
+      gap: scaleSize(8),
     },
     docLabel: {
       fontFamily: 'TiltNeon',
-      fontSize: scaleFont(13),
+      fontSize: scaleFont(14),
       color: '#000000',
-      textAlign: 'center',
+      fontWeight: 'bold',
+    },
+    docCardInner: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    docFileName: {
+      fontFamily: 'TiltNeon',
+      fontSize: scaleFont(12),
+      color: '#878a8a',
+    },
+    docIcon: {
+      width: scaleSize(20),
+      height: scaleSize(20),
+      tintColor: '#3DBDB0',
+      transform: [{ rotate: '180deg' }],
     },
     informativeMessages: {
       fontFamily: 'TiltNeon',
@@ -227,7 +263,7 @@ const createStyles = (insets) =>
     },
     bottomView: {
       width: '100%',
-      height: scaleSize(50),
+      height: scaleSize(30),
       backgroundColor: '#3DBDB0',
     },
   });
