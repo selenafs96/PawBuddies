@@ -17,6 +17,7 @@ import { BackButton } from '../../src/components/BackButton.js';
 import { useAnimals } from '../../src/hooks/useAnimals.js';
 import { useShelter } from '../../src/hooks/useShelter.js';
 import { useHealthRecord } from '../../src/hooks/useHealthRecord.js';
+import ScreenHeader from '../../src/components/ScreenHeader.js';
 
 export default function AdoptableAnimalDetail() {
   const insets = useSafeAreaInsets();
@@ -24,13 +25,9 @@ export default function AdoptableAnimalDetail() {
   const { id_animal } = useLocalSearchParams();
 
   const { animals, loading, fetchAnimalById } = useAnimals();
-  const { shelters, shelterLoading, fetchShelterById } =
-    useShelter();
-  const {
-    healthRecords,
-    healthRecordLoading,
-    fetchHealthRecordById,
-  } = useHealthRecord();
+  const { shelters, shelterLoading, fetchShelterById } = useShelter();
+  const { healthRecords, healthRecordLoading, fetchHealthRecordById } =
+    useHealthRecord();
 
   //Usamos dos useEffect porque la función fetch es asíncrona, y el useEffect ejecuta todo a la vez, no de manera secuencial
   useEffect(() => {
@@ -62,10 +59,7 @@ export default function AdoptableAnimalDetail() {
         style={styles.scrollContainer}
         contentContainerStyle={styles.scrollContent}
       >
-        <View style={styles.titleContainer}>
-          <BackButton />
-          <Text style={styles.title}>Detalles del animal</Text>
-        </View>
+        <ScreenHeader title="Detalles del animal" />
         <AnimalImagesCarousel imageUrls={animals.url_foto} />
         <Image
           source={require('../../assets/icons/fav.png')}
@@ -166,11 +160,20 @@ const createStyles = (insets) =>
     },
     titleContainer: {
       flexDirection: 'row',
-      backgroundColor: '#FFFFFF',
-      width: '70%',
-      alignContent: 'center',
       alignItems: 'center',
-      justifyContent: 'space-between',
+      paddingTop: insets.top,
+      width: '100%',
+    },
+    leftColumn: {
+      flex: 1,
+      alignItems: 'flex-start',
+    },
+    centerColumn: {
+      flex: 2,
+      alignItems: 'center',
+    },
+    rightColumn: {
+      flex: 1,
     },
     title: {
       fontFamily: 'TiltNeon',
