@@ -8,12 +8,11 @@ import {
   ScrollView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useLocalSearchParams } from 'expo-router';
+import { Link, useLocalSearchParams } from 'expo-router';
 
 import { scaleFont, scaleSize } from '../../src/constants/layout.js';
 import { AnimalImagesCarousel } from '../../src/components/AnimalImagesCarousel.js';
 import { AnimalDataCard } from '../../src/components/AnimalDataCard.js';
-import { BackButton } from '../../src/components/BackButton.js';
 import { useAnimals } from '../../src/hooks/useAnimals.js';
 import { useShelter } from '../../src/hooks/useShelter.js';
 import { useHealthRecord } from '../../src/hooks/useHealthRecord.js';
@@ -119,14 +118,19 @@ export default function AdoptableAnimalDetail() {
         </View>
         <View style={styles.bottomView}></View>
       </ScrollView>
-      <Pressable
-        style={styles.adoptameButton}
-        onPress={() => {
-          alert('Hola');
+      <Link
+        href={{
+          pathname: `/confirmation`,
+          params: { message: '¡Solicitud enviada!' },
         }}
+        asChild
       >
-        <Text style={styles.buttonText}>Adóptame</Text>
-      </Pressable>
+        <Pressable
+          style={styles.adoptameButton}
+        >
+          <Text style={styles.buttonText}>Adóptame</Text>
+        </Pressable>
+      </Link>
     </View>
   );
 }
@@ -206,7 +210,7 @@ const createStyles = (insets) =>
     wideCard: {
       marginLeft: scaleSize(10),
       marginRight: scaleSize(10),
-      width: '100%',
+      width: '95%',
       height: scaleSize(60),
       marginBottom: scaleSize(10),
     },
@@ -214,7 +218,6 @@ const createStyles = (insets) =>
       marginLeft: scaleSize(10),
       marginRight: scaleSize(10),
       width: '95%',
-      height: scaleSize(60),
       marginBottom: scaleSize(10),
       height: 'auto',
     },
@@ -248,7 +251,7 @@ const createStyles = (insets) =>
       height: scaleSize(35),
       right: scaleSize(20),
       top: scaleSize(45),
-      zIndex: 10
+      zIndex: 10,
     },
     informativeMessages: {
       flex: 1,

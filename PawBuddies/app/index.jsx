@@ -4,7 +4,7 @@ import VolunteerProfile from "./(volunteers)/profile.jsx";
 const PawBuddies = () => {
 
   return (
-    <VolunteerProfile/>
+    <AdoptaScreen/>
   );
 };
 
