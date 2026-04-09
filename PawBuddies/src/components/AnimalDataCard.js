@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { scaleFont, scaleSize } from '../constants/layout';
 
-export const DataCard = ({ category, data, style, unidad_medida }) => {
+export const AnimalDataCard = ({ category, data, style, unidad_medida }) => {
   
   if(!unidad_medida) {
     unidad_medida = ""
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   container: {
-    paddingBottom: scaleSize(5),
+    paddingBottom: scaleSize(10),
     paddingTop: scaleSize(10),
     paddingLeft: scaleSize(15),
     paddingRight: scaleSize(15),

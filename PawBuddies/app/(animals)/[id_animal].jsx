@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,14 +8,49 @@ import {
   ScrollView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { scaleFont, scaleSize } from '../constants/layout.js';
-import { AnimalImagesCarousel } from '../components/AnimalImagesCarousel.js';
-import { DataCard } from '../components/DataCard.js';
-import { BackButton } from '../components/BackButton.js';
+import { Link, useLocalSearchParams } from 'expo-router';
 
-export const AdoptableAnimalDetail = () => {
+import { scaleFont, scaleSize } from '../../src/constants/layout.js';
+import { AnimalImagesCarousel } from '../../src/components/AnimalImagesCarousel.js';
+import { AnimalDataCard } from '../../src/components/AnimalDataCard.js';
+import { useAnimals } from '../../src/hooks/useAnimals.js';
+import { useShelter } from '../../src/hooks/useShelter.js';
+import { useHealthRecord } from '../../src/hooks/useHealthRecord.js';
+import ScreenHeader from '../../src/components/ScreenHeader.js';
+
+export default function AdoptableAnimalDetail() {
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
+  const { id_animal } = useLocalSearchParams();
+
+  const { animals, loading, fetchAnimalById } = useAnimals();
+  const { shelters, shelterLoading, fetchShelterById } = useShelter();
+  const { healthRecords, healthRecordLoading, fetchHealthRecordById } =
+    useHealthRecord();
+
+  //Usamos dos useEffect porque la función fetch es asíncrona, y el useEffect ejecuta todo a la vez, no de manera secuencial
+  useEffect(() => {
+    if (id_animal) {
+      fetchAnimalById(id_animal);
+    }
+  }, [id_animal]);
+
+  console.log(animals);
+
+  useEffect(() => {
+    if (animals && animals.id_protectora) {
+      fetchShelterById(animals.id_protectora);
+    }
+
+    if (animals && animals.id_animal) {
+      fetchHealthRecordById(animals.id_animal);
+    }
+  }, [animals]);
+
+  if (loading || healthRecordLoading || shelterLoading)
+    return <Text style={styles.informativeMessages}>Cargando...</Text>;
+  if (!animals || !shelters || !healthRecords)
+    return <Text style={styles.informativeMessages}>No encontrado</Text>;
 
   return (
     <View style={styles.mainContainer}>
@@ -22,14 +58,8 @@ export const AdoptableAnimalDetail = () => {
         style={styles.scrollContainer}
         contentContainerStyle={styles.scrollContent}
       >
-        <View style={styles.titleContainer}>
-          <BackButton />
-          <Text style={styles.title}>Detalles del animal</Text>
-        </View>
-        <AnimalImagesCarousel
-          filter="id_animal"
-          value="b51116cd-2bed-44c9-bca0-f2b5f95dd6cd"
-        />
+        <ScreenHeader title="Detalles del animal" />
+        <AnimalImagesCarousel imageUrls={animals.url_foto} />
         <Image
           source={require('../../assets/icons/fav.png')}
           style={styles.favButton}
@@ -41,48 +71,69 @@ export const AdoptableAnimalDetail = () => {
           }}
         >
           <View style={{ width: '100%' }}>
-            <Text style={styles.secondaryTitle}>Nombre</Text>
+            <Text style={styles.secondaryTitle}>{animals.nombre}</Text>
           </View>
           <View style={styles.firstDataRow}>
-            <DataCard category="Género" data="Hembra" />
-            <DataCard category="Edad" data="4" unidad_medida="años" />
-            <DataCard category="Carácter" data="Tranquilo" />
+            <AnimalDataCard category="Género" data={animals.genero} />
+            <AnimalDataCard
+              category="Edad"
+              data={animals.edad}
+              unidad_medida="años"
+            />
+            <AnimalDataCard category="Especie" data={animals.especie} />
           </View>
           <View style={styles.secondDataRow}>
             <Text style={styles.secondaryTitle}>Presentación</Text>
-            <DataCard category="" data="Muy bueno" style={styles.largeCard} />
+            <AnimalDataCard
+              category=""
+              data={animals.presentacion}
+              style={styles.largeCard}
+            />
           </View>
           <View style={{ width: '100%' }}>
             <Text style={styles.secondaryTitle}>Datos adicionales</Text>
           </View>
           <View style={styles.thirdDataSection}>
-            <DataCard
+            <AnimalDataCard
               category="Protectora"
-              data="PawBuddies"
+              data={shelters.nombre}
               style={styles.wideCard}
             />
-            <DataCard
+            <AnimalDataCard
               category="Esterilizado"
-              data="Sí"
+              data={healthRecords.esterilizacion}
               style={styles.wideCard}
             />
-            <DataCard category="Especie" data="Perro" style={styles.wideCard} />
-            <DataCard category="Raza" data="Labrador" style={styles.wideCard} />
+            <AnimalDataCard
+              category="Raza"
+              data={animals.raza}
+              style={styles.wideCard}
+            />
+            <AnimalDataCard
+              category="Carácter"
+              data={animals.caracter}
+              style={styles.tallWideCard}
+            />
           </View>
         </View>
         <View style={styles.bottomView}></View>
       </ScrollView>
-      <Pressable
-        style={styles.adoptameButton}
-        onPress={() => {
-          alert('Hola');
+      <Link
+        href={{
+          pathname: `/confirmation`,
+          params: { message: '¡Solicitud enviada!' },
         }}
+        asChild
       >
-        <Text style={styles.buttonText}>Adóptame</Text>
-      </Pressable>
+        <Pressable
+          style={styles.adoptameButton}
+        >
+          <Text style={styles.buttonText}>Adóptame</Text>
+        </Pressable>
+      </Link>
     </View>
   );
-};
+}
 
 const createStyles = (insets) =>
   StyleSheet.create({
@@ -101,7 +152,6 @@ const createStyles = (insets) =>
     },
     scrollContent: {
       flexGrow: 1,
-      paddingTop: insets.top,
     },
     secondaryTitle: {
       fontFamily: 'TiltNeon',
@@ -113,11 +163,20 @@ const createStyles = (insets) =>
     },
     titleContainer: {
       flexDirection: 'row',
-      backgroundColor: '#FFFFFF',
-      width: '100%',
-      alignContent: 'center',
       alignItems: 'center',
-      justifyContent: 'center',
+      paddingTop: insets.top,
+      width: '100%',
+    },
+    leftColumn: {
+      flex: 1,
+      alignItems: 'flex-start',
+    },
+    centerColumn: {
+      flex: 2,
+      alignItems: 'center',
+    },
+    rightColumn: {
+      flex: 1,
     },
     title: {
       fontFamily: 'TiltNeon',
@@ -155,6 +214,13 @@ const createStyles = (insets) =>
       height: scaleSize(60),
       marginBottom: scaleSize(10),
     },
+    tallWideCard: {
+      marginLeft: scaleSize(10),
+      marginRight: scaleSize(10),
+      width: '95%',
+      marginBottom: scaleSize(10),
+      height: 'auto',
+    },
     adoptameButton: {
       position: 'absolute',
       bottom: insets.bottom > 0 ? insets.bottom : scaleSize(10),
@@ -183,7 +249,14 @@ const createStyles = (insets) =>
       position: 'absolute',
       width: scaleSize(35),
       height: scaleSize(35),
-      left: scaleSize(320),
+      right: scaleSize(20),
       top: scaleSize(45),
+      zIndex: 10,
+    },
+    informativeMessages: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#FFFFFF',
     },
   });
