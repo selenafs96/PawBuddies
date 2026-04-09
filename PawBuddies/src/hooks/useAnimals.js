@@ -32,7 +32,7 @@ export function useAnimals(filtro = 'todos') {
     }
   };
 
-    const fetchAnimalByEspecieEstado = async (especie, estado) => {
+  const fetchAnimalByEspecieEstado = async (especie, estado) => {
     try {
       const data = await AnimalRepository.getByEspecieEstado(especie, estado);
       setAnimals(data);
@@ -45,5 +45,29 @@ export function useAnimals(filtro = 'todos') {
     }
   };
 
-  return { animals, loading, fetchAnimals, fetchAnimalById, fetchAnimalByEspecieEstado };
+  const updateAnimal = async (id, updates) => {
+    try {
+      const data = await AnimalRepository.update(id, updates);
+      setAnimals((prev) => ({ ...prev, ...updates }));
+      setError(null);
+      return data;
+    } catch (err) {
+      console.error('Error actualizando animal:', err);
+      setError(err);
+      throw err;
+    }
+  };
+
+  const deleteAnimal = async (id) => {
+  try {
+    await AnimalRepository.delete(id);
+    setError(null);
+  } catch (err) {
+    console.error('Error eliminando animal:', err);
+    setError(err);
+    throw err;
+  }
+};
+
+  return { animals, loading, fetchAnimals, fetchAnimalById, fetchAnimalByEspecieEstado, updateAnimal, deleteAnimal };
 }
