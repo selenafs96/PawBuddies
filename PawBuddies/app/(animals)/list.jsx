@@ -13,6 +13,7 @@ import {
 import AnimalCard from '../../src/components/AnimalCard';
 import { useAnimals } from '../../src/hooks/useAnimals';
 import { scaleFont, scaleSize } from '../../src/constants/layout';
+import { BottomNav } from '../../src/components/BottomNav';
 
 export default function AdoptaScreen() {
   const NAV_HEIGHT = scaleSize(50);
@@ -230,32 +231,7 @@ export default function AdoptaScreen() {
       </SafeAreaView>
 
       {/* Bottom Nav */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
-          <Image
-            source={require('../../assets/icons/home.png')}
-            style={styles.bottomIconoImg}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.navItem, styles.navActivo]}>
-          <Image
-            source={require('../../assets/icons/patas.png')}
-            style={styles.bottomIconoImgActivo}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Image
-            source={require('../../assets/icons/corazon.png')}
-            style={styles.bottomIconoImg}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Image
-            source={require('../../assets/icons/perfil.png')}
-            style={styles.bottomIconoImg}
-          />
-        </TouchableOpacity>
-      </View>
+      <BottomNav />
     </View>
   );
 }
