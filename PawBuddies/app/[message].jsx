@@ -2,10 +2,10 @@ import { View, Image, StyleSheet, Text, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 
-import { scaleFont, scaleSize } from '../constants/layout';
+import { scaleFont, scaleSize } from '../src/constants/layout.js';
 
 export const MensajeConfirmacionScreen = () => {
-  const { mensaje } = useLocalSearchParams(); //TODO gestionar parámetros
+  const { message } = useLocalSearchParams(); //TODO gestionar parámetros
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
 
@@ -16,11 +16,11 @@ export const MensajeConfirmacionScreen = () => {
       />
       <Text style={styles.title}>PawBuddies</Text>
       <Image
-        source={require('../../assets/icons/logo_principal.png')}
+        source={require('../assets/icons/logo_principal.png')}
         style={styles.logo}
       />
-      <Image source={require('../../assets/icons/casa_pata_turquesa.png')} />
-      <Text style={styles.text}>{mensaje || 'Confirmación general'}</Text>
+      <Image source={require('../assets/icons/casa_pata_turquesa.png')} />
+      <Text style={styles.text}>{message || 'Confirmación general'}</Text>
       <Pressable
         style={styles.volverButton}
         onPress={() => {
