@@ -153,18 +153,14 @@ const createStyles = (insets) =>
   StyleSheet.create({
     mainContainer: {
       flex: 1,
-      backgroundColor: '#FFFFFF',
     },
     centeredContainer: {
       flex: 1,
       alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#FFFFFF',
       gap: scaleSize(12),
     },
     scrollContainer: {
       flex: 1,
-      backgroundColor: '#FFFFFF',
       alignSelf: 'center',
       width: '100%',
       maxWidth: 500,
@@ -182,11 +178,11 @@ const createStyles = (insets) =>
     },
     title: {
       fontFamily: 'TiltNeon',
-      fontSize: scaleFont(20),
+      fontSize: scaleFont(18),
       flex: 1,
       textAlign: 'center',
     },
-    // Mismo ancho que BackButton para centrar el título
+  
     titleSpacer: {
       width: scaleSize(44),
     },
@@ -198,7 +194,7 @@ const createStyles = (insets) =>
     },
     sectionTitle: {
       fontFamily: 'TiltNeon',
-      fontSize: scaleFont(20),
+      fontSize: scaleFont(18),
       fontWeight: 'bold',
       paddingTop: scaleSize(18),
       paddingBottom: scaleSize(10),
