@@ -3,7 +3,7 @@ import { HealthRecordRepository } from '../repositories/healthRecordRepository';
 
 export function useHealthRecord() {
   const [healthRecords, setHealthRecords] = useState([]);
-  const [healthRecordLoading, setHealthRecordLoading] = useState(true);
+  const [healthRecordLoading, setHealthRecordLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchHealthRecords = async () => {
