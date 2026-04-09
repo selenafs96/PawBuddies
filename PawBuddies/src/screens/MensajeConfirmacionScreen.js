@@ -1,8 +1,11 @@
 import { View, Image, StyleSheet, Text, Pressable } from 'react-native';
-import { scaleFont, scaleSize } from '../constants/layout';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useLocalSearchParams } from 'expo-router';
 
-export const SolicitudAdopcionEnviada = () => {
+import { scaleFont, scaleSize } from '../constants/layout';
+
+export const MensajeConfirmacionScreen = () => {
+  const { mensaje } = useLocalSearchParams(); //TODO gestionar parámetros
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
 
@@ -17,7 +20,7 @@ export const SolicitudAdopcionEnviada = () => {
         style={styles.logo}
       />
       <Image source={require('../../assets/icons/casa_pata_turquesa.png')} />
-      <Text style={styles.text}>¡Solicitud enviada!</Text>
+      <Text style={styles.text}>{mensaje || 'Confirmación general'}</Text>
       <Pressable
         style={styles.volverButton}
         onPress={() => {
@@ -40,9 +43,9 @@ const createStyles = (insets) =>
     },
     circle: {
       position: 'absolute',
-      top: insets.top > 0 ? insets.top : scaleSize(-220),
-      width: scaleSize(450),
-      height: scaleSize(450),
+      top: -220,
+      width: scaleSize(449),
+      height: scaleSize(449),
       borderRadius: scaleSize(450) / 2,
       backgroundColor: '#3DBDB0',
     },
@@ -52,11 +55,11 @@ const createStyles = (insets) =>
       fontSize: scaleFont(20),
     },
     title: {
+      position: 'absolute',
+      top: (insets.top || 20) + 130, // Se ajusta dinámicamente
       color: '#fff',
       fontFamily: 'TiltNeon',
       fontSize: scaleFont(20),
-      position: 'absolute',
-      top: insets.top > 0 ? insets.top : scaleSize(130),
     },
     volverButton: {
       position: 'absolute',
@@ -76,6 +79,6 @@ const createStyles = (insets) =>
     },
     logo: {
       position: 'absolute',
-      top: insets.top > 0 ? insets.top : scaleSize(40),
+      top: insets.top > 0 ? insets.top + 20 : scaleSize(40),
     },
   });
