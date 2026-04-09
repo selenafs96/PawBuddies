@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Image,
   SafeAreaView,
@@ -17,16 +16,15 @@ export default function LoginHeader() {
         backgroundColor="#43B0A7"
         translucent={false}
       />
-
     <View style={styles.logoContainer}>
         <Image 
-        source={require('../../../assets/icons/logo_principal.png')} 
+        source={require('../../assets/icons/logo_principal.png')} 
         style={styles.logo}
         resizeMode="contain"
       />
       </View>
-
       <Text style={styles.title}>PAWBUDDIES</Text>
+
     </SafeAreaView>
   );
 }
@@ -53,7 +51,7 @@ const styles = StyleSheet.create({
     fontSize: 100,
   },
   title: {
-    fontFamily: 'Tilt Warp',
+    fontFamily: 'TiltNeon',
     fontSize: 22,
     fontWeight: '400',
     lineHeight: 28,

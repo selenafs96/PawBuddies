@@ -1,5 +1,4 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   label: {
-    fontFamily: 'Tilt Warp',
+    fontFamily: 'TiltNeon',
     fontSize: 14,
     fontWeight: '400',
     lineHeight: 18,
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontSize: 14,
     fontWeight: '400',
     lineHeight: 18,
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   errorText: {
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontSize: 12,
     fontWeight: '400',
     lineHeight: 15,
@@ -152,7 +151,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   forgotPassword: {
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontSize: 14,
     fontWeight: '400',
     lineHeight: 18,

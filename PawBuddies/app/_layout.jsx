@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Slot } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
+import AuthProvider from '../providers/AuthProvider';
 
 class ErrorBoundary extends React.Component {
   state = { error: null };
@@ -39,12 +40,14 @@ const RootLayout = () => {
   }
 
   return (
-    <SafeAreaProvider>
-      <StatusBar style="auto" />
-      <ErrorBoundary>
-        <Slot />
-      </ErrorBoundary>
-    </SafeAreaProvider>
+    <AuthProvider>
+      <SafeAreaProvider>
+        <StatusBar style="auto" />
+        <ErrorBoundary>
+          <Slot />
+        </ErrorBoundary>
+      </SafeAreaProvider>
+    </AuthProvider>
   );
 };
 
