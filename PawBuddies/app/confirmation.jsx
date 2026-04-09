@@ -1,19 +1,17 @@
 import { View, Image, StyleSheet, Text, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 import { scaleFont, scaleSize } from '../src/constants/layout.js';
 
-export const MensajeConfirmacionScreen = () => {
-  const { message } = useLocalSearchParams(); //TODO gestionar parámetros
+export default function MensajeConfirmacionScreen() {
+  const { message } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
 
   return (
     <View style={styles.mainContainer}>
-      <View
-        style={styles.circle}
-      />
+      <View style={styles.circle} />
       <Text style={styles.title}>PawBuddies</Text>
       <Image
         source={require('../assets/icons/logo_principal.png')}
@@ -24,14 +22,18 @@ export const MensajeConfirmacionScreen = () => {
       <Pressable
         style={styles.volverButton}
         onPress={() => {
-          alert('Hola');
+          if (router.canGoBack()) {
+            router.back();
+          } else {
+            router.push('/');
+          }
         }}
       >
         <Text style={styles.buttonText}>Volver</Text>
       </Pressable>
     </View>
   );
-};
+}
 
 const createStyles = (insets) =>
   StyleSheet.create({

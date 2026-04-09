@@ -120,16 +120,13 @@ export default function AdoptableAnimalDetail() {
       </ScrollView>
       <Link
         href={{
-          pathname: `/[message]`,
+          pathname: `/confirmation`,
           params: { message: '¡Solicitud enviada!' },
         }}
         asChild
       >
         <Pressable
           style={styles.adoptameButton}
-          onPress={() => {
-            alert('Hola');
-          }}
         >
           <Text style={styles.buttonText}>Adóptame</Text>
         </Pressable>
@@ -213,7 +210,7 @@ const createStyles = (insets) =>
     wideCard: {
       marginLeft: scaleSize(10),
       marginRight: scaleSize(10),
-      width: '100%',
+      width: '95%',
       height: scaleSize(60),
       marginBottom: scaleSize(10),
     },
@@ -221,7 +218,6 @@ const createStyles = (insets) =>
       marginLeft: scaleSize(10),
       marginRight: scaleSize(10),
       width: '95%',
-      height: scaleSize(60),
       marginBottom: scaleSize(10),
       height: 'auto',
     },
