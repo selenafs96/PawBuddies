@@ -8,15 +8,15 @@ import {
   ScrollView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 
 import { scaleFont, scaleSize } from '../../src/constants/layout.js';
 import { AnimalImagesCarousel } from '../../src/components/AnimalImagesCarousel.js';
-import { AnimalDataCard } from '../../src/components/AnimalDataCard.js';
+import { DataCard } from '../../src/components/DataCard.js';
+import { BackButton } from '../../src/components/BackButton.js';
 import { useAnimals } from '../../src/hooks/useAnimals.js';
 import { useShelter } from '../../src/hooks/useShelter.js';
 import { useHealthRecord } from '../../src/hooks/useHealthRecord.js';
-import ScreenHeader from '../../src/components/ScreenHeader.js';
 
 export default function AdoptableAnimalDetail() {
   const insets = useSafeAreaInsets();
@@ -24,9 +24,13 @@ export default function AdoptableAnimalDetail() {
   const { id_animal } = useLocalSearchParams();
 
   const { animals, loading, fetchAnimalById } = useAnimals();
-  const { shelters, shelterLoading, fetchShelterById } = useShelter();
-  const { healthRecords, healthRecordLoading, fetchHealthRecordById } =
-    useHealthRecord();
+  const { shelters, shelterLoading, fetchShelterById } =
+    useShelter();
+  const {
+    healthRecords,
+    healthRecordLoading,
+    fetchHealthRecordById,
+  } = useHealthRecord();
 
   //Usamos dos useEffect porque la función fetch es asíncrona, y el useEffect ejecuta todo a la vez, no de manera secuencial
   useEffect(() => {
@@ -58,7 +62,10 @@ export default function AdoptableAnimalDetail() {
         style={styles.scrollContainer}
         contentContainerStyle={styles.scrollContent}
       >
-        <ScreenHeader title="Detalles del animal" />
+        <View style={styles.titleContainer}>
+          <BackButton />
+          <Text style={styles.title}>Detalles del animal</Text>
+        </View>
         <AnimalImagesCarousel imageUrls={animals.url_foto} />
         <Image
           source={require('../../assets/icons/fav.png')}
@@ -74,17 +81,17 @@ export default function AdoptableAnimalDetail() {
             <Text style={styles.secondaryTitle}>{animals.nombre}</Text>
           </View>
           <View style={styles.firstDataRow}>
-            <AnimalDataCard category="Género" data={animals.genero} />
-            <AnimalDataCard
+            <DataCard category="Género" data={animals.genero} />
+            <DataCard
               category="Edad"
               data={animals.edad}
               unidad_medida="años"
             />
-            <AnimalDataCard category="Especie" data={animals.especie} />
+            <DataCard category="Especie" data={animals.especie} />
           </View>
           <View style={styles.secondDataRow}>
             <Text style={styles.secondaryTitle}>Presentación</Text>
-            <AnimalDataCard
+            <DataCard
               category=""
               data={animals.presentacion}
               style={styles.largeCard}
@@ -94,22 +101,22 @@ export default function AdoptableAnimalDetail() {
             <Text style={styles.secondaryTitle}>Datos adicionales</Text>
           </View>
           <View style={styles.thirdDataSection}>
-            <AnimalDataCard
+            <DataCard
               category="Protectora"
               data={shelters.nombre}
               style={styles.wideCard}
             />
-            <AnimalDataCard
+            <DataCard
               category="Esterilizado"
               data={healthRecords.esterilizacion}
               style={styles.wideCard}
             />
-            <AnimalDataCard
+            <DataCard
               category="Raza"
               data={animals.raza}
               style={styles.wideCard}
             />
-            <AnimalDataCard
+            <DataCard
               category="Carácter"
               data={animals.caracter}
               style={styles.tallWideCard}
@@ -118,19 +125,14 @@ export default function AdoptableAnimalDetail() {
         </View>
         <View style={styles.bottomView}></View>
       </ScrollView>
-      <Link
-        href={{
-          pathname: `/confirmation`,
-          params: { message: '¡Solicitud enviada!' },
+      <Pressable
+        style={styles.adoptameButton}
+        onPress={() => {
+          alert('Hola');
         }}
-        asChild
       >
-        <Pressable
-          style={styles.adoptameButton}
-        >
-          <Text style={styles.buttonText}>Adóptame</Text>
-        </Pressable>
-      </Link>
+        <Text style={styles.buttonText}>Adóptame</Text>
+      </Pressable>
     </View>
   );
 }
@@ -152,6 +154,7 @@ const createStyles = (insets) =>
     },
     scrollContent: {
       flexGrow: 1,
+      paddingTop: insets.top,
     },
     secondaryTitle: {
       fontFamily: 'TiltNeon',
@@ -163,20 +166,11 @@ const createStyles = (insets) =>
     },
     titleContainer: {
       flexDirection: 'row',
+      backgroundColor: '#FFFFFF',
+      width: '70%',
+      alignContent: 'center',
       alignItems: 'center',
-      paddingTop: insets.top,
-      width: '100%',
-    },
-    leftColumn: {
-      flex: 1,
-      alignItems: 'flex-start',
-    },
-    centerColumn: {
-      flex: 2,
-      alignItems: 'center',
-    },
-    rightColumn: {
-      flex: 1,
+      justifyContent: 'space-between',
     },
     title: {
       fontFamily: 'TiltNeon',
@@ -218,6 +212,7 @@ const createStyles = (insets) =>
       marginLeft: scaleSize(10),
       marginRight: scaleSize(10),
       width: '95%',
+      height: scaleSize(60),
       marginBottom: scaleSize(10),
       height: 'auto',
     },
@@ -249,9 +244,8 @@ const createStyles = (insets) =>
       position: 'absolute',
       width: scaleSize(35),
       height: scaleSize(35),
-      right: scaleSize(20),
+      left: scaleSize(320),
       top: scaleSize(45),
-      zIndex: 10,
     },
     informativeMessages: {
       flex: 1,
