@@ -1,11 +1,11 @@
-import EditAnimalScreen from "./(animals)/EditAnimalScreen.jsx";
+import Onboarding4 from "./(adopters)/onboarding4.jsx";
 import AdoptaScreen from "./(animals)/list.jsx";
 import VolunteerProfile from "./(volunteers)/profile.jsx";
 
 const PawBuddies = () => {
 
   return (
-    <AdoptaScreen />
+    <Onboarding4/>
   );
 };
 
