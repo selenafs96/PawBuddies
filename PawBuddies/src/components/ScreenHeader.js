@@ -3,20 +3,20 @@ import { BackButton } from './BackButton';
 import { StyleSheet, Text, View } from 'react-native';
 import { scaleFont, scaleSize } from '../constants/layout';
 
-export default function ScreenHeader({title}) {
+export default function ScreenHeader({ title }) {
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
 
   return (
-      <View style={styles.titleContainer}>
-        <View style={styles.leftColumn}>
-          <BackButton />
-        </View>
-        <View style={styles.centerColumn}>
-          <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>{title}</Text>
-        </View>
-        <View style={styles.rightColumn} />
+    <View style={styles.titleContainer}>
+      <View style={styles.leftColumn}>
+        <BackButton />
       </View>
+      <View style={styles.centerColumn}>
+        <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>{title}</Text>
+      </View>
+      <View style={styles.rightColumn} />
+    </View>
   );
 }
 
@@ -30,18 +30,23 @@ const createStyles = (insets) =>
       width: '100%',
     },
     leftColumn: {
-      flex: 1,
-      alignItems: 'flex-start',
+      position: 'absolute',
+      left: scaleSize(10),
+      zIndex: 1,
     },
+
     centerColumn: {
-      flex: 2, // Le damos más espacio al centro
+      width: '100%',
       alignItems: 'center',
     },
+
     rightColumn: {
-      flex: 1, // Espacio vacío para equilibrar el flex
+      position: 'absolute',
+      right: scaleSize(10),
     },
     title: {
       fontFamily: 'TiltNeon',
       fontSize: scaleFont(20),
+      maxWidth: '80%', // evita que choque con botones
     },
   });

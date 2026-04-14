@@ -14,11 +14,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 
 import { scaleFont, scaleSize } from '../../src/constants/layout.js';
-import { useAnimals } from '../../src/hooks/useAnimals.js';
+import { useAnimals } from '../../src/hooks/useAnimals';
 import ScreenHeader from '../../src/components/ScreenHeader.js';
-import { BottomNav } from '../../src/components/BottomNav.js';
 
 export default function RegistroAnimalesScreen() {
+  const [modoEliminar, setModoEliminar] = useState(false);
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
@@ -29,26 +29,31 @@ export default function RegistroAnimalesScreen() {
     fetchAnimalByEspecieEstado(especie, 'todos');
   }, [especie]);
 
-  const handleDelete = (id_animal, nombre) => {
-    Alert.alert(
-      'Eliminar animal',
-      `¿Seguro que quieres eliminar a ${nombre}?`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Eliminar',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await deleteAnimal(id_animal);
-              fetchAnimalByEspecieEstado(especie, 'todos');
-            } catch (err) {
-              Alert.alert('Error', 'No se pudo eliminar el animal.');
-            }
-          },
-        },
-      ]
-    );
+  const handleSave = async () => {
+    try {
+      const updates = {
+        nombre: form.nombre,
+        genero: form.genero,
+        edad: parseInt(form.edad) || 0,
+        tamano: form.tamano,
+        presentacion: form.presentacion,
+      };
+      await updateAnimal(animals.id_animal, updates);
+      alert('Cambios guardados');
+    } catch (err) {
+      alert('Error al guardar: ' + err.message);
+    }
+  };
+
+
+  const handleDelete = async (id_animal) => {
+    try {
+      await deleteAnimal(id_animal);
+      alert('Animal eliminado');
+      await fetchAnimalByEspecieEstado(especie, 'todos');
+    } catch (err) {
+      alert('Error al eliminar: ' + err.message);
+    }
   };
 
   const handleEdit = (id_animal) => {
@@ -70,12 +75,14 @@ export default function RegistroAnimalesScreen() {
             resizeMode="cover"
           />
           {/* Botón X */}
-          <Pressable
-            style={styles.deleteBtn}
-            onPress={() => handleDelete(item.id_animal, item.nombre)}
-          >
-            <Text style={styles.deleteBtnText}>✕</Text>
-          </Pressable>
+          {modoEliminar && (
+            <Pressable
+              style={styles.deleteBtn}
+              onPress={() => handleDelete(item.id_animal)}
+            >
+              <Text style={styles.deleteBtnText}>✕</Text>
+            </Pressable>
+          )}
         </View>
 
         {/* Info */}
@@ -100,46 +107,44 @@ export default function RegistroAnimalesScreen() {
   return (
     <View style={styles.mainContainer}>
       {/* Cabecera */}
-      <View style={{ backgroundColor: '#FFFFFF' }}>
+      <View style={styles.titleContainer}>
         <ScreenHeader title="Registro de animales" />
       </View>
-
-      {/* Filtros de especie */}
-      <View style={styles.filtrosRow}>
-        <TouchableOpacity
-          style={[styles.filtroBtn, especie === 'Perro' && styles.filtroBtnActivo]}
-          onPress={() => setEspecie(especie === 'Perro' ? 'todos' : 'Perro')}
-        >
-          <Image
-            source={require('../../assets/icons/Dog.png')}
-            style={[styles.filtroIcono, especie === 'Perro' && styles.filtroIconoActivo]}
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.filtroBtn, especie === 'Gato' && styles.filtroBtnActivo]}
-          onPress={() => setEspecie(especie === 'Gato' ? 'todos' : 'Gato')}
-        >
-          <Image
-            source={require('../../assets/icons/Cat.png')}
-            style={[styles.filtroIcono, especie === 'Gato' && styles.filtroIconoActivo]}
-          />
-        </TouchableOpacity>
-
-        {/* Botón añadir animal */}
-        <TouchableOpacity
-          style={styles.addBtn}
-          onPress={() => router.push('/(animals)/EditAnimalScreen')}
-        >
-          <Image
-            source={require('../../assets/icons/guardar.png')}
-            style={styles.addBtnIcon}
-          />
-        </TouchableOpacity>
-      </View>
-
-      {/* Contenido */}
       <View style={styles.listContainer}>
+        {/* Filtros de especie */}
+        <View style={styles.filtrosRow}>
+          <TouchableOpacity
+            style={[styles.filtroBtn, especie === 'Perro' && styles.filtroBtnActivo]}
+            onPress={() => setEspecie(especie === 'Perro' ? 'todos' : 'Perro')}
+          >
+            <Image
+              source={require('../../assets/icons/Dog.png')}
+              style={[styles.filtroIcono, especie === 'Perro' && styles.filtroIconoActivo]}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.filtroBtn, especie === 'Gato' && styles.filtroBtnActivo]}
+            onPress={() => setEspecie(especie === 'Gato' ? 'todos' : 'Gato')}
+          >
+            <Image
+              source={require('../../assets/icons/Cat.png')}
+              style={[styles.filtroIcono, especie === 'Gato' && styles.filtroIconoActivo]}
+            />
+          </TouchableOpacity>
+
+          {/* Botón añadir animal */}
+          <TouchableOpacity
+            style={[styles.lapizBtn, modoEliminar && styles.filtroBtnActivo]}
+            onPress={() => setModoEliminar(!modoEliminar)}
+          >
+            <Image
+              source={require('../../assets/icons/lapiz.png')}
+              style={[styles.lapizBtnIcon, modoEliminar && styles.filtroIconoActivo]}
+            />
+          </TouchableOpacity>
+        </View>
+        {/* Contenido */}
         {loading ? (
           <View style={styles.centrado}>
             <ActivityIndicator size="large" color="#FFFFFF" />
@@ -165,8 +170,17 @@ export default function RegistroAnimalesScreen() {
         )}
       </View>
 
-      {/* BottomNav */}
-      <BottomNav />
+      {/* Barra Guardar fija */}
+      <Pressable
+        style={[styles.saveBar, { paddingBottom: insets.bottom > 0 ? insets.bottom : scaleSize(16) }]}
+        onPress={handleSave}
+      >
+        <Image
+          source={require('../../assets/icons/GuardarBtn.png')}
+          style={styles.saveButtonImage}
+          resizeMode="contain"
+        />
+      </Pressable>
     </View>
   );
 }
@@ -176,6 +190,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingVertical: scaleSize(8),
+    marginTop: scaleSize(5),
+    marginTop: scaleSize(5),
+    width: '100%',
+    position: 'relative',
+  },
   // ── Filtros ──
   filtrosRow: {
     flexDirection: 'row',
@@ -183,7 +207,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: scaleSize(10),
     paddingVertical: scaleSize(10),
-    backgroundColor: '#FFFFFF',
   },
   filtroBtn: {
     backgroundColor: '#e8f7f6',
@@ -204,14 +227,14 @@ const styles = StyleSheet.create({
   filtroIconoActivo: {
     tintColor: '#FFFFFF',
   },
-  addBtn: {
+  lapizBtn: {
     position: 'absolute',
     right: scaleSize(20),
     backgroundColor: '#e8f7f6',
     padding: scaleSize(10),
     borderRadius: scaleSize(14),
   },
-  addBtnIcon: {
+  lapizBtnIcon: {
     width: scaleSize(20),
     height: scaleSize(20),
     resizeMode: 'contain',
@@ -225,7 +248,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: scaleSize(14),
     paddingHorizontal: scaleSize(10),
     paddingTop: scaleSize(10),
-    paddingBottom: scaleSize(70), // espacio para BottomNav
+    paddingBottom: scaleSize(30),
   },
   listaContent: {
     paddingBottom: scaleSize(20),
@@ -306,5 +329,18 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: scaleFont(11),
     fontWeight: '600',
+  },
+  saveBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingTop: scaleSize(10),
+    paddingHorizontal: scaleSize(20),
+    alignItems: 'center'
+  },
+  saveButtonImage: {
+    width: '100%',
+    height: scaleSize(55)
   },
 });
