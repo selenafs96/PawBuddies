@@ -1,37 +1,41 @@
 import { View, Image, StyleSheet, Text, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
-import { scaleFont, scaleSize } from '../constants/layout';
+import { scaleFont, scaleSize } from '../src/constants/layout.js';
 
-export const MensajeConfirmacionScreen = () => {
-  const { mensaje } = useLocalSearchParams(); //TODO gestionar parámetros
+export default function MensajeConfirmacionScreen() {
+
+  //Pasamos el mensaje que queremos que se muestre como parámetro al llamar a la ruta
+  const { message } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
 
   return (
     <View style={styles.mainContainer}>
-      <View
-        style={styles.circle}
-      />
+      <View style={styles.circle} />
       <Text style={styles.title}>PawBuddies</Text>
       <Image
-        source={require('../../assets/icons/logo_principal.png')}
+        source={require('../assets/icons/logo_principal.png')}
         style={styles.logo}
       />
-      <Image source={require('../../assets/icons/casa_pata_turquesa.png')} />
-      <Text style={styles.text}>{mensaje || 'Confirmación general'}</Text>
+      <Image source={require('../assets/icons/casa_pata_turquesa.png')} />
+      <Text style={styles.text}>{message || 'Confirmación general'}</Text>
       <Pressable
         style={styles.volverButton}
         onPress={() => {
-          alert('Hola');
+          if (router.canGoBack()) {
+            router.back();
+          } else {
+            router.push('/');
+          }
         }}
       >
         <Text style={styles.buttonText}>Volver</Text>
       </Pressable>
     </View>
   );
-};
+}
 
 const createStyles = (insets) =>
   StyleSheet.create({
