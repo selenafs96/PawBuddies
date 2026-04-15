@@ -1,30 +1,22 @@
-import Login from "../src/screens/Login.js";
-import AdoptaScreen from "./(animals)/list.jsx";
-import VolunteerProfile from "./(volunteers)/profile.jsx";
-import RegistroAnimalesScreen from "./(volunteers)/RegistroAnimalesScreen.jsx";
+import LocalizacionScreen from '../src/screens/LocalizacionScreen.js';
+import Login from '../src/screens/Login.js';
+import AdoptaScreen from './(animals)/list.jsx';
+import VolunteerProfile from './(volunteers)/profile.jsx';
+import RegistroAnimalesScreen from './(volunteers)/RegistroAnimalesScreen.jsx';
 
-const PawBuddies = () => {
+// const PawBuddies = () => {
 
-  return (
-    <Login/>
-  );
-};
+//   return (
+//     <Login/>
+//   );
+// };
 
-export default PawBuddies;
+// export default PawBuddies;
 
 //ESTO ES LO QUE APARECERÁ UNA VEZ TENGAMOS TODAS LAS PANTALLAS CONECTADAS, REDIRIGIRÁ A LAS NOTICIAS AUTOMÁTICAMENTE Y PODREMOS EMPEZAR A NAVEGAR
-// import { Redirect } from 'expo-router';
+import { Redirect } from 'expo-router';
 
-// export default function Index() {
-//   return <Redirect href="/(noticias)/123" />;
-// }
-
-/*import AnimalAdoptadoScreen from "../src/screens/AnimalAdoptadoScreen.js";
-
-const PawBuddies = () => {
-  return (
-    <AnimalAdoptadoScreen id_usuario="6f26b6ea-105b-4ac4-a59b-7dbb84338ebe" />
-  );
-};
-
-export default PawBuddies;*/
+export default function PawBuddies() {
+  // return <Redirect href="/(adopters)/onboarding4" />;
+  return <LocalizacionScreen />;
+}

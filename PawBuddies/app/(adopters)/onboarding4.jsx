@@ -7,20 +7,65 @@ import {
   ScrollView,
   TextInput,
 } from 'react-native';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 
 import { scaleFont, scaleSize } from '../../src/constants/layout';
 import MyCheckBox from '../../src/components/MyCheckBox';
+import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
+import { supabase } from '../../src/lib/supabase';
 
 export default function Onboarding4() {
   const [inputDescriptionValue, setInputDescriptionValue] = useState('');
   const [tags, setTags] = useState([]);
+
+  const { actualizarDatos, datosRegistro } = useRegistroUsuario();
 
   const handleAddTag = () => {
     const trimmedValue = inputValue.trim();
     if (trimmedValue !== '' && !tags.includes(trimmedValue)) {
       setTags([...tags, trimmedValue]);
       setInputValue('');
+    }
+  };
+
+  const handleRegister = async () => {
+    actualizarDatos({descripcion: inputDescriptionValue});
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: datosRegistro.email,
+        password: datosRegistro.password,
+        options: {
+          data: {
+            nombre: datosRegistro.nombre,
+            apellidos: datosRegistro.apellidos,
+            telefono: datosRegistro.telefono,
+            rol: datosRegistro.rol,
+            localidad_preferida: datosRegistro.localidad_preferida,
+            radio_maximo_km: datosRegistro.radio_maximo_km,
+            descripcion: inputDescriptionValue,
+            url_foto: datosRegistro.url_foto,
+            id_protectora: datosRegistro.id_protectora,
+            perros_propiedad: datosRegistro.perros_propiedad,
+            gatos_propiedad: datosRegistro.gatos_propiedad,
+            otros_propiedad: datosRegistro.otros_propiedad,
+          },
+        },
+      });
+
+      if (error) {
+        alert('Error en el registro: ', error.message);
+      }
+
+      if (data.user) {
+        console.log('Usuario creado con éxito: ', data.user.id);
+        router.push({
+          pathname: '/confirmation',
+          params: { message: '¡Perfil completado!' },
+        });
+      }
+    } catch (err) {
+      console.error('Error inesperado: ', err);
     }
   };
 
@@ -55,10 +100,9 @@ export default function Onboarding4() {
         <Text style={styles.sectionTitle}>Mascotas</Text>
         <Text style={styles.label}>¿Tienes otro animal de compañia?</Text>
 
-        <MyCheckBox tag="Perro"/>
-        <MyCheckBox tag="Gato"/>
-        <MyCheckBox tag="Otro"/>
-
+        <MyCheckBox tag="Perro" />
+        <MyCheckBox tag="Gato" />
+        <MyCheckBox tag="Otro" />
 
         <View style={styles.footer}>
           <TouchableOpacity
@@ -73,18 +117,12 @@ export default function Onboarding4() {
           >
             <Text style={styles.btnTextVolver}>Volver</Text>
           </TouchableOpacity>
-
-          <Link
-            href={{
-              pathname: `/confirmation`,
-              params: { message: '¡Perfil completado!' },
-            }}
-            asChild
+          <TouchableOpacity
+            style={styles.btnSiguiente}
+            onPress={handleRegister}
           >
-            <TouchableOpacity style={styles.btnSiguiente}>
-              <Text style={styles.btnTextSiguiente}>Registrar</Text>
-            </TouchableOpacity>
-          </Link>
+            <Text style={styles.btnTextSiguiente}>Registrar</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

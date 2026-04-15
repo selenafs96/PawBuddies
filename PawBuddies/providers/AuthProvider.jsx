@@ -36,11 +36,11 @@ export default function AuthProvider(props) {
             setSession(session);
             setLoading(false);
 
-            if(session) {
-                router.replace('/profile')
-            } else {
-                router.replace('/')
-            }
+            // if(session) {
+            //     router.replace('/(adopters)/onboarding4')
+            // } else {
+            //     router.replace('/')
+            // }
         });
 
         return () => {

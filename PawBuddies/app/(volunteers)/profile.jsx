@@ -5,10 +5,25 @@ import ImageNameEmailVolunteerCard from '../../src/components/ImageNameEmailVolu
 import { scaleFont, scaleSize } from '../../src/constants/layout';
 import StatCard from '../../src/components/StatCard';
 import ProfileMenuItem from '../../src/components/ProfileMenuItem';
+import { router } from 'expo-router';
+import { supabase } from '../../src/lib/supabase';
+import { BottomNav } from '../../src/components/BottomNav';
 
 export default function VolunteerProfile() {
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
+
+  const cerrarSesion = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error('Error al cerrar sesión:', error.message);
+      return { success: false, message: error.message };
+    }
+
+    console.log('Sesión cerrada correctamente');
+    router.replace('/');
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -28,12 +43,14 @@ export default function VolunteerProfile() {
           <ProfileMenuItem action="Registro de noticias" />
           <ProfileMenuItem action="Registro de voluntarios" />
           <ProfileMenuItem action="Gestión de inventario" />
+          <ProfileMenuItem action="Cerrar sesión" onPress={cerrarSesion} />
         </View>
       </View>
       <Image
         source={require('../../assets/icons/Logo.png')}
         style={styles.logo}
       />
+      <BottomNav />
     </View>
   );
 }

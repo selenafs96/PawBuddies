@@ -5,6 +5,7 @@ import { Slot } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import AuthProvider from '../providers/AuthProvider';
+import { RegistroProvider } from '../contexts/RegistroUsuarioContext';
 
 class ErrorBoundary extends React.Component {
   state = { error: null };
@@ -41,12 +42,14 @@ const RootLayout = () => {
 
   return (
     <AuthProvider>
-      <SafeAreaProvider>
-        <StatusBar style="auto" />
-        <ErrorBoundary>
-          <Slot />
-        </ErrorBoundary>
-      </SafeAreaProvider>
+      <RegistroProvider>
+        <SafeAreaProvider>
+          <StatusBar style="auto" />
+          <ErrorBoundary>
+            <Slot />
+          </ErrorBoundary>
+        </SafeAreaProvider>
+      </RegistroProvider>
     </AuthProvider>
   );
 };
