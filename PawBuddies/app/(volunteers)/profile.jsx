@@ -10,17 +10,22 @@ import { supabase } from '../../src/lib/supabase';
 import { BottomNav } from '../../src/components/BottomNav';
 import { useUsers } from '../../src/hooks/useUsers';
 import { useEffect } from 'react';
+import { useAnimals } from '../../src/hooks/useAnimals';
 
 export default function VolunteerProfile() {
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
   const { id_usuario } = useLocalSearchParams();
 
-  const { users, loading, fetchUserById } = useUsers();
+  const { users, loading, fetchUserById, fetchNumeroVoluntariosProtectora, numeroVoluntariosProtectora } = useUsers();
+  const { numeroPerrosProtectora, fetchNumeroPerrosProtectora, numeroGatosProtectora, fetchNumeroGatosProtectora } = useAnimals();
 
   useEffect(() => {
     if (id_usuario) {
       fetchUserById(id_usuario);
+      fetchNumeroPerrosProtectora(id_usuario);
+      fetchNumeroGatosProtectora(id_usuario);
+      fetchNumeroVoluntariosProtectora(id_usuario);
     }
   }, [id_usuario]);
 
@@ -44,12 +49,12 @@ export default function VolunteerProfile() {
       <ScreenHeader title="Perfil" />
       <View style={styles.secondaryContainer}>
         <View style={{ alignItems: 'flex-start', width: '100%' }}>
-          <ImageNameEmailVolunteerCard />
+          <ImageNameEmailVolunteerCard usuario={users}/>
         </View>
         <View style={styles.row}>
-          <StatCard number={users?.perros_propiedad} stat="perros" />
-          <StatCard number={users?.gatos_propiedad} stat="gatos" />
-          {/* <StatCard number={users.voluntarios} stat="voluntarios" /> */}
+          <StatCard number={numeroPerrosProtectora} stat="Perros" />
+          <StatCard number={numeroGatosProtectora} stat="Gatos" />
+          <StatCard number={numeroVoluntariosProtectora} stat="Voluntarios" />
         </View>
         <View style={styles.menuContainer}>
           <Text style={styles.gestiones}>Gestiones</Text>

@@ -5,6 +5,7 @@ export function useUsers() {
   const [users, setUsers] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [numeroVoluntariosProtectora, setNumeroVoluntariosProtectora] = useState(0);
 
   const fetchUsers = async () => {
     try {
@@ -65,5 +66,22 @@ export function useUsers() {
       throw err;
     }
   };
-  return { users, loading, fetchUsers, fetchUserById, updateUser, deleteUser, createUser };
+  
+    const fetchNumeroVoluntariosProtectora = async (id_usuario) => {
+      try {
+        const data = await UsersRepository.getConteoVoluntariosProtectora(id_usuario);
+        setNumeroVoluntariosProtectora(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error obteniendo conteo de voluntarios:', err);
+        setError(err);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    };
+
+
+  
+  return { users, loading, fetchUsers, fetchUserById, updateUser, deleteUser, createUser, fetchNumeroVoluntariosProtectora, numeroVoluntariosProtectora };
 }

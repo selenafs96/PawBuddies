@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     // Nombre Apellido
     width: 90,
     height: 15,
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontWeight: '400',
     fontSize: 12,
     lineHeight: 15,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     // Persona de acogida
     width: 106,
     height: 15,
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontWeight: '400',
     fontSize: 12,
     lineHeight: 15,
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     // Description text
     width: 325,
     height: 42,
-    fontFamily: 'Urbanist',
+    fontFamily: 'TiltNeon',
     fontWeight: '400',
     fontSize: 12,
     lineHeight: 14,

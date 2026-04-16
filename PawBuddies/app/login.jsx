@@ -6,10 +6,10 @@ import {
   View,
 } from 'react-native';
 
-import LoginButtons from '../components/LoginButtons';
-import LoginForm from '../components/LoginForm';
-import LoginHeader from '../components/LoginHeader';
-import { supabase } from '../lib/supabase.js'
+import LoginButtons from '../src/components/LoginButtons.js';
+import LoginForm from '../src/components/LoginForm.js';
+import LoginHeader from '../src/components/LoginHeader.js';
+import { supabase } from '../src/lib/supabase.js'
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');

@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scaleSize } from '../constants/layout';
 
-export default function ImageNameEmailVolunteerCard() {
+export default function ImageNameEmailVolunteerCard({usuario}) {
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
 
@@ -16,8 +16,8 @@ export default function ImageNameEmailVolunteerCard() {
           />
         </View>
         <View>
-            <Text style={styles.name}>Nombre Apellido Apellido</Text>
-            <Text style={styles.email}>Correo</Text>
+            <Text style={styles.name}>{usuario.nombre} {usuario.apellidos}</Text>
+            <Text style={styles.email}>{usuario.email}</Text>
         </View>
       </View>
     </View>
