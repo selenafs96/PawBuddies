@@ -28,7 +28,7 @@ export function RegistroProvider({ children }) {
     }
 
     return(
-        <RegistroUsuarioContext.Provider value={{ datosRegistro, actualizarDatos}}>
+        <RegistroUsuarioContext.Provider value={{ datosRegistro, actualizarDatos }}>
             {children}
         </RegistroUsuarioContext.Provider>
     )

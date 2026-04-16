@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,12 +13,14 @@ import { scaleFont, scaleSize } from '../../src/constants/layout';
 import MyCheckBox from '../../src/components/MyCheckBox';
 import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 import { supabase } from '../../src/lib/supabase';
+import { useUsers } from '../../src/hooks/useUsers';
 
 export default function Onboarding4() {
   const [inputDescriptionValue, setInputDescriptionValue] = useState('');
   const [tags, setTags] = useState([]);
 
   const { actualizarDatos, datosRegistro } = useRegistroUsuario();
+  const { createUser } = useUsers();
 
   const handleAddTag = () => {
     const trimmedValue = inputValue.trim();
@@ -29,36 +31,39 @@ export default function Onboarding4() {
   };
 
   const handleRegister = async () => {
-    actualizarDatos({descripcion: inputDescriptionValue});
+    actualizarDatos({ descripcion: inputDescriptionValue });
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email: datosRegistro.email,
         password: datosRegistro.password,
-        options: {
-          data: {
-            nombre: datosRegistro.nombre,
-            apellidos: datosRegistro.apellidos,
-            telefono: datosRegistro.telefono,
-            rol: datosRegistro.rol,
-            localidad_preferida: datosRegistro.localidad_preferida,
-            radio_maximo_km: datosRegistro.radio_maximo_km,
-            descripcion: inputDescriptionValue,
-            url_foto: datosRegistro.url_foto,
-            id_protectora: datosRegistro.id_protectora,
-            perros_propiedad: datosRegistro.perros_propiedad,
-            gatos_propiedad: datosRegistro.gatos_propiedad,
-            otros_propiedad: datosRegistro.otros_propiedad,
-          },
-        },
       });
 
-      if (error) {
-        alert('Error en el registro: ', error.message);
+      if (authError) {
+        alert('Error en el registro: ', authError.message);
       }
 
-      if (data.user) {
-        console.log('Usuario creado con éxito: ', data.user.id);
+      if (authData.user) {
+        const perfilUsuario = {
+          id_usuario: authData.user.id,
+          nombre: datosRegistro.nombre,
+          apellidos: datosRegistro.apellidos,
+          email: datosRegistro.email,
+          telefono: datosRegistro.telefono,
+          url_foto: datosRegistro.url_foto,
+          rol: datosRegistro.rol,
+          id_protectora: datosRegistro.id_protectora,
+          localidad_preferida: datosRegistro.localidad_preferida,
+          radio_maximo_km: datosRegistro.radio_maximo_km,
+          descripcion: inputDescriptionValue,
+          perros_propiedad: datosRegistro.perros_propiedad,
+          gatos_propiedad: datosRegistro.gatos_propiedad,
+          otros_propiedad: datosRegistro.otros_propiedad,
+        };
+
+        
+        await createUser(perfilUsuario);
+
         router.push({
           pathname: '/confirmation',
           params: { message: '¡Perfil completado!' },
