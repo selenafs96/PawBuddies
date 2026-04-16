@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { UsersRepository } from '../repositories/usersRepository.js';
 
 export function useUsers() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,9 +19,9 @@ export function useUsers() {
     }
   };
 
-  const fetchUserById = async (id) => {
+  const fetchUserById = async (id_usuario) => {
     try {
-      const data = await UsersRepository.getById(id);
+      const data = await UsersRepository.getById(id_usuario);
       setUsers(data);
       setError(null);
     } catch (err) {

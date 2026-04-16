@@ -9,13 +9,19 @@ export const UsersRepository = {
   },
 
   // Obtener un usuario por su ID
-  async getById(id) {
+  async getById(id_usuario) {
     const { data, error } = await supabase
       .from('usuario')
       .select('*')
-      .eq('id_protectoraid_usuario', id)
+      .eq('id_usuario', id_usuario)
       .single();
-    if (error) throw new Error(error.message);
+
+      
+    if (error){
+      console.error("Error de Supabase:", error.message, error.details)
+      throw new Error(error.message);
+    } 
+    console.log('Datos encontrados: ', data);
     return data;
   },
 

@@ -5,13 +5,24 @@ import ImageNameEmailVolunteerCard from '../../src/components/ImageNameEmailVolu
 import { scaleFont, scaleSize } from '../../src/constants/layout';
 import StatCard from '../../src/components/StatCard';
 import ProfileMenuItem from '../../src/components/ProfileMenuItem';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { supabase } from '../../src/lib/supabase';
 import { BottomNav } from '../../src/components/BottomNav';
+import { useUsers } from '../../src/hooks/useUsers';
+import { useEffect } from 'react';
 
 export default function VolunteerProfile() {
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
+  const { id_usuario } = useLocalSearchParams();
+
+  const { users, loading, fetchUserById } = useUsers();
+
+  useEffect(() => {
+    if (id_usuario) {
+      fetchUserById(id_usuario);
+    }
+  }, [id_usuario]);
 
   const cerrarSesion = async () => {
     const { error } = await supabase.auth.signOut();
@@ -25,6 +36,9 @@ export default function VolunteerProfile() {
     router.replace('/');
   };
 
+  if(loading) return <Text style={styles.informativeMessages}>Cargando...</Text>;
+  if(!users) return <Text style={styles.informativeMessages}>Usuario no encontrado</Text>;
+
   return (
     <View style={styles.mainContainer}>
       <ScreenHeader title="Perfil" />
@@ -33,9 +47,9 @@ export default function VolunteerProfile() {
           <ImageNameEmailVolunteerCard />
         </View>
         <View style={styles.row}>
-          <StatCard number="50" stat="perros" />
-          <StatCard number="47" stat="gatos" />
-          <StatCard number="5" stat="voluntarios" />
+          <StatCard number={users?.perros_propiedad} stat="perros" />
+          <StatCard number={users?.gatos_propiedad} stat="gatos" />
+          {/* <StatCard number={users.voluntarios} stat="voluntarios" /> */}
         </View>
         <View style={styles.menuContainer}>
           <Text style={styles.gestiones}>Gestiones</Text>

@@ -19,5 +19,5 @@ import { Redirect } from 'expo-router';
 
 export default function PawBuddies() {
   // return <Redirect href="/(adopters)/onboarding4" />;
-  return <Onboarding4 />;
+  return <VolunteerProfile />;
 }

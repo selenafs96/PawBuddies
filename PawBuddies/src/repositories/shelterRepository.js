@@ -1,14 +1,14 @@
 import { supabase } from '../lib/supabase.js';
 
 export const ShelterRepository = {
-  // Obtener todos los animales
+  // Obtener todos los protectoras
   async getAll() {
     const { data, error } = await supabase.from('protectora').select('*');
     if (error) throw new Error(error.message);
     return data;
   },
 
-  // Obtener un animal por su ID
+  // Obtener una protectora por su ID
   async getById(id) {
     const { data, error } = await supabase
       .from('protectora')
@@ -18,22 +18,6 @@ export const ShelterRepository = {
     if (error) throw new Error(error.message);
     return data;
   },
-
-//   async getByEspecieEstado(especie, estado) {
-//     let query = supabase.from('animal').select('*');
-
-//     if (estado && estado !== 'todos') {
-//       query = query.eq('estado', estado);
-//     }
-
-//     if (especie && especie !== 'todos') {
-//       query = query.eq('especie', especie);
-//     }
-
-//     const { data, error } = await query;
-//     if (error) throw new Error(error.message);
-//     return data;
-//   },
 
   // ACTUALIZAR
   async update(id, updates) {

@@ -61,7 +61,12 @@ export const BottomNav = () => {
       {/* PERFIL */}
       <TouchableOpacity
         style={styles.navItem}
-        onPress={() => console.log('Futuro perfil')}
+        onPress={() => {
+          router.push({
+            pathname:'/(volunteers)/profile',
+            params: { id_usuario: 'fe04b85b-255d-475a-8d7c-cd0bf1aa9823' }
+          });
+        }}
       >
         <Image
           source={require('../../assets/icons/perfil.png')}
