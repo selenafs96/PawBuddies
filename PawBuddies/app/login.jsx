@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -6,9 +6,10 @@ import {
   View,
 } from 'react-native';
 
-import LoginButtons from '../components/Login/LoginButtons';
-import LoginForm from '../components/Login/LoginForm';
-import LoginHeader from '../components/Login/LoginHeader';
+import LoginButtons from '../src/components/LoginButtons.js';
+import LoginForm from '../src/components/LoginForm.js';
+import LoginHeader from '../src/components/LoginHeader.js';
+import { supabase } from '../src/lib/supabase.js'
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -16,17 +17,38 @@ export default function Login({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
 
-  const handleSignIn = () => {
-    // Validar password
-    if (password.length < 6) {
-      setPasswordError('Password debe ser mayor a 6 dígitos');
+const handleSignIn = async () => {
+    setPasswordError('');
+    // 1. Validaciones locales
+    if (!email || !password) {
+      alert('Por favor, introduce email y contraseña');
       return;
     }
 
-    if (email && password) {
-      // TODO: Conectar con Supabase para autenticación
-      console.log('Login:', { email, password });
-      // navigation.navigate('Home');
+    if (password.length < 6) {
+      setPasswordError('La contraseña debe tener al menos 6 dígitos');
+      return;
+    }
+
+    // 2. Intento de inicio de sesión
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+
+      if (error) {
+        alert('Error: ' + error.message);
+        return;
+      }
+
+      if (data.session) {
+        console.log(`Login exitoso, sesión creada: ${email}`);
+        // Aquí el AuthProvider redirigirá a la página indicada.
+      }
+      
+    } catch (err) {
+      console.error('Error inesperado:', err);
     }
   };
 

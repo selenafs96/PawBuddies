@@ -5,36 +5,6 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function NewsHeader() {
   return (
     <View style={styles.container}>
-      {/* Status Bar - Frame 241 */}
-      <View style={styles.statusBar}>
-        {/* Time - Left side */}
-        <Text style={styles.time}>9:41</Text>
-
-        {/* Right side - Levels (WiFi, Cellular, Battery) */}
-        <View style={styles.levelsContainer}>
-          {/* Cellular Connection */}
-          <MaterialCommunityIcons 
-            name="signal-cellular-3" 
-            size={16} 
-            color="#202020" 
-          />
-
-          {/* WiFi */}
-          <MaterialCommunityIcons 
-            name="wifi" 
-            size={16} 
-            color="#202020" 
-          />
-
-          {/* Battery */}
-          <View style={styles.batteryContainer}>
-            <View style={styles.batteryBorder}>
-              <View style={styles.batteryCapacity} />
-            </View>
-            <View style={styles.batteryCap} />
-          </View>
-        </View>
-      </View>
 
       {/* Title area - Noticias */}
       <View style={styles.titleContainer}>

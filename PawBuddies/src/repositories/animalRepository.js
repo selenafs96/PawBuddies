@@ -53,4 +53,63 @@ export const AnimalRepository = {
       .eq('id_animal', id);
     if (error) throw new Error(error.message);
   },
+
+  async getConteoPerrosProtectora(id_usuario) {
+    try {
+      // 1. Obtenemos el id_protectora del usuario
+      const { data: usuario, error: userError } = await supabase
+        .from('usuario')
+        .select('id_protectora')
+        .eq('id_usuario', id_usuario)
+        .single();
+
+      if (userError || !usuario?.id_protectora) {
+        throw new Error('No se encontró la protectora del usuario');
+      }
+
+      // 2. Contamos los perros en la tabla 'animal' que pertenecen a esa protectora
+      // Usamos { count: 'exact', head: true } para que no traiga los datos, solo el número
+      const { count, error: countError } = await supabase
+        .from('animal')
+        .select('*', { count: 'exact', head: true })
+        .eq('id_protectora', usuario.id_protectora)
+        .eq('especie', 'Perro'); // Ajusta 'especie' y 'Perro' según tus nombres en la DB
+
+      if (countError) throw countError;
+
+      return count; // Devuelve el número total
+    } catch (error) {
+      console.error('Error en la consulta:', error.message);
+      return 0;
+    }
+  },
+  async getConteoGatosProtectora(id_usuario) {
+    try {
+      // 1. Obtenemos el id_protectora del usuario
+      const { data: usuario, error: userError } = await supabase
+        .from('usuario')
+        .select('id_protectora')
+        .eq('id_usuario', id_usuario)
+        .single();
+
+      if (userError || !usuario?.id_protectora) {
+        throw new Error('No se encontró la protectora del usuario');
+      }
+
+      // 2. Contamos los perros en la tabla 'animal' que pertenecen a esa protectora
+      // Usamos { count: 'exact', head: true } para que no traiga los datos, solo el número
+      const { count, error: countError } = await supabase
+        .from('animal')
+        .select('*', { count: 'exact', head: true })
+        .eq('id_protectora', usuario.id_protectora)
+        .eq('especie', 'Gato');
+
+      if (countError) throw countError;
+
+      return count; // Devuelve el número total
+    } catch (error) {
+      console.error('Error en la consulta:', error.message);
+      return 0;
+    }
+  },
 };

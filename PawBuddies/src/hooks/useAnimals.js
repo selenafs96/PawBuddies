@@ -5,6 +5,8 @@ export function useAnimals(filtro = 'todos') {
   const [animals, setAnimals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [numeroPerrosProtectora, setNumeroPerrosProtectora] = useState(0);
+  const [numeroGatosProtectora, setNumeroGatosProtectora] = useState(0);
 
   const fetchAnimals = async () => {
     try {
@@ -59,15 +61,55 @@ export function useAnimals(filtro = 'todos') {
   };
 
   const deleteAnimal = async (id) => {
-  try {
-    await AnimalRepository.delete(id);
-    setError(null);
-  } catch (err) {
-    console.error('Error eliminando animal:', err);
-    setError(err);
-    throw err;
-  }
-};
+    try {
+      await AnimalRepository.delete(id);
+      setError(null);
+    } catch (err) {
+      console.error('Error eliminando animal:', err);
+      setError(err);
+      throw err;
+    }
+  };
 
-  return { animals, loading, fetchAnimals, fetchAnimalById, fetchAnimalByEspecieEstado, updateAnimal, deleteAnimal };
+  const fetchNumeroPerrosProtectora = async (id_usuario) => {
+    try {
+      const data = await AnimalRepository.getConteoPerrosProtectora(id_usuario);
+      setNumeroPerrosProtectora(data);
+      setError(null);
+    } catch (err) {
+      console.error('Error obteniendo conteo de perros:', err);
+      setError(err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchNumeroGatosProtectora = async (id_usuario) => {
+    try {
+      const data = await AnimalRepository.getConteoGatosProtectora(id_usuario);
+      setNumeroGatosProtectora(data);
+      setError(null);
+    } catch (err) {
+      console.error('Error obteniendo conteo de gatos:', err);
+      setError(err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    animals,
+    loading,
+    fetchAnimals,
+    fetchAnimalById,
+    fetchAnimalByEspecieEstado,
+    updateAnimal,
+    deleteAnimal,
+    fetchNumeroPerrosProtectora,
+    numeroPerrosProtectora,
+    fetchNumeroGatosProtectora,
+    numeroGatosProtectora,
+  };
 }

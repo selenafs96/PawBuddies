@@ -1,6 +1,7 @@
 import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useRouter, useSegments } from 'expo-router';
 import { scaleSize } from '../constants/layout';
+import { supabase } from '../lib/supabase';
 
 export const BottomNav = () => {
   const router = useRouter();
@@ -12,24 +13,44 @@ export const BottomNav = () => {
   const isNoticias = activeSection === '(noticias)';
   const isAnimals = activeSection === '(animals)';
 
+  const handleProfilePress = async () => {
+    // 1. Obtenemos la sesión actual
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession();
+
+    if (error) {
+      console.error('Error al obtener la sesión:', error.message);
+      return;
+    }
+
+    if (session) {
+      // 2. Si hay sesión, vamos al perfil pasando el ID del usuario logueado
+      router.push({
+        pathname: '/(volunteers)/profile',
+        params: { id_usuario: session.user.id },
+      });
+    } else {
+      // 3. Si no hay sesión, al login (ajusta la ruta según tu estructura)
+      router.push('/login');
+    }
+  };
+
   return (
     <View style={styles.bottomNav}>
-
       {/* NOTICIAS */}
       <TouchableOpacity
         style={[styles.navItem, isNoticias && styles.navActivo]}
-        onPress={() => router.push({
-            pathname: '/(noticias)/[id_noticia]',
-            params: { id_noticia: '123' },
+        onPress={() =>
+          router.push({
+            pathname: '/',
           })
         }
       >
         <Image
           source={require('../../assets/icons/home.png')}
-          style={[
-            styles.icon,
-            isNoticias && styles.iconActive
-          ]}
+          style={[styles.icon, isNoticias && styles.iconActive]}
         />
       </TouchableOpacity>
 
@@ -40,10 +61,7 @@ export const BottomNav = () => {
       >
         <Image
           source={require('../../assets/icons/patas.png')}
-          style={[
-            styles.icon,
-            isAnimals && styles.iconActive
-          ]}
+          style={[styles.icon, isAnimals && styles.iconActive]}
         />
       </TouchableOpacity>
 
@@ -61,14 +79,13 @@ export const BottomNav = () => {
       {/* PERFIL */}
       <TouchableOpacity
         style={styles.navItem}
-        onPress={() => console.log('Futuro perfil')}
+        onPress={handleProfilePress}
       >
         <Image
           source={require('../../assets/icons/perfil.png')}
           style={styles.icon}
         />
       </TouchableOpacity>
-
     </View>
   );
 };

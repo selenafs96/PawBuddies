@@ -6,11 +6,10 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-
-import BottomNavBar from '../components/Noticias/BottomNavBar';
-import FilterTabs from '../components/Noticias/FilterTabs';
-import NewsCard from '../components/Noticias/NewsCard';
-import NewsHeader from '../components/Noticias/NewsHeader';
+import FilterTabs from '../../src/components/FilterTabs';
+import NewsCard from '../../src/components/NewsCard';
+import NewsHeader from '../../src/components/NewsHeader';
+import { BottomNav } from '../../src/components/BottomNav';
 
 export default function Noticias() {
   const [selectedFilter, setSelectedFilter] = useState('All');
@@ -128,7 +127,7 @@ export default function Noticias() {
         ))}
       </ScrollView>
 
-      <BottomNavBar
+      <BottomNav
         activeTab={activeTab}
         onTabChange={setActiveTab}
       />

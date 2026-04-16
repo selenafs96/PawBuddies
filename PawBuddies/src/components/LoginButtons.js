@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   signInText: {
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontSize: 14,
     fontWeight: '600',
     lineHeight: 18,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   signUpText: {
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontSize: 14,
     fontWeight: '400',
     lineHeight: 18,
