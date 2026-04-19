@@ -1,11 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import { scaleFont, scaleSize } from '../constants/layout';
+import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 
 export default function MyCheckBox({ tag }) {
   const [isChecked, setIsChecked] = useState(false);
-  const [cantidad, setCantidad] = useState('');
+  const [cantidad, setCantidad] = useState(0);
+  const { actualizarDatos } = useRegistroUsuario();
+
+  useEffect(() => {
+    if (tag === 'Perro') {
+      actualizarDatos({ perros_propiedad: cantidad });
+    }
+
+    if (tag === 'Gato') {
+      actualizarDatos({ gatos_propiedad: cantidad });
+    }
+
+    if (tag === 'Otro') {
+      actualizarDatos({ otros_propiedad: cantidad });
+    }
+  }, [cantidad]);
 
   return (
     <View style={styles.mainContainer}>
