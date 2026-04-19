@@ -4,15 +4,15 @@ const RegistroUsuarioContext = createContext();
 
 export function RegistroProvider({ children }) {
     const [datosRegistro, setDatosRegistro] = useState({
-        password: 'prueba',
-        nombre: 'prueba',
-        apellidos: 'prueba',
-        email: 'pruebatrigger@prueba.com',
+        password: 'prueba6',
+        nombre: 'prueba6',
+        apellidos: 'prueba6apellidos',
+        email: 'pruebasignup6@prueba.com',
         telefono: '123456789',
         url_foto: 'prueba',
         rol: 'Adoptante',
         id_protectora: null,
-        localidad_preferida: 'Madrid',
+        localidad_preferida: '',
         radio_maximo_km: 50,
         descripcion: 'prueba',
         perros_propiedad: 0,

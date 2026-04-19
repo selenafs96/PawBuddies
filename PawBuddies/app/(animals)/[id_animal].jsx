@@ -35,8 +35,6 @@ export default function AdoptableAnimalDetail() {
     }
   }, [id_animal]);
 
-  console.log(animals);
-
   useEffect(() => {
     if (animals && animals.id_protectora) {
       fetchShelterById(animals.id_protectora);

@@ -10,6 +10,7 @@ import LoginButtons from '../src/components/LoginButtons.js';
 import LoginForm from '../src/components/LoginForm.js';
 import LoginHeader from '../src/components/LoginHeader.js';
 import { supabase } from '../src/lib/supabase.js'
+import { router } from 'expo-router';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -54,7 +55,7 @@ const handleSignIn = async () => {
 
   const handleSignUp = () => {
     // TODO: Navegar a pantalla de registro
-    console.log('Navigate to SignUp');
+    router.push('(adopters)/onboarding3');
     // navigation.navigate('SignUp');
   };
 
