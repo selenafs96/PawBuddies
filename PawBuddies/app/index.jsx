@@ -3,6 +3,7 @@ import Onboarding4 from './(adopters)/onboarding4.jsx';
 import AdoptaScreen from './(animals)/list.jsx';
 import VolunteerProfile from './(volunteers)/profile.jsx';
 import RegistroAnimalesScreen from './(volunteers)/RegistroAnimalesScreen.jsx';
+import registroAdoptantes from './(volunteers)/registroAdoptantes.jsx';
 
 // const PawBuddies = () => {
 
