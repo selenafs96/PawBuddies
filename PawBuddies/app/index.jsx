@@ -1,7 +1,9 @@
+import AdoptaConfirmScreen from "./(animals)/AdoptaConfirmScreen";
+
 // const PawBuddies = () => {
 
 //   return (
-//     <Login/>
+//     <AdoptaConfirmScreen/>
 //   );
 // };
 

@@ -4,11 +4,11 @@ import {
   Text,
   StyleSheet,
   Image,
-  Pressable,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 import { scaleFont, scaleSize } from '../../src/constants/layout.js';
 import { AnimalImagesCarousel } from '../../src/components/AnimalImagesCarousel.js';
@@ -17,6 +17,8 @@ import { useAnimals } from '../../src/hooks/useAnimals.js';
 import { useShelter } from '../../src/hooks/useShelter.js';
 import { useHealthRecord } from '../../src/hooks/useHealthRecord.js';
 import ScreenHeader from '../../src/components/ScreenHeader.js';
+import { supabase } from '../../src/lib/supabase.js';
+import { useFavoritos } from '../../src/hooks/useFavoritos.js';
 
 export default function AdoptableAnimalDetail() {
   const insets = useSafeAreaInsets();
@@ -27,6 +29,7 @@ export default function AdoptableAnimalDetail() {
   const { shelters, shelterLoading, fetchShelterById } = useShelter();
   const { healthRecords, healthRecordLoading, fetchHealthRecordById } =
     useHealthRecord();
+  const { toggleFavorito } = useFavoritos();
 
   //Usamos dos useEffect porque la función fetch es asíncrona, y el useEffect ejecuta todo a la vez, no de manera secuencial
   useEffect(() => {
@@ -45,6 +48,35 @@ export default function AdoptableAnimalDetail() {
     }
   }, [animals]);
 
+  const handleAdoptame = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) {
+      router.push('/login');
+    }
+
+    if (session) {
+      router.push('(animals)/AdoptaConfirmScreen');
+    }
+  };
+
+  const handleFavorito = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) {
+      router.push('/login');
+    }
+
+    if (session) {
+      toggleFavorito(id_animal, session.user.id);
+      alert('Animal añadido a favoritos');
+    }
+  };
+
   if (loading || healthRecordLoading || shelterLoading)
     return <Text style={styles.informativeMessages}>Cargando...</Text>;
   if (!animals || !shelters || !healthRecords)
@@ -58,10 +90,9 @@ export default function AdoptableAnimalDetail() {
       >
         <ScreenHeader title="Detalles del animal" />
         <AnimalImagesCarousel imageUrls={animals.url_foto} />
-        <Image
-          source={require('../../assets/icons/fav.png')}
-          style={styles.favButton}
-        />
+        <TouchableOpacity style={styles.favButton} onPress={handleFavorito}>
+          <Image source={require('../../assets/icons/fav.png')} />
+        </TouchableOpacity>
         <View
           style={{
             backgroundColor: '#3DBDB0',
@@ -116,19 +147,9 @@ export default function AdoptableAnimalDetail() {
         </View>
         <View style={styles.bottomView}></View>
       </ScrollView>
-      <Link
-        href={{
-          pathname: `/confirmation`,
-          params: { message: '¡Solicitud enviada!' },
-        }}
-        asChild
-      >
-        <Pressable
-          style={styles.adoptameButton}
-        >
-          <Text style={styles.buttonText}>Adóptame</Text>
-        </Pressable>
-      </Link>
+      <TouchableOpacity onPress={handleAdoptame} style={styles.adoptameButton}>
+        <Text style={styles.buttonText}>Adóptame</Text>
+      </TouchableOpacity>
     </View>
   );
 }
