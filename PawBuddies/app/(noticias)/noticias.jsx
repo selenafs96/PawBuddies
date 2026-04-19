@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   View,
@@ -104,7 +103,7 @@ export default function Noticias() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <NewsHeader />
         <FilterTabs
@@ -131,17 +130,17 @@ export default function Noticias() {
         activeTab={activeTab}
         onTabChange={setActiveTab}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#43B0A7',
+    backgroundColor: '#FFFFFF',
   },
   header: {
-    backgroundColor: '#43B0A7',
+    backgroundColor: '#FFFFFF',
   },
   loadingContainer: {
     flex: 1,
@@ -152,10 +151,13 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     flex: 1,
     backgroundColor: '#43B0A7',
+    //borderTopLeftRadius: 20,
+    //borderTopRightRadius: 20,
+    marginTop: 0,
   },
   scrollContent: {
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingTop: 12,
     paddingBottom: 120,
   },
 });
