@@ -1,26 +1,25 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     View,
     Text,
     StyleSheet,
-    SafeAreaView,
     TextInput,
     TouchableOpacity,
-    useWindowDimensions,
     Image,
     ScrollView,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
+import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
+import { router } from 'expo-router';
+import { scaleFont, scaleSize } from '../../src/constants/layout';
 
-export default function LocalizacionScreen({ onVolver, onSiguiente }) {
-    const { width } = useWindowDimensions();
-    const scale = width / 375;
-    const scaleFont = (size) => size * scale;
-    const scaleSize = (size) => size * scale;
+export default function LocalizacionScreen({ onVolver }) {
 
     const [inputValue, setInputValue] = useState('');
     const [tags, setTags] = useState([]);
     const [distancia, setDistancia] = useState(23);
+
+     const { actualizarDatos, datosRegistro } = useRegistroUsuario();
 
     const handleAddTag = () => {
         const trimmedValue = inputValue.trim();
@@ -40,11 +39,9 @@ export default function LocalizacionScreen({ onVolver, onSiguiente }) {
             return;
         }
         
-        // Enviamos los datos al componente padre para guardarlos luego en Supabase
-        onSiguiente({
-            ciudades: tags,
-            radioKm: distancia,
-        });
+        // Enviamos los datos al contexto padre para guardarlos luego en Supabase
+        actualizarDatos({ localidad_preferida: inputValue, radio_maximo_km: distancia });
+        router.push('(adopters)/onboarding4');
     };
 
     // DEFINIMOS LOS ESTILOS ANTES DEL RETURN
@@ -74,7 +71,7 @@ export default function LocalizacionScreen({ onVolver, onSiguiente }) {
     });
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+        <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.container}>
                     {/* Progress Bar */}
@@ -146,6 +143,6 @@ export default function LocalizacionScreen({ onVolver, onSiguiente }) {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }
