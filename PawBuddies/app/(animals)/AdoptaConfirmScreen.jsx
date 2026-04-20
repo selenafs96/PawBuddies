@@ -12,12 +12,29 @@ import {
 } from 'react-native';
 import { useFavoritos } from '../../src/hooks/useFavoritos';
 import { BackButton } from '../../src/components/BackButton';
+import { supabase } from '../../src/lib/supabase';
+import { router, useLocalSearchParams } from 'expo-router';
 
-export default function AdoptaConfirmScreen({
-  onVolver,
-  idAnimalPreseleccionado,
-}) {
-  const { animalesFavoritos, loading, eliminarFavorito } = useFavoritos();
+export default function AdoptaConfirmScreen() {
+
+  const { idAnimalPreseleccionado } = useLocalSearchParams();
+
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        setUserId(session.user.id);
+      }
+    };
+    checkSession();
+  }, []);
+
+  const { animalesFavoritos, loading, eliminarFavorito, fetchFavoritos } = useFavoritos();
 
   const [busqueda, setBusqueda] = useState('');
   const [seleccionAdoptar, setSeleccionAdoptar] = useState(
@@ -35,8 +52,6 @@ export default function AdoptaConfirmScreen({
   const bottomSheetAnim = useRef(
     new Animated.Value(idAnimalPreseleccionado ? 1 : 0),
   ).current;
-
-  const ID_USUARIO_PRUEBA = 'b0000000-0000-0000-0000-000000000001';
 
   useEffect(() => {
     if (mostrarConfirm) {
@@ -67,7 +82,7 @@ export default function AdoptaConfirmScreen({
     const solicitudes = ids.map((id_animal) => ({
       estado_adopcion: 'Solicitada',
       fecha_adopcion: new Date().toISOString().split('T')[0],
-      id_usuario: ID_USUARIO_PRUEBA,
+      id_usuario: userId,
       id_animal,
     }));
     const { error } = await supabase.from('adopcion').insert(solicitudes);
@@ -76,7 +91,10 @@ export default function AdoptaConfirmScreen({
     else {
       setSeleccionAdoptar({});
       setMostrarConfirm(false);
-      alert('¡Solicitud enviada!');
+      router.push({
+          pathname: '/confirmation',
+          params: { message: '¡Solicitud enviada!' },
+        })
     }
   }
 
@@ -101,6 +119,10 @@ export default function AdoptaConfirmScreen({
     setSeleccionAdoptar({});
     setMostrarConfirm(false);
   };
+
+  useEffect(() => {
+    fetchFavoritos(userId);
+  }, [userId, idAnimalPreseleccionado])
 
   const animalesFiltrados = animalesFavoritos.filter((a) =>
     a.nombre.toLowerCase().includes(busqueda.toLowerCase()),
@@ -179,7 +201,7 @@ export default function AdoptaConfirmScreen({
         </View>
 
         {/* CONTENIDO */}
-        {loading ? (
+        {loading ? ( //TODO quitar negacion
           <View style={styles.centrado}>
             <ActivityIndicator size="large" color="#3DBDB0" />
           </View>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -21,6 +21,21 @@ import { supabase } from '../../src/lib/supabase.js';
 import { useFavoritos } from '../../src/hooks/useFavoritos.js';
 
 export default function AdoptableAnimalDetail() {
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        setUserId(session.user.id);
+      }
+    };
+    checkSession();
+  }, []);
+
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
   const { id_animal } = useLocalSearchParams();
@@ -29,7 +44,8 @@ export default function AdoptableAnimalDetail() {
   const { shelters, shelterLoading, fetchShelterById } = useShelter();
   const { healthRecords, healthRecordLoading, fetchHealthRecordById } =
     useHealthRecord();
-  const { toggleFavorito } = useFavoritos();
+
+  const { toggleFavorito, loading: favoritosLoading } = useFavoritos();
 
   //Usamos dos useEffect porque la función fetch es asíncrona, y el useEffect ejecuta todo a la vez, no de manera secuencial
   useEffect(() => {
@@ -48,33 +64,22 @@ export default function AdoptableAnimalDetail() {
     }
   }, [animals]);
 
-  const handleAdoptame = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    if (!session) {
+  const handleFavorito = async () => {
+    if (!userId) {
       router.push('/login');
+      return;
     }
 
-    if (session) {
-      router.push('(animals)/AdoptaConfirmScreen');
+    if (userId) {
+      toggleFavorito(id_animal, userId);
     }
   };
 
-  const handleFavorito = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    if (!session) {
-      router.push('/login');
-    }
-
-    if (session) {
-      toggleFavorito(id_animal, session.user.id);
-      alert('Animal añadido a favoritos');
-    }
+  const handleAdoptame = async () => {
+    router.push({
+      pathname: '(animals)/AdoptaConfirmScreen',
+      params: { idAnimalPreseleccionado: id_animal },
+    });
   };
 
   if (loading || healthRecordLoading || shelterLoading)
