@@ -20,6 +20,16 @@ export default function VolunteerOnboarding1() {
   const [showPassword, setShowPassword] = useState(false);
   const [errores, setErrores] = useState({});
 
+  const validarNombre = (v) => /^[a-zA-ZÀ-ÿ\s]+$/.test(v);
+  const validarEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const validarTelefono = (v) => /^\d{9}$/.test(v);
+  const validarContrasena = (v) =>
+    v.length >= 8 &&
+    /[A-Z]/.test(v) &&
+    /[a-z]/.test(v) &&
+    /[0-9]/.test(v) &&
+    /[^a-zA-Z0-9]/.test(v);
+
   const handleSiguiente = () => {
     const nuevosErrores = {};
 
@@ -60,16 +70,6 @@ export default function VolunteerOnboarding1() {
     });
   };
 
-  const validarNombre = (v) => /^[a-zA-ZÀ-ÿ\s]+$/.test(v);
-  const validarEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  const validarTelefono = (v) => /^\d{9}$/.test(v);
-  const validarContrasena = (v) =>
-    v.length >= 8 &&
-    /[A-Z]/.test(v) &&
-    /[a-z]/.test(v) &&
-    /[0-9]/.test(v) &&
-    /[^a-zA-Z0-9]/.test(v);
-
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
@@ -77,7 +77,6 @@ export default function VolunteerOnboarding1() {
         {/* Progress bar — paso 1 activo */}
         <View style={styles.progressContainer}>
           <View style={[styles.progressBar, styles.progressActive]} />
-          <View style={[styles.progressBar, styles.progressInactive]} />
           <View style={[styles.progressBar, styles.progressInactive]} />
           <View style={[styles.progressBar, styles.progressInactive]} />
         </View>
