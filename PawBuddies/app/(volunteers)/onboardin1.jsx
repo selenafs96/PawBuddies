@@ -18,17 +18,57 @@ export default function VolunteerOnboarding1() {
   const [contrasena, setContrasena] = useState('');
   const [telefono, setTelefono] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [errores, setErrores] = useState({});
 
   const handleSiguiente = () => {
-    if (!nombre || !email || !contrasena || !telefono) {
-      alert('Por favor, completa todos los campos.');
+    const nuevosErrores = {};
+
+    if (!nombre) {
+      nuevosErrores.nombre = 'El nombre es obligatorio.';
+    } else if (!validarNombre(nombre)) {
+      nuevosErrores.nombre = 'El nombre no puede contener números.';
+    }
+
+    if (!email) {
+      nuevosErrores.email = 'El email es obligatorio.';
+    } else if (!validarEmail(email)) {
+      nuevosErrores.email = 'Introduce un email válido con @.';
+    }
+
+    if (!contrasena) {
+      nuevosErrores.contrasena = 'La contraseña es obligatoria.';
+    } else if (!validarContrasena(contrasena)) {
+      nuevosErrores.contrasena =
+        'Mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.';
+    }
+
+    if (!telefono) {
+      nuevosErrores.telefono = 'El teléfono es obligatorio.';
+    } else if (!validarTelefono(telefono)) {
+      nuevosErrores.telefono = 'El teléfono debe tener exactamente 9 números.';
+    }
+
+    if (Object.keys(nuevosErrores).length > 0) {
+      setErrores(nuevosErrores);
       return;
     }
+
+    setErrores({});
     router.push({
       pathname: '/(volunteers)/onboarding2',
       params: { nombre, email, contrasena, telefono },
     });
   };
+
+  const validarNombre = (v) => /^[a-zA-ZÀ-ÿ\s]+$/.test(v);
+  const validarEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const validarTelefono = (v) => /^\d{9}$/.test(v);
+  const validarContrasena = (v) =>
+    v.length >= 8 &&
+    /[A-Z]/.test(v) &&
+    /[a-z]/.test(v) &&
+    /[0-9]/.test(v) &&
+    /[^a-zA-Z0-9]/.test(v);
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -56,6 +96,7 @@ export default function VolunteerOnboarding1() {
             autoCapitalize="words"
           />
         </View>
+        {errores.nombre && <Text style={styles.errorText}>{errores.nombre}</Text>}
 
         {/* Email */}
         <Text style={styles.label}>Email</Text>
@@ -71,6 +112,7 @@ export default function VolunteerOnboarding1() {
           />
           <Text style={styles.inputIconText}>@</Text>
         </View>
+        {errores.email && <Text style={styles.errorText}>{errores.email}</Text>}
 
         {/* Contraseña */}
         <Text style={styles.label}>Contraseña</Text>
@@ -91,6 +133,7 @@ export default function VolunteerOnboarding1() {
             />
           </TouchableOpacity>
         </View>
+        {errores.contrasena && <Text style={styles.errorText}>{errores.contrasena}</Text>}
 
         {/* Teléfono */}
         <Text style={styles.label}>Teléfono</Text>
@@ -108,6 +151,7 @@ export default function VolunteerOnboarding1() {
             style={styles.inputIcon}
           />
         </View>
+        {errores.telefono && <Text style={styles.errorText}>{errores.telefono}</Text>}
 
         {/* Footer */}
         <View style={styles.footer}>
@@ -152,14 +196,14 @@ const styles = StyleSheet.create({
   progressInactive: { backgroundColor: '#E0E0E0' },
   headerTitle: {
     fontFamily: 'TiltNeon',
-    fontSize: scaleFont(20),      // más pequeño que LocalizacionScreen (24)
+    fontSize: scaleFont(20),
     color: '#3DBDB0',
     fontWeight: '600',
     marginBottom: scaleSize(22),
   },
   label: {
     fontFamily: 'TiltNeon',
-    fontSize: scaleFont(13),      // igual que gestiones en profile.jsx
+    fontSize: scaleFont(13),
     color: '#222222',
     marginBottom: scaleSize(5),
   },
@@ -167,10 +211,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#CCCCCC',       // borde gris suave como en el mockup
+    borderColor: '#CCCCCC',
     borderRadius: scaleSize(10),
     paddingHorizontal: scaleSize(12),
-    height: scaleSize(42),        // más compacto
+    height: scaleSize(42),
     marginBottom: scaleSize(14),
   },
   input: {
@@ -225,5 +269,12 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: scaleFont(15),
     fontWeight: '600',
+  },
+  errorText: {
+    fontFamily: 'TiltNeon',
+    fontSize: scaleFont(11),
+    color: '#E53935',
+    marginTop: scaleSize(-10),
+    marginBottom: scaleSize(8),
   },
 });
