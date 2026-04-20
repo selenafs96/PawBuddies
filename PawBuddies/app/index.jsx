@@ -1,10 +1,10 @@
 
-import Onboarding1 from './(volunteers)/onboardin1.jsx';
+import Onboarding3 from './(volunteers)/onboarding3.js';
 
 const PawBuddies = () => {
 
    return (
-     <Onboarding1/>
+     <Onboarding3/>
    );
 };
 
