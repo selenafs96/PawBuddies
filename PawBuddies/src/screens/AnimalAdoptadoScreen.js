@@ -13,7 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { scaleFont, scaleSize } from '../constants/layout.js';
 import { AnimalImagesCarousel } from '../components/AnimalImagesCarousel.js';
-import { DataCard } from '../components/DataCard.js';
+import { DataCard } from '../components/AnimalDataCard.js';
 import { BackButton } from '../components/BackButton.js';
 import { useAdopcion } from '../hooks/useAdopcion.js';
 import { useHealthRecord } from '../hooks/useHealthRecord.js';
@@ -91,14 +91,14 @@ export default function AnimalAdoptadoScreen({ id_usuario }) {
 
           {/* Fila: Género / Edad / Tamaño */}
           <View style={styles.dataRow}>
-            <DataCard category="Género" data={animal.genero} />
-            <DataCard category="Edad" data={animal.edad} unidad_medida="años" />
-            <DataCard category="Tamaño" data={animal.tamano ?? animal.especie} />
+            <AnimalDataCard category="Género" data={animal.genero} />
+            <AnimalDataCard category="Edad" data={animal.edad} unidad_medida="años" />
+            <AnimalDataCard category="Tamaño" data={animal.tamano ?? animal.especie} />
           </View>
 
           {/* Sobre el animal */}
           <Text style={styles.sectionTitle}>Sobre el animal</Text>
-          <DataCard
+          <AnimalDataCard
             category=""
             data={animal.presentacion}
             style={styles.largeCard}

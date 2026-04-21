@@ -20,5 +20,14 @@ export function useAdopcion() {
     }
   };
 
-  return { adopcion, adopcionLoading, fetchAdopcionByUsuario, error };
+  const enviarSolicitudAdopcion = async (id_usuario, id_animal) => {
+    try {
+      await AdopcionRepository.enviarSolicitudAdopcion(id_usuario, id_animal);
+    } catch (err) {
+      console.error('Error enviando solicitud de adopción:', err);
+      setError(err);
+    }
+  };
+
+  return { adopcion, adopcionLoading, fetchAdopcionByUsuario, enviarSolicitudAdopcion, error };
 }

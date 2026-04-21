@@ -19,7 +19,7 @@ export default function LocalizacionScreen({ onVolver }) {
     const [tags, setTags] = useState([]);
     const [distancia, setDistancia] = useState(23);
 
-     const { actualizarDatos, datosRegistro } = useRegistroUsuario();
+    const { actualizarDatos, datosRegistro } = useRegistroUsuario();
 
     const handleAddTag = () => {
         const trimmedValue = inputValue.trim();
@@ -33,6 +33,7 @@ export default function LocalizacionScreen({ onVolver }) {
         setTags(tags.filter((tag) => tag !== tagToRemove));
     };
 
+    const handleVolver = onVolver ?? (() => router.back());
     const handleSiguiente = () => {
         if (tags.length === 0) {
             alert("Por favor, introduce al menos una ciudad o código postal.");
@@ -131,10 +132,10 @@ export default function LocalizacionScreen({ onVolver }) {
                         maximumTrackTintColor="#999999"
                         thumbTintColor="#3DBDB0"
                     />
-                    <Text style={styles.sliderValue}>{distancia} K.m</Text>
+                    <Text style={styles.sliderValue}>{distancia} Km</Text>
 
                     <View style={styles.footer}>
-                        <TouchableOpacity style={styles.btnVolver} onPress={onVolver}>
+                        <TouchableOpacity style={styles.btnVolver} onPress={handleVolver}>
                             <Text style={styles.btnTextVolver}>Volver</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.btnSiguiente} onPress={handleSiguiente}>

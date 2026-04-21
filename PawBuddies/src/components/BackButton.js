@@ -2,7 +2,7 @@ import { TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { scaleSize } from '../constants/layout';
 import { useRouter } from 'expo-router';
 
-export const BackButton = () => {
+export const BackButton = ({color}) => {
   const router = useRouter();
 
   return (
@@ -18,7 +18,7 @@ export const BackButton = () => {
     >
       <Image
         source={require('../../assets/icons/arrow_back.png')}
-        style={styles.icon}
+        style={[styles.icon, {tintColor: color || '#000000'}]}
       />
     </TouchableOpacity>
   );
