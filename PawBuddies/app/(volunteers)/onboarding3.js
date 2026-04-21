@@ -11,11 +11,14 @@ import {
 import Slider from '@react-native-community/slider';
 import { router } from 'expo-router';
 import { scaleFont, scaleSize } from '../../src/constants/layout';
+import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 
 export default function VolunteerOnboarding2() {
   const [inputValue, setInputValue] = useState('');
   const [tags, setTags] = useState([]);
   const [distancia, setDistancia] = useState(23);
+
+  const { actualizarDatos } = useRegistroUsuario();
 
   const handleAddTag = () => {
     const trimmedValue = inputValue.trim();
@@ -34,14 +37,19 @@ export default function VolunteerOnboarding2() {
       alert('Por favor, introduce al menos una ciudad o código postal.');
       return;
     }
-    router.push('/(volunteers)/onboarding3');
+
+    actualizarDatos({
+      localidad_preferida: tags.join(', '),
+      radio_maximo_km: distancia,
+    });
+
+    router.push('/(volunteers)/onboarding4');
   };
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
 
-        {/* Progress Bar — paso 2 activo */}
         <View style={styles.progressContainer}>
           <View style={[styles.progressBar, styles.progressActive]} />
           <View style={[styles.progressBar, styles.progressActive]} />
@@ -95,7 +103,6 @@ export default function VolunteerOnboarding2() {
         />
         <Text style={styles.sliderValue}>{distancia} K.m</Text>
 
-        {/* Footer pegado abajo */}
         <View style={styles.footer}>
           <TouchableOpacity
             style={styles.btnVolver}
@@ -216,7 +223,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingBottom: scaleSize(30),
-    marginTop: 'auto',   // empuja el footer al fondo
+    marginTop: 'auto',
     paddingTop: scaleSize(16),
   },
   btnVolver: {

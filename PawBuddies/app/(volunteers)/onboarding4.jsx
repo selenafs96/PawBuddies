@@ -5,9 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
 import { scaleFont, scaleSize } from '../../src/constants/layout';
+import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
+import { supabase } from '../../src/lib/supabase';
+import { useUsers } from '../../src/hooks/useUsers';
 
 const DISPONIBILIDAD = ['Días laborables', 'Fines de semana', 'Festivos'];
 const HABILIDADES = ['Adiestramiento de animales', 'Organización de eventos', 'Recaudación de fondos'];
@@ -26,6 +30,10 @@ function Checkbox({ label, checked, onPress }) {
 export default function VolunteerOnboarding3() {
   const [disponibilidad, setDisponibilidad] = useState([]);
   const [habilidades, setHabilidades] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const { datosRegistro } = useRegistroUsuario();
+  const { createUser } = useUsers();
 
   const toggle = (list, setList, value) => {
     setList((prev) =>
@@ -33,21 +41,70 @@ export default function VolunteerOnboarding3() {
     );
   };
 
-  const handleRegistrar = () => {
+  const handleRegistrar = async () => {
     if (disponibilidad.length === 0) {
       alert('Selecciona al menos una opción de disponibilidad.');
       return;
     }
-    // Aquí irá la llamada a Supabase para registrar al trabajador
-    // con los datos recogidos en los 3 pasos del onboarding
-    router.push('/');
+
+    setLoading(true);
+
+    try {
+      // 1. Crear usuario en Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: datosRegistro.email,
+        password: datosRegistro.password,
+      });
+
+      if (authError) {
+        alert('Error en el registro: ' + authError.message);
+        setLoading(false);
+        return;
+      }
+
+      if (authData.user) {
+        // 2. Insertar en la tabla usuario con todos los datos recogidos
+        const perfilUsuario = {
+          id_usuario: authData.user.id,
+          nombre: datosRegistro.nombre,
+          apellidos: datosRegistro.apellidos ?? '',
+          email: datosRegistro.email,
+          telefono: datosRegistro.telefono,
+          url_foto: datosRegistro.url_foto ?? null,
+          rol: 'Voluntario',
+          id_protectora: datosRegistro.id_protectora,
+          localidad_preferida: datosRegistro.localidad_preferida,
+          radio_maximo_km: String(datosRegistro.radio_maximo_km),
+          descripcion: [
+            disponibilidad.length > 0 ? 'Disponibilidad: ' + disponibilidad.join(', ') : '',
+            habilidades.length > 0 ? 'Habilidades: ' + habilidades.join(', ') : '',
+          ]
+            .filter(Boolean)
+            .join(' | '),
+          perros_propiedad: 0,
+          gatos_propiedad: 0,
+          otros_propiedad: 0,
+        };
+
+        await createUser(perfilUsuario);
+
+        router.push({
+          pathname: '/confirmation',
+          params: { message: '¡Registro completado!' },
+        });
+      }
+    } catch (err) {
+      console.error('Error inesperado:', err);
+      alert('Error inesperado: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
 
-        {/* Progress bar — todos activos (paso 3 de 3) */}
         <View style={styles.progressContainer}>
           <View style={[styles.progressBar, styles.progressActive]} />
           <View style={[styles.progressBar, styles.progressActive]} />
@@ -56,7 +113,6 @@ export default function VolunteerOnboarding3() {
 
         <Text style={styles.headerTitle}>Trabajador/Voluntario</Text>
 
-        {/* Disponibilidad */}
         <Text style={styles.sectionTitle}>Disponibilidad</Text>
         <Text style={styles.label}>
           ¿Cuándo estás disponible para hacer voluntariado?{'\n'}
@@ -71,7 +127,6 @@ export default function VolunteerOnboarding3() {
           />
         ))}
 
-        {/* Habilidades e intereses */}
         <Text style={[styles.sectionTitle, { marginTop: scaleSize(22) }]}>
           Habilidades e intereses
         </Text>
@@ -88,7 +143,6 @@ export default function VolunteerOnboarding3() {
           />
         ))}
 
-        {/* Footer */}
         <View style={styles.footer}>
           <TouchableOpacity
             style={styles.btnVolver}
@@ -96,11 +150,21 @@ export default function VolunteerOnboarding3() {
               if (router.canGoBack()) router.back();
               else router.push('/');
             }}
+            disabled={loading}
           >
             <Text style={styles.btnTextVolver}>Volver</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnRegistrar} onPress={handleRegistrar}>
-            <Text style={styles.btnTextRegistrar}>Registrar</Text>
+
+          <TouchableOpacity
+            style={[styles.btnRegistrar, loading && { opacity: 0.7 }]}
+            onPress={handleRegistrar}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#FFFFFF" />
+            ) : (
+              <Text style={styles.btnTextRegistrar}>Registrar</Text>
+            )}
           </TouchableOpacity>
         </View>
 
@@ -149,7 +213,6 @@ const styles = StyleSheet.create({
     marginBottom: scaleSize(14),
     lineHeight: scaleFont(19),
   },
-  // ── Checkbox ──
   checkRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -179,7 +242,6 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(14),
     color: '#222222',
   },
-  // ── Footer ──
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
