@@ -17,5 +17,5 @@ import RegistroAnimalesScreen from "./(volunteers)/RegistroAnimalesScreen";
 import { Redirect } from 'expo-router';
 
 export default function PawBuddies() {
-  return <Redirect href="/(noticias)/noticias" />;
+  return <Redirect href="/(adopters)/onboarding2" />;
 }
