@@ -2,8 +2,28 @@ import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useRouter, useSegments } from 'expo-router';
 import { scaleSize } from '../constants/layout';
 import { supabase } from '../lib/supabase';
+import { useEffect, useState } from 'react';
 
 export const BottomNav = () => {
+
+  //Checkeamos si el usuario está conectado o no para al presionar favoritos le lleve al login si no lo está
+  const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+      const checkSession = async () => {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+  
+        if (session) {
+          setUserId(session.user.id);
+        }
+      };
+      checkSession();
+    }, []);
+
+
+
   const router = useRouter();
   const segments = useSegments();
 
@@ -37,6 +57,15 @@ export const BottomNav = () => {
     }
   };
 
+  const handleFavPress = () => {
+
+    if(!userId) {
+      router.push('/login');
+      return;
+    }
+    router.push('/(animals)/AdoptaConfirmScreen');
+  }
+
   return (
     <View style={styles.bottomNav}>
       {/* NOTICIAS */}
@@ -68,7 +97,7 @@ export const BottomNav = () => {
       {/* FAVORITOS */}
       <TouchableOpacity
         style={styles.navItem}
-        onPress={() => console.log('Futuros favoritos')}
+        onPress={handleFavPress}
       >
         <Image
           source={require('../../assets/icons/corazon.png')}

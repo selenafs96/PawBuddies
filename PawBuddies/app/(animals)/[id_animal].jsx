@@ -19,9 +19,11 @@ import { useHealthRecord } from '../../src/hooks/useHealthRecord.js';
 import ScreenHeader from '../../src/components/ScreenHeader.js';
 import { supabase } from '../../src/lib/supabase.js';
 import { useFavoritos } from '../../src/hooks/useFavoritos.js';
+import { useAdopcion } from '../../src/hooks/useAdopcion.js';
 
 export default function AdoptableAnimalDetail() {
   const [userId, setUserId] = useState(null);
+  const [esFavorito, setEsFavorito] = useState(false);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -44,8 +46,12 @@ export default function AdoptableAnimalDetail() {
   const { shelters, shelterLoading, fetchShelterById } = useShelter();
   const { healthRecords, healthRecordLoading, fetchHealthRecordById } =
     useHealthRecord();
-
-  const { toggleFavorito, loading: favoritosLoading } = useFavoritos();
+  const {
+    toggleFavorito,
+    loading: favoritosLoading,
+    checkEsFavorito,
+  } = useFavoritos();
+  const { enviarSolicitudAdopcion } = useAdopcion();
 
   //Usamos dos useEffect porque la función fetch es asíncrona, y el useEffect ejecuta todo a la vez, no de manera secuencial
   useEffect(() => {
@@ -64,6 +70,16 @@ export default function AdoptableAnimalDetail() {
     }
   }, [animals]);
 
+  useEffect(() => {
+    const checkFavorito = async () => {
+      if (userId && id_animal) {
+        const esFav = await checkEsFavorito(userId, id_animal);
+        setEsFavorito(esFav);
+      }
+    };
+    checkFavorito();
+  }, [userId, id_animal]);
+
   const handleFavorito = async () => {
     if (!userId) {
       router.push('/login');
@@ -72,13 +88,20 @@ export default function AdoptableAnimalDetail() {
 
     if (userId) {
       toggleFavorito(id_animal, userId);
+      setEsFavorito(!esFavorito)
     }
   };
 
   const handleAdoptame = async () => {
+
+    if(!userId) {
+      router.push('/login');
+      return;
+    }
+    await enviarSolicitudAdopcion(userId, id_animal);
     router.push({
-      pathname: '(animals)/AdoptaConfirmScreen',
-      params: { idAnimalPreseleccionado: id_animal },
+      pathname: '/confirmation',
+      params: { message: '¡Solicitud enviada!' },
     });
   };
 
@@ -95,9 +118,16 @@ export default function AdoptableAnimalDetail() {
       >
         <ScreenHeader title="Detalles del animal" />
         <AnimalImagesCarousel imageUrls={animals.url_foto} />
-        <TouchableOpacity style={styles.favButton} onPress={handleFavorito}>
-          <Image source={require('../../assets/icons/fav.png')} />
-        </TouchableOpacity>
+
+        {!esFavorito ? (
+          <TouchableOpacity style={styles.favButton} onPress={handleFavorito}>
+            <Image source={require('../../assets/icons/fav.png')} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.favButton} onPress={handleFavorito}>
+            <Image source={require('../../assets/icons/checkedFav.png')} />
+          </TouchableOpacity>
+        )}
         <View
           style={{
             backgroundColor: '#3DBDB0',

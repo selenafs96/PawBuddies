@@ -114,7 +114,7 @@ export default function AdoptaConfirmScreen() {
       .filter(([_, v]) => v)
       .map(([id]) => id);
     for (const id of ids) {
-      await eliminarFavorito(id);
+      await eliminarFavorito(id, userId);
     }
     setSeleccionAdoptar({});
     setMostrarConfirm(false);

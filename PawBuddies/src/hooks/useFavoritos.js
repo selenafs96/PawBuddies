@@ -8,8 +8,7 @@ export const useFavoritos = () => {
   const [loading, setLoading] = useState(true);
 
   async function fetchFavoritos(id_usuario) {
-
-    if(!id_usuario) {
+    if (!id_usuario) {
       setLoading(false);
       return;
     }
@@ -57,6 +56,8 @@ export const useFavoritos = () => {
         prev.filter((a) => a.id_animal != id_animal),
       );
       setLoading(false);
+      // Alert.alert('Animal eliminado de favoritos'); //Para móvil
+      // alert('Animal eliminado de favoritos') //Para web
     } else {
       // Añadir a favoritos
       const { data, error } = await supabase
@@ -64,6 +65,8 @@ export const useFavoritos = () => {
         .insert({ id_usuario: id_usuario, id_animal: id_animal });
       setFavoritos((prev) => [...prev, id_animal]);
       setLoading(false);
+      // Alert.alert('Animal añadido a favoritos'); //Para móvil
+      // alert('Animal añadido a favoritos') //Para web
       if (error) {
         console.log(error);
       }
@@ -89,5 +92,6 @@ export const useFavoritos = () => {
     toggleFavorito,
     eliminarFavorito,
     fetchFavoritos,
+    checkEsFavorito,
   };
 };

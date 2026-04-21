@@ -70,7 +70,7 @@ const createStyles = (insets) =>
       bottom: insets.bottom > 0 ? insets.bottom : scaleSize(10),
       alignSelf: 'center',
       backgroundColor: '#3DBDB0',
-      borderRadius: 5,
+      borderRadius: 10,
       paddingHorizontal: scaleSize(14),
       paddingVertical: scaleSize(5),
       width: '85%',
