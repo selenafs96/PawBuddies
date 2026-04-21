@@ -9,12 +9,23 @@ export const AdopcionRepository = {
         `
         *,
         animal (*)
-      `
+      `,
       )
       .eq('id_usuario', id_usuario)
       .eq('estado_adopcion', 'Aprobada')
       .single();
     if (error) throw new Error(error.message);
     return data;
+  },
+
+  async enviarSolicitudAdopcion(id_usuario, id_animal) {
+    const { data, error } = await supabase.from('adopcion').insert([
+      {
+        id_usuario: id_usuario,
+        id_animal: id_animal,
+        estado_adopcion: 'Solicitada',
+        fecha_adopcion: new Date().toISOString().split('T')[0], // Formato YYYY-MM-DD
+      },
+    ]);
   },
 };

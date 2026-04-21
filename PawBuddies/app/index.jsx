@@ -1,19 +1,21 @@
+import AnimalAdoptadoScreen from "../src/screens/AnimalAdoptadoScreen";
+import AdoptaConfirmScreen from "./(animals)/AdoptaConfirmScreen";
+import VolunteerOnboarding1 from "./(volunteers)/onboardin1";
+import RegistroAdoptantesScreen from "./(volunteers)/registroAdoptantes";
+import RegistroAnimalesScreen from "./(volunteers)/RegistroAnimalesScreen";
 
-import Onboarding1 from './(volunteers)/onboardin1.jsx';
+// const PawBuddies = () => {
 
-const PawBuddies = () => {
+//    return (
+//      <AnimalAdoptadoScreen/>
+//    );
+// };
 
-   return (
-     <Onboarding1/>
-   );
-};
-
-export default PawBuddies;
+// export default PawBuddies;
 
 //ESTO ES LO QUE APARECERÁ UNA VEZ TENGAMOS TODAS LAS PANTALLAS CONECTADAS, REDIRIGIRÁ A LAS NOTICIAS AUTOMÁTICAMENTE Y PODREMOS EMPEZAR A NAVEGAR
-/*import { Redirect } from 'expo-router';
+import { Redirect } from 'expo-router';
 
 export default function PawBuddies() {
   return <Redirect href="/(noticias)/noticias" />;
-
-}*/
+}

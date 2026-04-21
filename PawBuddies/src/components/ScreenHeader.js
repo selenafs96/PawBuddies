@@ -13,7 +13,14 @@ export default function ScreenHeader({ title }) {
         <BackButton />
       </View>
       <View style={styles.centerColumn}>
-        <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>{title}</Text>
+        <Text
+          style={styles.title}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.7}
+        >
+          {title}
+        </Text>
       </View>
       <View style={styles.rightColumn} />
     </View>
@@ -24,25 +31,25 @@ const createStyles = (insets) =>
   StyleSheet.create({
     titleContainer: {
       flexDirection: 'row',
+      justifyContent: 'space-between',
       alignItems: 'center',
       paddingTop: insets.top,
-      paddingHorizontal: scaleSize(5),
       width: '100%',
     },
     leftColumn: {
-      position: 'absolute',
-      left: scaleSize(10),
+      width: '20%',
       zIndex: 1,
     },
 
     centerColumn: {
-      width: '100%',
+      width: '60%',
       alignItems: 'center',
+      zIndex: 1,
     },
 
     rightColumn: {
-      position: 'absolute',
-      right: scaleSize(10),
+      width: '20%',
+      zIndex: 1,
     },
     title: {
       fontFamily: 'TiltNeon',

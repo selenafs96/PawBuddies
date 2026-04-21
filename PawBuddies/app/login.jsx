@@ -11,6 +11,7 @@ import LoginForm from '../src/components/LoginForm.js';
 import LoginHeader from '../src/components/LoginHeader.js';
 import { supabase } from '../src/lib/supabase.js'
 import { router } from 'expo-router';
+import { BackButton } from '../src/components/BackButton.js';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -67,6 +68,7 @@ const handleSignIn = async () => {
       >
         {/* Background Rectangle 52 */}
         <View style={styles.background}>
+          <BackButton color = '#FFFFFF'/>
           {/* Header - Status Bar + Logo + Title */}
           <LoginHeader />
 

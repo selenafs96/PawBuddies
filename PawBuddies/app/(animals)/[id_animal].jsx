@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  Pressable,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 import { scaleFont, scaleSize } from '../../src/constants/layout.js';
 import { AnimalImagesCarousel } from '../../src/components/AnimalImagesCarousel.js';
@@ -17,8 +17,27 @@ import { useAnimals } from '../../src/hooks/useAnimals.js';
 import { useShelter } from '../../src/hooks/useShelter.js';
 import { useHealthRecord } from '../../src/hooks/useHealthRecord.js';
 import ScreenHeader from '../../src/components/ScreenHeader.js';
+import { supabase } from '../../src/lib/supabase.js';
+import { useFavoritos } from '../../src/hooks/useFavoritos.js';
+import { useAdopcion } from '../../src/hooks/useAdopcion.js';
 
 export default function AdoptableAnimalDetail() {
+  const [userId, setUserId] = useState(null);
+  const [esFavorito, setEsFavorito] = useState(false);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        setUserId(session.user.id);
+      }
+    };
+    checkSession();
+  }, []);
+
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
   const { id_animal } = useLocalSearchParams();
@@ -27,6 +46,12 @@ export default function AdoptableAnimalDetail() {
   const { shelters, shelterLoading, fetchShelterById } = useShelter();
   const { healthRecords, healthRecordLoading, fetchHealthRecordById } =
     useHealthRecord();
+  const {
+    toggleFavorito,
+    loading: favoritosLoading,
+    checkEsFavorito,
+  } = useFavoritos();
+  const { enviarSolicitudAdopcion } = useAdopcion();
 
   //Usamos dos useEffect porque la función fetch es asíncrona, y el useEffect ejecuta todo a la vez, no de manera secuencial
   useEffect(() => {
@@ -45,6 +70,41 @@ export default function AdoptableAnimalDetail() {
     }
   }, [animals]);
 
+  useEffect(() => {
+    const checkFavorito = async () => {
+      if (userId && id_animal) {
+        const esFav = await checkEsFavorito(userId, id_animal);
+        setEsFavorito(esFav);
+      }
+    };
+    checkFavorito();
+  }, [userId, id_animal]);
+
+  const handleFavorito = async () => {
+    if (!userId) {
+      router.push('/login');
+      return;
+    }
+
+    if (userId) {
+      toggleFavorito(id_animal, userId);
+      setEsFavorito(!esFavorito)
+    }
+  };
+
+  const handleAdoptame = async () => {
+
+    if(!userId) {
+      router.push('/login');
+      return;
+    }
+    await enviarSolicitudAdopcion(userId, id_animal);
+    router.push({
+      pathname: '/confirmation',
+      params: { message: '¡Solicitud enviada!' },
+    });
+  };
+
   if (loading || healthRecordLoading || shelterLoading)
     return <Text style={styles.informativeMessages}>Cargando...</Text>;
   if (!animals || !shelters || !healthRecords)
@@ -58,10 +118,16 @@ export default function AdoptableAnimalDetail() {
       >
         <ScreenHeader title="Detalles del animal" />
         <AnimalImagesCarousel imageUrls={animals.url_foto} />
-        <Image
-          source={require('../../assets/icons/fav.png')}
-          style={styles.favButton}
-        />
+
+        {!esFavorito ? (
+          <TouchableOpacity style={styles.favButton} onPress={handleFavorito}>
+            <Image source={require('../../assets/icons/fav.png')} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.favButton} onPress={handleFavorito}>
+            <Image source={require('../../assets/icons/checkedFav.png')} />
+          </TouchableOpacity>
+        )}
         <View
           style={{
             backgroundColor: '#3DBDB0',
@@ -116,19 +182,9 @@ export default function AdoptableAnimalDetail() {
         </View>
         <View style={styles.bottomView}></View>
       </ScrollView>
-      <Link
-        href={{
-          pathname: `/confirmation`,
-          params: { message: '¡Solicitud enviada!' },
-        }}
-        asChild
-      >
-        <Pressable
-          style={styles.adoptameButton}
-        >
-          <Text style={styles.buttonText}>Adóptame</Text>
-        </Pressable>
-      </Link>
+      <TouchableOpacity onPress={handleAdoptame} style={styles.adoptameButton}>
+        <Text style={styles.buttonText}>Adóptame</Text>
+      </TouchableOpacity>
     </View>
   );
 }
