@@ -13,9 +13,12 @@ export default function FilterTabs({ selectedFilter, onFilterChange }) {
   return (
     <View style={styles.container}>
       <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={[
+            styles.scrollContent,
+            { justifyContent: 'center', flexGrow: 1 }
+          ]}
       >
         {filters.map((filter) => {
           const isActive = selectedFilter === filter.label;
@@ -51,23 +54,25 @@ export default function FilterTabs({ selectedFilter, onFilterChange }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#43B0A7',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
   },
   scrollContent: {
-    gap: 8,
+    gap: 10,
     alignItems: 'center',
+    paddingHorizontal: 10,
   },
   button: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 8,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
   text: {
-    fontFamily: 'Urbanist',
+    fontFamily: 'TiltNeon',
     fontSize: 14,
-    fontWeight: '400',
   },
 });

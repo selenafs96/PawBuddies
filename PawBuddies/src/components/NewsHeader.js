@@ -16,7 +16,7 @@ export default function NewsHeader() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#43B0A7',
+    backgroundColor: '#FFFFFF',
     paddingTop: 0,
     paddingBottom: 20,
     width: '100%',
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   time: {
     // Time text
-    fontFamily: 'SF Pro',
+    fontFamily: 'TiltNeon',
     fontWeight: '590',
     fontSize: 17,
     lineHeight: 22,
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   title: {
     // Noticias title
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontWeight: '400',
     fontSize: 18,
     lineHeight: 23,
