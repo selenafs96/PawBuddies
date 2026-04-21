@@ -81,7 +81,20 @@ export function useUsers() {
       }
     };
 
+    const fetchRolUsuario = async (id_usuario) => {
+      try {
+        const data = await UsersRepository.getRolUsuario(id_usuario);
+        setError(null);
+        return data;
+      } catch (err) {
+        console.error('Error obteniendo rol de usuario:', err);
+        setError(err);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
 
+    }; 
   
-  return { users, loading, fetchUsers, fetchUserById, updateUser, deleteUser, createUser, fetchNumeroVoluntariosProtectora, numeroVoluntariosProtectora };
+  return { users, loading, fetchUsers, fetchUserById, updateUser, deleteUser, createUser, fetchNumeroVoluntariosProtectora, numeroVoluntariosProtectora, fetchRolUsuario };
 }

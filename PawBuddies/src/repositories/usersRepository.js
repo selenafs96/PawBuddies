@@ -84,4 +84,15 @@ export const UsersRepository = {
     }
   },
 
+  async checkRolUsuario(id_usuario) {
+    const { data, error } = await supabase
+      .from('usuario')
+      .select('rol')
+      .eq('id_usuario', id_usuario)
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data.rol;
+  }
+
 };
