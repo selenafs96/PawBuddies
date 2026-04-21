@@ -84,7 +84,7 @@ export const UsersRepository = {
     }
   },
 
-  async checkRolUsuario(id_usuario) {
+  async getRolUsuario(id_usuario) {
     const { data, error } = await supabase
       .from('usuario')
       .select('rol')
