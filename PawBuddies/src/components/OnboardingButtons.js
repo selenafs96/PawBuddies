@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   buttonBackText: {
     color: '#43B0A7',
     fontSize: 14,
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontWeight: '400',
   },
   buttonNext: {
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   buttonNextText: {
     color: '#FFFFFF',
     fontSize: 14,
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontWeight: '400',
   },
 });

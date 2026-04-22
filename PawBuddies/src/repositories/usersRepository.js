@@ -21,7 +21,6 @@ export const UsersRepository = {
       console.error("Error de Supabase:", error.message, error.details)
       throw new Error(error.message);
     } 
-    console.log('Datos encontrados: ', data);
     return data;
   },
 

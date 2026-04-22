@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontWeight: '400',
     color: '#43B0A7',
   },
@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
   },
   fieldLabel: {
     fontSize: 14,
+    fontFamily: 'TiltNeon',
     fontFamily: 'Tilt Neon',
     fontWeight: '400',
     color: '#000000',
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#848484',
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontSize: 14,
     fontWeight: '400',
     color: '#000000',
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
   },
   inputFlex: {
     flex: 1,
-    fontFamily: 'Tilt Neon',
+    fontFamily: 'TiltNeon',
     fontSize: 14,
     fontWeight: '400',
     color: '#000000',
