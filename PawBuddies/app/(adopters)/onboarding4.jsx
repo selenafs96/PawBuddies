@@ -22,14 +22,6 @@ export default function AdopterOnboarding4() {
   const { actualizarDatos, datosRegistro } = useRegistroUsuario();
   const { createUser } = useUsers();
 
-  const handleAddTag = () => {
-    const trimmedValue = inputValue.trim();
-    if (trimmedValue !== '' && !tags.includes(trimmedValue)) {
-      setTags([...tags, trimmedValue]);
-      setInputValue('');
-    }
-  };
-
   const handleRegister = async () => {
     actualizarDatos({ descripcion: inputDescriptionValue });
 
@@ -61,7 +53,6 @@ export default function AdopterOnboarding4() {
           otros_propiedad: datosRegistro.otros_propiedad,
         };
 
-        
         await createUser(perfilUsuario);
 
         router.push({
@@ -94,7 +85,6 @@ export default function AdopterOnboarding4() {
             placeholder="Sobre mí"
             value={inputDescriptionValue}
             onChangeText={setInputDescriptionValue}
-            onSubmitEditing={handleAddTag}
             returnKeyType="done"
             multiline={true}
             textAlignVertical="top"

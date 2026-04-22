@@ -9,7 +9,7 @@ export function RegistroProvider({ children }) {
         apellidos: '',
         email: '',
         telefono: '',
-        url_foto: null,
+        url_foto: 'https://vbmcpkjcfznvcszwlckm.supabase.co/storage/v1/object/public/imagenes_usuarios/perfil_generico.jpg',
         rol: 'Adoptante',
         id_protectora: null,
         localidad_preferida: '',

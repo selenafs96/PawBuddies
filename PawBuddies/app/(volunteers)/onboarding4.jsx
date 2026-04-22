@@ -12,13 +12,22 @@ import { scaleFont, scaleSize } from '../../src/constants/layout';
 import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 import { supabase } from '../../src/lib/supabase';
 import { useUsers } from '../../src/hooks/useUsers';
+import { createClient } from '@supabase/supabase-js';
 
 const DISPONIBILIDAD = ['Días laborables', 'Fines de semana', 'Festivos'];
-const HABILIDADES = ['Adiestramiento de animales', 'Organización de eventos', 'Recaudación de fondos'];
+const HABILIDADES = [
+  'Adiestramiento de animales',
+  'Organización de eventos',
+  'Recaudación de fondos',
+];
 
 function Checkbox({ label, checked, onPress }) {
   return (
-    <TouchableOpacity style={styles.checkRow} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity
+      style={styles.checkRow}
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
       <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
         {checked && <Text style={styles.checkmark}>✓</Text>}
       </View>
@@ -37,7 +46,7 @@ export default function VolunteerOnboarding3() {
 
   const toggle = (list, setList, value) => {
     setList((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
     );
   };
 
@@ -50,20 +59,37 @@ export default function VolunteerOnboarding3() {
     setLoading(true);
 
     try {
-      // 1. Crear usuario en Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: datosRegistro.email,
-        password: datosRegistro.password,
-      });
+      // 1. Crear un cliente temporal "fantasma" que NO guarda sesión
+      const tempSupabase = createClient(
+        process.env.EXPO_PUBLIC_SUPABASE_URL,
+        process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
+        {
+          auth: {
+            persistSession: false, // CRÍTICO: No guarda el token en el dispositivo
+            autoRefreshToken: false,
+            detectSessionInUrl: false,
+            storage: {
+              getItem: () => null,
+              setItem: () => {},
+              removeItem: () => {},
+            },
+          },
+        },
+      );
+
+      // 2. Crear usuario en Auth usando el cliente temporal
+      const { data: authData, error: authError } =
+        await tempSupabase.auth.signUp({
+          email: datosRegistro.email,
+          password: datosRegistro.password,
+        });
 
       if (authError) {
         alert('Error en el registro: ' + authError.message);
-        setLoading(false);
         return;
       }
 
       if (authData.user) {
-        // 2. Insertar en la tabla usuario con todos los datos recogidos
         const perfilUsuario = {
           id_usuario: authData.user.id,
           nombre: datosRegistro.nombre,
@@ -74,16 +100,20 @@ export default function VolunteerOnboarding3() {
           rol: 'Voluntario',
           id_protectora: datosRegistro.id_protectora,
           localidad_preferida: datosRegistro.localidad_preferida,
-          radio_maximo_km: String(datosRegistro.radio_maximo_km),
+          radio_maximo_km: datosRegistro.radio_maximo_km,
           descripcion: [
-            disponibilidad.length > 0 ? 'Disponibilidad: ' + disponibilidad.join(', ') : '',
-            habilidades.length > 0 ? 'Habilidades: ' + habilidades.join(', ') : '',
+            disponibilidad.length > 0
+              ? 'Disponibilidad: ' + disponibilidad.join(', ')
+              : '',
+            habilidades.length > 0
+              ? 'Habilidades: ' + habilidades.join(', ')
+              : '',
           ]
             .filter(Boolean)
             .join(' | '),
-          perros_propiedad: 0,
-          gatos_propiedad: 0,
-          otros_propiedad: 0,
+          perros_propiedad: null,
+          gatos_propiedad: null,
+          otros_propiedad: null,
         };
 
         await createUser(perfilUsuario);
@@ -104,7 +134,6 @@ export default function VolunteerOnboarding3() {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
-
         <View style={styles.progressContainer}>
           <View style={[styles.progressBar, styles.progressActive]} />
           <View style={[styles.progressBar, styles.progressActive]} />
@@ -131,8 +160,9 @@ export default function VolunteerOnboarding3() {
           Habilidades e intereses
         </Text>
         <Text style={styles.label}>
-          ¿Tienes alguna habilidad o interés específico que pueda ayudar? (por ejemplo,
-          adiestramiento de animales, organización de eventos, recaudación de fondos)
+          ¿Tienes alguna habilidad o interés específico que pueda ayudar? (por
+          ejemplo, adiestramiento de animales, organización de eventos,
+          recaudación de fondos)
         </Text>
         {HABILIDADES.map((item) => (
           <Checkbox
@@ -167,7 +197,6 @@ export default function VolunteerOnboarding3() {
             )}
           </TouchableOpacity>
         </View>
-
       </View>
     </ScrollView>
   );

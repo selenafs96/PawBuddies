@@ -82,9 +82,9 @@ export default function AdopterOnboarding1() {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
-
         <View style={styles.progressContainer}>
           <View style={[styles.progressBar, styles.progressActive]} />
+          <View style={[styles.progressBar, styles.progressInactive]} />
           <View style={[styles.progressBar, styles.progressInactive]} />
           <View style={[styles.progressBar, styles.progressInactive]} />
         </View>
@@ -92,7 +92,9 @@ export default function AdopterOnboarding1() {
         <Text style={styles.headerTitle}>Completa los siguientes datos</Text>
 
         <Text style={styles.label}>Nombre</Text>
-        <View style={[styles.inputContainer, errores.nombre && styles.inputError]}>
+        <View
+          style={[styles.inputContainer, errores.nombre && styles.inputError]}
+        >
           <TextInput
             style={styles.input}
             placeholder="Nombre"
@@ -102,9 +104,13 @@ export default function AdopterOnboarding1() {
             autoCapitalize="words"
           />
         </View>
-        {errores.nombre && <Text style={styles.errorText}>{errores.nombre}</Text>}
+        {errores.nombre && (
+          <Text style={styles.errorText}>{errores.nombre}</Text>
+        )}
         <Text style={styles.label}>Apellidos</Text>
-        <View style={[styles.inputContainer, errores.nombre && styles.inputError]}>
+        <View
+          style={[styles.inputContainer, errores.nombre && styles.inputError]}
+        >
           <TextInput
             style={styles.input}
             placeholder="Apellidos"
@@ -114,10 +120,14 @@ export default function AdopterOnboarding1() {
             autoCapitalize="words"
           />
         </View>
-        {errores.apellidos && <Text style={styles.errorText}>{errores.apellidos}</Text>}
+        {errores.apellidos && (
+          <Text style={styles.errorText}>{errores.apellidos}</Text>
+        )}
 
         <Text style={styles.label}>Email</Text>
-        <View style={[styles.inputContainer, errores.email && styles.inputError]}>
+        <View
+          style={[styles.inputContainer, errores.email && styles.inputError]}
+        >
           <TextInput
             style={styles.input}
             placeholder="E-mail completo"
@@ -132,7 +142,12 @@ export default function AdopterOnboarding1() {
         {errores.email && <Text style={styles.errorText}>{errores.email}</Text>}
 
         <Text style={styles.label}>Contraseña</Text>
-        <View style={[styles.inputContainer, errores.contrasena && styles.inputError]}>
+        <View
+          style={[
+            styles.inputContainer,
+            errores.contrasena && styles.inputError,
+          ]}
+        >
           <TextInput
             style={styles.input}
             placeholder="Contraseña para tu cuenta"
@@ -145,14 +160,21 @@ export default function AdopterOnboarding1() {
           <TouchableOpacity onPress={() => setShowPassword((v) => !v)}>
             <Image
               source={require('../../assets/icons/search.png')}
-              style={[styles.inputIcon, { tintColor: showPassword ? '#3DBDB0' : '#999' }]}
+              style={[
+                styles.inputIcon,
+                { tintColor: showPassword ? '#3DBDB0' : '#999' },
+              ]}
             />
           </TouchableOpacity>
         </View>
-        {errores.contrasena && <Text style={styles.errorText}>{errores.contrasena}</Text>}
+        {errores.contrasena && (
+          <Text style={styles.errorText}>{errores.contrasena}</Text>
+        )}
 
         <Text style={styles.label}>Teléfono</Text>
-        <View style={[styles.inputContainer, errores.telefono && styles.inputError]}>
+        <View
+          style={[styles.inputContainer, errores.telefono && styles.inputError]}
+        >
           <TextInput
             style={styles.input}
             placeholder="¿Cuál es tu número de teléfono?"
@@ -166,7 +188,9 @@ export default function AdopterOnboarding1() {
             style={styles.inputIcon}
           />
         </View>
-        {errores.telefono && <Text style={styles.errorText}>{errores.telefono}</Text>}
+        {errores.telefono && (
+          <Text style={styles.errorText}>{errores.telefono}</Text>
+        )}
 
         <View style={styles.footer}>
           <TouchableOpacity
@@ -178,11 +202,13 @@ export default function AdopterOnboarding1() {
           >
             <Text style={styles.btnTextVolver}>Volver</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnSiguiente} onPress={handleSiguiente}>
+          <TouchableOpacity
+            style={styles.btnSiguiente}
+            onPress={handleSiguiente}
+          >
             <Text style={styles.btnTextSiguiente}>Siguiente</Text>
           </TouchableOpacity>
         </View>
-
       </View>
     </ScrollView>
   );
@@ -198,12 +224,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: scaleSize(20),
-    marginBottom: scaleSize(24),
+    marginBottom: scaleSize(30),
   },
   progressBar: {
     height: scaleSize(6),
     borderRadius: scaleSize(3),
-    width: '31%',
+    width: '23%',
   },
   progressActive: { backgroundColor: '#3DBDB0' },
   progressInactive: { backgroundColor: '#E0E0E0' },

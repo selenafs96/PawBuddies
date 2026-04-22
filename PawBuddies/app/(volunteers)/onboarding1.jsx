@@ -15,6 +15,7 @@ import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 
 export default function VolunteerOnboarding1() {
   const [nombre, setNombre] = useState('');
+  const [apellidos, setApellidos] = useState('');
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [telefono, setTelefono] = useState('');
@@ -24,6 +25,7 @@ export default function VolunteerOnboarding1() {
   const { actualizarDatos } = useRegistroUsuario();
 
   const validarNombre = (v) => /^[a-zA-ZÀ-ÿ\s]+$/.test(v);
+  const validarApellidos = (v) => /^[a-zA-ZÀ-ÿ\s]+$/.test(v);
   const validarEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   const validarTelefono = (v) => /^\d{9}$/.test(v);
   const validarContrasena = (v) =>
@@ -68,6 +70,7 @@ export default function VolunteerOnboarding1() {
 
     actualizarDatos({
       nombre,
+      apellidos,
       email,
       password: contrasena,
       telefono,
@@ -94,7 +97,7 @@ export default function VolunteerOnboarding1() {
         <View style={[styles.inputContainer, errores.nombre && styles.inputError]}>
           <TextInput
             style={styles.input}
-            placeholder="Nombre Completo"
+            placeholder="Nombre"
             placeholderTextColor="#999999"
             value={nombre}
             onChangeText={setNombre}
@@ -102,6 +105,18 @@ export default function VolunteerOnboarding1() {
           />
         </View>
         {errores.nombre && <Text style={styles.errorText}>{errores.nombre}</Text>}
+        <Text style={styles.label}>Apellidos</Text>
+        <View style={[styles.inputContainer, errores.nombre && styles.inputError]}>
+          <TextInput
+            style={styles.input}
+            placeholder="Apellidos"
+            placeholderTextColor="#999999"
+            value={apellidos}
+            onChangeText={setApellidos}
+            autoCapitalize="words"
+          />
+        </View>
+        {errores.apellidos && <Text style={styles.errorText}>{errores.apellidos}</Text>}
 
         <Text style={styles.label}>Email</Text>
         <View style={[styles.inputContainer, errores.email && styles.inputError]}>
