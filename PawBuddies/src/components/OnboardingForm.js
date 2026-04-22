@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
   fieldLabel: {
     fontSize: 14,
     fontFamily: 'TiltNeon',
+    fontFamily: 'Tilt Neon',
     fontWeight: '400',
     color: '#000000',
   },
