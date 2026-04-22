@@ -15,7 +15,7 @@ import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 import { supabase } from '../../src/lib/supabase';
 import { useUsers } from '../../src/hooks/useUsers';
 
-export default function Onboarding4() {
+export default function AdopterOnboarding4() {
   const [inputDescriptionValue, setInputDescriptionValue] = useState('');
   const [tags, setTags] = useState([]);
 

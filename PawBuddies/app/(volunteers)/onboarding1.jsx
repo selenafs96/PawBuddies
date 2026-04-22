@@ -13,9 +13,8 @@ import { router } from 'expo-router';
 import { scaleFont, scaleSize } from '../../src/constants/layout';
 import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 
-export default function AdopterOnboarding1() {
+export default function VolunteerOnboarding1() {
   const [nombre, setNombre] = useState('');
-  const [apellidos, setApellidos] = useState('');
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [telefono, setTelefono] = useState('');
@@ -69,14 +68,14 @@ export default function AdopterOnboarding1() {
 
     actualizarDatos({
       nombre,
-      apellidos,
       email,
       password: contrasena,
       telefono,
+      rol: 'Voluntario',
     });
 
     setErrores({});
-    router.push('/(adopters)/onboarding2');
+    router.push('/(volunteers)/onboarding3');
   };
 
   return (
@@ -95,7 +94,7 @@ export default function AdopterOnboarding1() {
         <View style={[styles.inputContainer, errores.nombre && styles.inputError]}>
           <TextInput
             style={styles.input}
-            placeholder="Nombre"
+            placeholder="Nombre Completo"
             placeholderTextColor="#999999"
             value={nombre}
             onChangeText={setNombre}
@@ -103,18 +102,6 @@ export default function AdopterOnboarding1() {
           />
         </View>
         {errores.nombre && <Text style={styles.errorText}>{errores.nombre}</Text>}
-        <Text style={styles.label}>Apellidos</Text>
-        <View style={[styles.inputContainer, errores.nombre && styles.inputError]}>
-          <TextInput
-            style={styles.input}
-            placeholder="Apellidos"
-            placeholderTextColor="#999999"
-            value={apellidos}
-            onChangeText={setApellidos}
-            autoCapitalize="words"
-          />
-        </View>
-        {errores.apellidos && <Text style={styles.errorText}>{errores.apellidos}</Text>}
 
         <Text style={styles.label}>Email</Text>
         <View style={[styles.inputContainer, errores.email && styles.inputError]}>
