@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import { scaleFont, scaleSize } from '../../src/constants/layout';
 import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 import { supabase } from '../../src/lib/supabase';
 import { useUsers } from '../../src/hooks/useUsers';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const DISPONIBILIDAD = ['Días laborables', 'Fines de semana', 'Festivos'];
 const HABILIDADES = [
@@ -40,9 +40,25 @@ export default function VolunteerOnboarding3() {
   const [disponibilidad, setDisponibilidad] = useState([]);
   const [habilidades, setHabilidades] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
-  const { datosRegistro } = useRegistroUsuario();
-  const { createUser } = useUsers();
+  useEffect(() => {
+    const cargarDatosSesion = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session?.user?.id) {
+        await fetchUserById(session.user.id);
+        setIsLogged(true);
+      }
+    };
+    cargarDatosSesion();
+    
+  }, []);
+
+  const { datosRegistro, resetearDatos } = useRegistroUsuario();
+  const { createUser, fetchUserById, users } = useUsers();
 
   const toggle = (list, setList, value) => {
     setList((prev) =>
@@ -97,8 +113,8 @@ export default function VolunteerOnboarding3() {
           email: datosRegistro.email,
           telefono: datosRegistro.telefono,
           url_foto: datosRegistro.url_foto ?? null,
-          rol: 'Voluntario',
-          id_protectora: datosRegistro.id_protectora,
+          rol: datosRegistro.rol,
+          id_protectora: isLogged ? users.id_protectora : datosRegistro.id_protectora,
           localidad_preferida: datosRegistro.localidad_preferida,
           radio_maximo_km: datosRegistro.radio_maximo_km,
           descripcion: [
@@ -117,6 +133,7 @@ export default function VolunteerOnboarding3() {
         };
 
         await createUser(perfilUsuario);
+        resetearDatos();
 
         router.push({
           pathname: '/confirmation',
