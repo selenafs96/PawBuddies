@@ -78,7 +78,7 @@ export default function VolunteerOnboarding1() {
     });
 
     setErrores({});
-    router.push('/(volunteers)/onboarding3');
+    router.push('/(volunteers)/onboarding2');
   };
 
   return (

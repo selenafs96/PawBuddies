@@ -43,7 +43,7 @@ export default function VolunteerOnboarding2() {
       radio_maximo_km: distancia,
     });
 
-    router.push('/(volunteers)/onboarding4');
+    router.push('/(volunteers)/onboarding3');
   };
 
   return (
