@@ -19,7 +19,7 @@ export default function AdopterOnboarding4() {
   const [inputDescriptionValue, setInputDescriptionValue] = useState('');
   const [tags, setTags] = useState([]);
 
-  const { actualizarDatos, datosRegistro } = useRegistroUsuario();
+  const { actualizarDatos, datosRegistro, resetearDatos } = useRegistroUsuario();
   const { createUser } = useUsers();
 
   const handleRegister = async () => {
@@ -54,6 +54,7 @@ export default function AdopterOnboarding4() {
         };
 
         await createUser(perfilUsuario);
+        resetearDatos();
 
         router.push({
           pathname: '/confirmation',
@@ -83,7 +84,7 @@ export default function AdopterOnboarding4() {
           <TextInput
             style={styles.input}
             placeholder="Sobre mí"
-            value={inputDescriptionValue}
+            value={inputDescriptionValue? inputDescriptionValue : ''}
             onChangeText={setInputDescriptionValue}
             returnKeyType="done"
             multiline={true}
