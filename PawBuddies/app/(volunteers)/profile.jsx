@@ -62,6 +62,12 @@ export default function VolunteerProfile() {
   const handleRegistroVoluntarios = () => {
     router.push('(volunteers)/onboarding1');
   };
+  const handleRegistroAnimales = () => {
+    router.push('(volunteers)/RegistroAnimalesScreen');
+  };
+  const handleEditarAdoptantes = () => {
+    router.push('(volunteers)/registroAdoptantes');
+  };
 
   if (loading)
     return <Text style={styles.informativeMessages}>Cargando...</Text>;
@@ -89,8 +95,9 @@ export default function VolunteerProfile() {
         </View>
         <View style={styles.menuContainer}>
           <Text style={styles.gestiones}>Gestiones</Text>
-          <ProfileMenuItem action="Registro de animales" />
+          <ProfileMenuItem action="Registro de animales" onPress={handleRegistroAnimales} />
           <ProfileMenuItem action="Registro de noticias" />
+          <ProfileMenuItem action="Editar adoptantes" onPress={handleEditarAdoptantes}/>
           <ProfileMenuItem
             action="Registro de voluntarios"
             onPress={handleRegistroVoluntarios}
