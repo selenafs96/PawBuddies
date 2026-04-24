@@ -10,10 +10,11 @@ import {
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { scaleFont, scaleSize } from '../../src/constants/layout';
 
 export default function LocalizacionScreen({ onVolver }) {
+  const { tipoSeleccionado } = useLocalSearchParams();
   const [inputValue, setInputValue] = useState('');
   const [tags, setTags] = useState([]);
   const [distancia, setDistancia] = useState(23);
@@ -44,7 +45,15 @@ export default function LocalizacionScreen({ onVolver }) {
       localidad_preferida: tags[0], //Se guarda la primera
       radio_maximo_km: distancia,
     });
-    router.push('(adopters)/onboarding4');
+
+    if (tipoSeleccionado === 'Voluntario') {
+      router.push({
+        pathname: '(volunteers)/onboarding3',
+        params: { origenRegistro: 'pantallaLogin' },
+      });
+    } else {
+      router.push('(adopters)/onboarding4');
+    }
   };
 
   // DEFINIMOS LOS ESTILOS ANTES DEL RETURN

@@ -60,10 +60,16 @@ export default function TipoUsuarioScreen({ onVolver }) {
     });
 
     if (tipoSeleccionado === 'Voluntario') {
-      router.push('(volunteers)/onboarding3');
+      router.push({
+        pathname: '(adopters)/onboarding3',
+        params: { tipoSeleccionado: tipoSeleccionado },
+      });
       return;
     } else if (tipoSeleccionado === 'Adoptante') {
-      router.push('(adopters)/onboarding3');
+      router.push({
+        pathname: '(adopters)/onboarding3',
+        params: { tipoSeleccionado: tipoSeleccionado },
+      });
     }
   };
 
