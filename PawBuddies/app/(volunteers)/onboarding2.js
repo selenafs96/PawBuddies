@@ -43,7 +43,10 @@ export default function VolunteerOnboarding2() {
       radio_maximo_km: distancia,
     });
 
-    router.push('/(volunteers)/onboarding3');
+    router.push({
+      pathname: '(volunteers)/onboarding3',
+      params: { origenRegistro: 'perfilVoluntario' },
+    });
   };
 
   return (

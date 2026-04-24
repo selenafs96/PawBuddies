@@ -7,7 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { scaleFont, scaleSize } from '../../src/constants/layout';
 import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 import { supabase } from '../../src/lib/supabase';
@@ -37,6 +37,7 @@ function Checkbox({ label, checked, onPress }) {
 }
 
 export default function VolunteerOnboarding3() {
+  const { origenRegistro } = useLocalSearchParams();
   const [disponibilidad, setDisponibilidad] = useState([]);
   const [habilidades, setHabilidades] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -155,6 +156,9 @@ export default function VolunteerOnboarding3() {
           <View style={[styles.progressBar, styles.progressActive]} />
           <View style={[styles.progressBar, styles.progressActive]} />
           <View style={[styles.progressBar, styles.progressActive]} />
+          {origenRegistro === 'pantallaLogin' && (
+            <View style={[styles.progressBar, styles.progressActive]} />
+          )}
         </View>
 
         <Text style={styles.headerTitle}>Trabajador/Voluntario</Text>
@@ -223,7 +227,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: scaleSize(25),
+    paddingHorizontal: scaleSize(20),
   },
   progressContainer: {
     flexDirection: 'row',
@@ -234,7 +238,8 @@ const styles = StyleSheet.create({
   progressBar: {
     height: scaleSize(6),
     borderRadius: scaleSize(3),
-    width: '31%',
+    flex: 1,
+    marginHorizontal: 5,
   },
   progressActive: { backgroundColor: '#3DBDB0' },
   progressInactive: { backgroundColor: '#E0E0E0' },
