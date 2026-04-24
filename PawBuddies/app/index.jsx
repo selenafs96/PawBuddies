@@ -1,7 +1,9 @@
 
+import EditAnimalScreen from './(animals)/EditAnimalScreen';
+import RegistroAdoptantesScreen from './(volunteers)/registroAdoptantes';
 
 // export default function PawBuddies() {
-//   return <AdopterOnboarding1 />;
+//   return <RegistroAdoptantesScreen/>;
 // }
 
 //ESTO ES LO QUE APARECERÁ UNA VEZ TENGAMOS TODAS LAS PANTALLAS CONECTADAS, REDIRIGIRÁ A LAS NOTICIAS AUTOMÁTICAMENTE Y PODREMOS EMPEZAR A NAVEGAR
