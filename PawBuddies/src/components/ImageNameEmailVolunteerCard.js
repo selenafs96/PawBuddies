@@ -11,7 +11,7 @@ export default function ImageNameEmailVolunteerCard({usuario}) {
       <View style={styles.row}>
         <View style={styles.imageContainer}>
           <Image
-            source={require('../../assets/images/perfil.jpg')}
+            source={{uri: usuario.url_foto}}
             style={styles.image}
           />
         </View>

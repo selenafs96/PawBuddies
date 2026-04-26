@@ -5,7 +5,6 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { scaleFont, scaleSize } from '../src/constants/layout.js';
 
 export default function MensajeConfirmacionScreen() {
-
   //Pasamos el mensaje que queremos que se muestre como parámetro al llamar a la ruta
   const { message } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
@@ -24,11 +23,7 @@ export default function MensajeConfirmacionScreen() {
       <Pressable
         style={styles.volverButton}
         onPress={() => {
-          if (router.canGoBack()) {
-            router.back();
-          } else {
-            router.push('/');
-          }
+          router.push('/');
         }}
       >
         <Text style={styles.buttonText}>Volver</Text>

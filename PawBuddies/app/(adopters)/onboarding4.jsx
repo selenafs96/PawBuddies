@@ -15,20 +15,12 @@ import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 import { supabase } from '../../src/lib/supabase';
 import { useUsers } from '../../src/hooks/useUsers';
 
-export default function Onboarding4() {
+export default function AdopterOnboarding4() {
   const [inputDescriptionValue, setInputDescriptionValue] = useState('');
   const [tags, setTags] = useState([]);
 
-  const { actualizarDatos, datosRegistro } = useRegistroUsuario();
+  const { actualizarDatos, datosRegistro, resetearDatos } = useRegistroUsuario();
   const { createUser } = useUsers();
-
-  const handleAddTag = () => {
-    const trimmedValue = inputValue.trim();
-    if (trimmedValue !== '' && !tags.includes(trimmedValue)) {
-      setTags([...tags, trimmedValue]);
-      setInputValue('');
-    }
-  };
 
   const handleRegister = async () => {
     actualizarDatos({ descripcion: inputDescriptionValue });
@@ -61,8 +53,8 @@ export default function Onboarding4() {
           otros_propiedad: datosRegistro.otros_propiedad,
         };
 
-        
         await createUser(perfilUsuario);
+        resetearDatos();
 
         router.push({
           pathname: '/confirmation',
@@ -92,9 +84,8 @@ export default function Onboarding4() {
           <TextInput
             style={styles.input}
             placeholder="Sobre mí"
-            value={inputDescriptionValue}
+            value={inputDescriptionValue? inputDescriptionValue : ''}
             onChangeText={setInputDescriptionValue}
-            onSubmitEditing={handleAddTag}
             returnKeyType="done"
             multiline={true}
             textAlignVertical="top"

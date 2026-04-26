@@ -11,16 +11,21 @@ import {
 import { router } from 'expo-router';
 
 import { scaleFont, scaleSize } from '../../src/constants/layout';
+import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 
 export default function VolunteerOnboarding1() {
   const [nombre, setNombre] = useState('');
+  const [apellidos, setApellidos] = useState('');
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [telefono, setTelefono] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errores, setErrores] = useState({});
 
+  const { actualizarDatos } = useRegistroUsuario();
+
   const validarNombre = (v) => /^[a-zA-ZÀ-ÿ\s]+$/.test(v);
+  const validarApellidos = (v) => /^[a-zA-ZÀ-ÿ\s]+$/.test(v);
   const validarEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   const validarTelefono = (v) => /^\d{9}$/.test(v);
   const validarContrasena = (v) =>
@@ -63,18 +68,23 @@ export default function VolunteerOnboarding1() {
       return;
     }
 
-    setErrores({});
-    router.push({
-      pathname: '/(volunteers)/onboarding2',
-      params: { nombre, email, contrasena, telefono },
+    actualizarDatos({
+      nombre,
+      apellidos,
+      email,
+      password: contrasena,
+      telefono,
+      rol: 'Voluntario',
     });
+
+    setErrores({});
+    router.push('/(volunteers)/onboarding2');
   };
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
 
-        {/* Progress bar — paso 1 activo */}
         <View style={styles.progressContainer}>
           <View style={[styles.progressBar, styles.progressActive]} />
           <View style={[styles.progressBar, styles.progressInactive]} />
@@ -83,12 +93,11 @@ export default function VolunteerOnboarding1() {
 
         <Text style={styles.headerTitle}>Completa los siguientes datos</Text>
 
-        {/* Nombre */}
         <Text style={styles.label}>Nombre</Text>
-        <View style={styles.inputContainer}>
+        <View style={[styles.inputContainer, errores.nombre && styles.inputError]}>
           <TextInput
             style={styles.input}
-            placeholder="Nombre Completo"
+            placeholder="Nombre"
             placeholderTextColor="#999999"
             value={nombre}
             onChangeText={setNombre}
@@ -96,10 +105,21 @@ export default function VolunteerOnboarding1() {
           />
         </View>
         {errores.nombre && <Text style={styles.errorText}>{errores.nombre}</Text>}
+        <Text style={styles.label}>Apellidos</Text>
+        <View style={[styles.inputContainer, errores.nombre && styles.inputError]}>
+          <TextInput
+            style={styles.input}
+            placeholder="Apellidos"
+            placeholderTextColor="#999999"
+            value={apellidos}
+            onChangeText={setApellidos}
+            autoCapitalize="words"
+          />
+        </View>
+        {errores.apellidos && <Text style={styles.errorText}>{errores.apellidos}</Text>}
 
-        {/* Email */}
         <Text style={styles.label}>Email</Text>
-        <View style={styles.inputContainer}>
+        <View style={[styles.inputContainer, errores.email && styles.inputError]}>
           <TextInput
             style={styles.input}
             placeholder="E-mail completo"
@@ -113,9 +133,8 @@ export default function VolunteerOnboarding1() {
         </View>
         {errores.email && <Text style={styles.errorText}>{errores.email}</Text>}
 
-        {/* Contraseña */}
         <Text style={styles.label}>Contraseña</Text>
-        <View style={styles.inputContainer}>
+        <View style={[styles.inputContainer, errores.contrasena && styles.inputError]}>
           <TextInput
             style={styles.input}
             placeholder="Contraseña para tu cuenta"
@@ -134,9 +153,8 @@ export default function VolunteerOnboarding1() {
         </View>
         {errores.contrasena && <Text style={styles.errorText}>{errores.contrasena}</Text>}
 
-        {/* Teléfono */}
         <Text style={styles.label}>Teléfono</Text>
-        <View style={styles.inputContainer}>
+        <View style={[styles.inputContainer, errores.telefono && styles.inputError]}>
           <TextInput
             style={styles.input}
             placeholder="¿Cuál es tu número de teléfono?"
@@ -152,7 +170,6 @@ export default function VolunteerOnboarding1() {
         </View>
         {errores.telefono && <Text style={styles.errorText}>{errores.telefono}</Text>}
 
-        {/* Footer */}
         <View style={styles.footer}>
           <TouchableOpacity
             style={styles.btnVolver}
@@ -163,7 +180,6 @@ export default function VolunteerOnboarding1() {
           >
             <Text style={styles.btnTextVolver}>Volver</Text>
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.btnSiguiente} onPress={handleSiguiente}>
             <Text style={styles.btnTextSiguiente}>Siguiente</Text>
           </TouchableOpacity>
@@ -189,7 +205,7 @@ const styles = StyleSheet.create({
   progressBar: {
     height: scaleSize(6),
     borderRadius: scaleSize(3),
-    width: '23%',
+    width: '31%',
   },
   progressActive: { backgroundColor: '#3DBDB0' },
   progressInactive: { backgroundColor: '#E0E0E0' },
@@ -214,7 +230,10 @@ const styles = StyleSheet.create({
     borderRadius: scaleSize(10),
     paddingHorizontal: scaleSize(12),
     height: scaleSize(42),
-    marginBottom: scaleSize(14),
+    marginBottom: scaleSize(6),
+  },
+  inputError: {
+    borderColor: '#E53935',
   },
   input: {
     flex: 1,
@@ -234,6 +253,12 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(16),
     color: '#999999',
     marginLeft: scaleSize(8),
+  },
+  errorText: {
+    fontFamily: 'TiltNeon',
+    fontSize: scaleFont(11),
+    color: '#E53935',
+    marginBottom: scaleSize(8),
   },
   footer: {
     flexDirection: 'row',
@@ -268,12 +293,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: scaleFont(15),
     fontWeight: '600',
-  },
-  errorText: {
-    fontFamily: 'TiltNeon',
-    fontSize: scaleFont(11),
-    color: '#E53935',
-    marginTop: scaleSize(-10),
-    marginBottom: scaleSize(8),
   },
 });
