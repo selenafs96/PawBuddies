@@ -74,7 +74,7 @@ export default function LoginForm({
         </View>
 
         {/* Password Error Message */}
-        {passwordError && (
+        {!!passwordError && (
           <Text style={styles.errorText}>
             Password will be greater than 6 digit.
           </Text>

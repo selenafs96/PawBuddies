@@ -56,8 +56,7 @@ const handleSignIn = async () => {
 
   const handleSignUp = () => {
     // TODO: Navegar a pantalla de registro
-    router.push('(adopters)/onboarding3');
-    // navigation.navigate('SignUp');
+    router.push('(adopters)/onboarding1');
   };
 
   return (
