@@ -14,18 +14,65 @@ import AnimalCard from '../../src/components/AnimalCard';
 import { useAnimals } from '../../src/hooks/useAnimals';
 import { scaleFont, scaleSize } from '../../src/constants/layout';
 import { BottomNav } from '../../src/components/BottomNav';
+import { supabase } from '../../src/lib/supabase';
+import { useUsers } from '../../src/hooks/useUsers';
 
 export default function AdoptaScreen() {
   const NAV_HEIGHT = scaleSize(50);
 
   const [especie, setEspecie] = useState('todos');
-  const [estado, setEstado] = useState('todos')
-  const { animals, loading, error, fetchAnimalByEspecieEstado } = useAnimals();
+  const [estado, setEstado] = useState('todos');
+  const [isLogged, setIsLogged] = useState(false);
+  const [rol, setRol] = useState('');
+  const [idProtectora, setIdProtectora] = useState('');
+  const [animalesMostrar, setAnimalesMostrar] = useState([]);
+
+  const {
+    loading,
+    error,
+    fetchAnimalByEspecieEstado,
+    fetchAnimalByEspecieProtectora,
+  } = useAnimals();
+
+  const { fetchUserById } = useUsers();
 
   useEffect(() => {
-    fetchAnimalByEspecieEstado(especie, 'Adoptable');
-  }, [estado, especie]);
+    const cargarDatosSesion = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
+      if (session?.user?.id) {
+        const usuario = await fetchUserById(session.user.id);
+
+        if (usuario) {
+          setIsLogged(true);
+          setRol(usuario.rol);
+          setIdProtectora(usuario.id_protectora);
+        }
+      }
+    };
+    cargarDatosSesion();
+  }, []);
+
+  useEffect(() => {
+    const filtrarAnimales = async () => {
+      let animales = [];
+
+      if (!isLogged || rol == 'Adoptante') {
+        animales = await fetchAnimalByEspecieEstado(especie, 'Adoptable');
+      } else if (isLogged && rol == 'Voluntario') {
+        if (!idProtectora) {
+          return;
+        }
+        animales = await fetchAnimalByEspecieProtectora(especie, idProtectora);
+      }
+
+      setAnimalesMostrar(animales);
+    };
+
+    filtrarAnimales();
+  }, [especie, idProtectora, isLogged, rol]);
 
   // Mapea cada animal a las props que espera AnimalCard
   const renderItem = ({ item }) => (
@@ -173,7 +220,9 @@ export default function AdoptaScreen() {
                   styles.filtroBtn,
                   especie === 'Gato' && styles.filtroActivo,
                 ]}
-                onPress={() => setEspecie(especie === 'Gato' ? 'todos' : 'Gato')}
+                onPress={() =>
+                  setEspecie(especie === 'Gato' ? 'todos' : 'Gato')
+                }
               >
                 <Image
                   source={require('../../assets/icons/Cat.png')}
@@ -212,7 +261,7 @@ export default function AdoptaScreen() {
             </View>
           ) : (
             <FlatList
-              data={animals}
+              data={animalesMostrar}
               renderItem={renderItem}
               keyExtractor={(item) => item.id_animal}
               numColumns={2}

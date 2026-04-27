@@ -34,6 +34,22 @@ export const AnimalRepository = {
     if (error) throw new Error(error.message);
     return data;
   },
+  
+  async getByEspecieProtectora(especie, id_protectora) {
+    let query = supabase.from('animal').select('*');
+
+    if (id_protectora && id_protectora !== 'todos') {
+      query = query.eq('id_protectora', id_protectora);
+    }
+
+    if (especie && especie !== 'todos') {
+      query = query.eq('especie', especie);
+    }
+
+    const { data, error } = await query;
+    if (error) throw new Error(error.message);
+    return data;
+  },
 
   // ACTUALIZAR
   async update(id, updates) {

@@ -25,6 +25,7 @@ export function useUsers() {
       const data = await UsersRepository.getById(id_usuario);
       setUsers(data);
       setError(null);
+      return data;
     } catch (err) {
       console.error('Error cargando usuarios:', err);
       setError(err);
