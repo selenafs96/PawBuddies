@@ -84,23 +84,26 @@ export default function EditarNoticia() {
         if (updateError) throw updateError;
         router.back();
       } else {
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
 
-        const { error: insertError } = await supabase
-          .from('noticia')
-          .insert({
-            titulo: titulo.trim(),
-            cuerpo: cuerpo.trim(),
-            url_imagen: imagenFinal,
-            id_usuario: user?.id ?? null,
-          });
+        const { error: insertError } = await supabase.from('noticia').insert({
+          titulo: titulo.trim(),
+          cuerpo: cuerpo.trim(),
+          url_imagen: imagenFinal,
+          id_usuario: user?.id ?? null,
+        });
 
         if (insertError) throw insertError;
         router.back();
       }
     } catch (err) {
       console.error('Error al guardar noticia:', err.message);
-      Alert.alert('Error', 'No se pudo guardar la noticia. Inténtalo de nuevo.');
+      Alert.alert(
+        'Error',
+        'No se pudo guardar la noticia. Inténtalo de nuevo.',
+      );
     } finally {
       setGuardando(false);
     }
@@ -124,7 +127,12 @@ export default function EditarNoticia() {
         keyboardShouldPersistTaps="handled"
       >
         {/* Barra superior — paddingTop con safe area */}
-        <View style={[styles.titleContainer, { paddingTop: insets.top + scaleSize(10) }]}>
+        <View
+          style={[
+            styles.titleContainer,
+            { paddingTop: insets.top + scaleSize(10) },
+          ]}
+        >
           <BackButton />
           <Text style={styles.topTitle}>
             {esEdicion ? 'Editar noticia' : 'Nueva noticia'}
@@ -150,13 +158,14 @@ export default function EditarNoticia() {
               source={require('../../assets/icons/lapiz.png')}
               style={styles.placeholderIcon}
             />
-            <Text style={styles.placeholderText}>Introduce una URL para ver la imagen</Text>
+            <Text style={styles.placeholderText}>
+              Introduce una URL para ver la imagen
+            </Text>
           </View>
         )}
 
         {/* FORMULARIO */}
         <View style={styles.formContainer}>
-
           <View style={styles.fieldCard}>
             <Text style={styles.fieldLabel}>Título</Text>
             <TextInput
@@ -194,7 +203,6 @@ export default function EditarNoticia() {
               textAlignVertical="top"
             />
           </View>
-
         </View>
       </ScrollView>
 
@@ -223,8 +231,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#3DBDB0',
   },
-
-  // Barra superior — paddingTop se sobreescribe inline con insets
   titleContainer: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
@@ -253,8 +259,6 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(13),
     fontWeight: '700',
   },
-
-  // Imagen
   headerImage: {
     width: '100%',
     height: scaleSize(220),
@@ -278,8 +282,6 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(14),
     color: '#FFFFFF',
   },
-
-  // Formulario
   formContainer: {
     paddingHorizontal: scaleSize(16),
     paddingTop: scaleSize(16),
@@ -309,8 +311,6 @@ const styles = StyleSheet.create({
     minHeight: scaleSize(120),
     paddingTop: scaleSize(4),
   },
-
-  // Footer
   footerContainer: {
     backgroundColor: '#43B0A7',
     paddingHorizontal: scaleSize(40),

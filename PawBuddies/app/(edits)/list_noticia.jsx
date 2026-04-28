@@ -32,7 +32,8 @@ export default function NoticiasEdit() {
 
       const { data, error: supabaseError } = await supabase
         .from('noticia')
-        .select(`
+        .select(
+          `
           id_noticia,
           titulo,
           cuerpo,
@@ -44,7 +45,8 @@ export default function NoticiasEdit() {
             url_foto,
             rol
           )
-        `)
+        `,
+        )
         .order('created_at', { ascending: false });
 
       if (supabaseError) throw supabaseError;
@@ -58,18 +60,14 @@ export default function NoticiasEdit() {
   };
 
   const handleEliminar = (noticia) => {
-    Alert.alert(
-      'Eliminar noticia',
-      `¿Eliminar "${noticia.titulo}"?`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Eliminar',
-          style: 'destructive',
-          onPress: () => eliminarNoticia(noticia.id_noticia),
-        },
-      ]
-    );
+    Alert.alert('Eliminar noticia', `¿Eliminar "${noticia.titulo}"?`, [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Eliminar',
+        style: 'destructive',
+        onPress: () => eliminarNoticia(noticia.id_noticia),
+      },
+    ]);
   };
 
   const eliminarNoticia = async (id_noticia) => {
@@ -118,11 +116,15 @@ export default function NoticiasEdit() {
   }
 
   return (
-    // ── Contenedor raíz — flex:1 y fondo blanco ──────────
+    // Contenedor raíz
     <View style={styles.container}>
-
       {/* Barra superior — paddingTop dinámico con insets */}
-      <View style={[styles.titleContainer, { paddingTop: insets.top + scaleSize(10) }]}>
+      <View
+        style={[
+          styles.titleContainer,
+          { paddingTop: insets.top + scaleSize(10) },
+        ]}
+      >
         <BackButton />
         <Text style={styles.topTitle}>Noticias</Text>
         <TouchableOpacity
@@ -160,16 +162,18 @@ export default function NoticiasEdit() {
 
       {/* Footer */}
       <View style={styles.footerContainer}>
-        <TouchableOpacity style={styles.guardarBtn} onPress={() => router.back()}>
+        <TouchableOpacity
+          style={styles.guardarBtn}
+          onPress={() => router.back()}
+        >
           <Text style={styles.guardarBtnText}>Guardar</Text>
         </TouchableOpacity>
       </View>
-
     </View>
   );
 }
 
-// ── Card ───────────────────────────────────────────────────
+// Card
 function NoticiaCardEdit({ item, onPress, onEliminar }) {
   const [imgError, setImgError] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
@@ -181,7 +185,6 @@ function NoticiaCardEdit({ item, onPress, onEliminar }) {
 
   return (
     <View style={styles.card}>
-
       {/* Cabecera con botón eliminar */}
       <View style={styles.cardHeader}>
         <View style={styles.cardHeaderLeft}>
@@ -199,7 +202,9 @@ function NoticiaCardEdit({ item, onPress, onEliminar }) {
             </View>
           )}
           <View style={{ flex: 1 }}>
-            <Text style={styles.authorName} numberOfLines={1}>{nombreCompleto}</Text>
+            <Text style={styles.authorName} numberOfLines={1}>
+              {nombreCompleto}
+            </Text>
             <Text style={styles.authorRole}>{autor?.rol ?? ''}</Text>
           </View>
         </View>
@@ -214,7 +219,7 @@ function NoticiaCardEdit({ item, onPress, onEliminar }) {
         </TouchableOpacity>
       </View>
 
-      {/* Imagen + descripción — navega al detalle */}
+      {/* Imagen + descripción */}
       <TouchableOpacity onPress={onPress} activeOpacity={0.85}>
         {item.url_imagen && !imgError ? (
           <Image
@@ -234,12 +239,10 @@ function NoticiaCardEdit({ item, onPress, onEliminar }) {
           </Text>
         </View>
       </TouchableOpacity>
-
     </View>
   );
 }
 
-// ── Estilos — insets se aplica inline, NO aquí ────────────
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -277,8 +280,6 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(15),
     fontWeight: '600',
   },
-
-  // Barra superior — paddingTop se sobreescribe inline con insets
   titleContainer: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
@@ -299,8 +300,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     tintColor: '#43B0A7',
   },
-
-  // Scroll
   scrollViewContainer: {
     flex: 1,
     backgroundColor: '#43B0A7',
@@ -320,8 +319,6 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(15),
     color: '#FFFFFF',
   },
-
-  // Card
   card: {
     width: '90%',
     backgroundColor: '#FFFFFF',

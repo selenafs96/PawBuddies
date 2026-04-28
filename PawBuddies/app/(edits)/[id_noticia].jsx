@@ -38,7 +38,8 @@ export default function DetalleNoticiaEdit() {
 
       const { data, error: supabaseError } = await supabase
         .from('noticia')
-        .select(`
+        .select(
+          `
           id_noticia,
           titulo,
           cuerpo,
@@ -50,7 +51,8 @@ export default function DetalleNoticiaEdit() {
             url_foto,
             rol
           )
-        `)
+        `,
+        )
         .eq('id_noticia', id_noticia)
         .single();
 
@@ -82,7 +84,9 @@ export default function DetalleNoticiaEdit() {
   if (error || !noticia) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{error ?? 'Noticia no encontrada.'}</Text>
+        <Text style={styles.errorText}>
+          {error ?? 'Noticia no encontrada.'}
+        </Text>
       </View>
     );
   }
@@ -98,8 +102,13 @@ export default function DetalleNoticiaEdit() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: scaleSize(160) }}
       >
-        {/* Barra superior — paddingTop con safe area */}
-        <View style={[styles.titleContainer, { paddingTop: insets.top + scaleSize(10) }]}>
+        {/* Barra superior */}
+        <View
+          style={[
+            styles.titleContainer,
+            { paddingTop: insets.top + scaleSize(10) },
+          ]}
+        >
           <BackButton />
           <Text style={styles.topTitle}>Noticia</Text>
           <TouchableOpacity
@@ -123,7 +132,10 @@ export default function DetalleNoticiaEdit() {
           />
 
           {/* Botón lápiz flotante */}
-          <TouchableOpacity style={styles.editFloatingBtn} onPress={handleEditar}>
+          <TouchableOpacity
+            style={styles.editFloatingBtn}
+            onPress={handleEditar}
+          >
             <Image
               source={require('../../assets/icons/lapiz.png')}
               style={styles.editFloatingIcon}
@@ -137,7 +149,6 @@ export default function DetalleNoticiaEdit() {
 
         {/* CONTENIDO */}
         <View style={styles.container}>
-
           {/* Card autor */}
           <View style={styles.titleCard}>
             {autor?.url_foto && !avatarError ? (
@@ -180,17 +191,17 @@ export default function DetalleNoticiaEdit() {
                   <Text style={styles.title}>Nombre Apellido {item}</Text>
                   <Text style={styles.subtitle}>Persona adoptante</Text>
                   <Text style={styles.text}>
-                    Figma ipsum component variant main layer. Style boolean italic star pixel mask underline.
+                    Figma ipsum component variant main layer. Style boolean
+                    italic star pixel mask underline.
                   </Text>
                 </View>
               </View>
             </View>
           ))}
-
         </View>
       </ScrollView>
 
-      {/* Botón guardar — navega a editar */}
+      {/* Botón guardar */}
       <View style={styles.footerContainer}>
         <TouchableOpacity style={styles.guardarBtn} onPress={handleEditar}>
           <Text style={styles.guardarBtnText}>Guardar</Text>
@@ -228,8 +239,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     textAlign: 'center',
   },
-
-  // Barra superior — paddingTop se sobreescribe inline con insets
   titleContainer: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
@@ -257,8 +266,6 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(13),
     fontWeight: '700',
   },
-
-  // Imagen header
   headerImage: {
     width: '100%',
     height: scaleSize(220),
@@ -289,8 +296,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: scaleSize(6),
     paddingVertical: scaleSize(2),
   },
-
-  // Card autor
   titleCard: {
     backgroundColor: '#FFFFFF',
     marginHorizontal: scaleSize(16),
