@@ -10,21 +10,19 @@ import {
 } from 'react-native';
 
 import { scaleFont, scaleSize } from '../../src/constants/layout';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BackButton } from '../../src/components/BackButton';
 import { BottomNav } from '../../src/components/BottomNav';
 import { supabase } from '../../src/lib/supabase';
 
-export default function DetalleNoticia() {
+export default function DetalleNoticiaEdit() {
   const { id_noticia } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
 
   const [noticia, setNoticia] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [liked, setLiked] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
   const [imgError, setImgError] = useState(false);
 
@@ -68,6 +66,13 @@ export default function DetalleNoticia() {
     }
   };
 
+  const handleEditar = () => {
+    router.push({
+      pathname: '/(edits)/edit_noticia', // ← corregido
+      params: { id_noticia: noticia.id_noticia },
+    });
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -95,17 +100,22 @@ export default function DetalleNoticia() {
     <View style={{ flex: 1, backgroundColor: '#3DBDB0' }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: scaleSize(120) }}
+        contentContainerStyle={{ paddingBottom: scaleSize(160) }}
       >
         {/* Barra superior */}
-        <View style={[styles.titleContainer, { paddingTop: insets.top + scaleSize(10) }]}>
+        <View
+          style={[
+            styles.titleContainer,
+            { paddingTop: insets.top + scaleSize(10) },
+          ]}
+        >
           <BackButton />
           <Text style={styles.topTitle}>Noticia</Text>
-          <TouchableOpacity hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <Image
-              source={require('../../assets/icons/share.png')}
-              style={styles.shareButton}
-            />
+          <TouchableOpacity
+            style={styles.closeBtn}
+            onPress={() => router.back()}
+          >
+            <Text style={styles.closeBtnText}>X</Text>
           </TouchableOpacity>
         </View>
 
@@ -121,29 +131,14 @@ export default function DetalleNoticia() {
             onError={() => setImgError(true)}
           />
 
-          {/* Corazón toggle */}
+          {/* Botón lápiz flotante */}
           <TouchableOpacity
-            style={styles.floatingBtnLeft}
-            onPress={() => setLiked(!liked)}
+            style={styles.editFloatingBtn}
+            onPress={handleEditar}
           >
             <Image
-              source={
-                liked
-                  ? require('../../assets/icons/checkedFav.png')
-                  : require('../../assets/icons/fav.png')
-              }
-              style={styles.favButton}
-            />
-          </TouchableOpacity>
-
-          {/* Guardar toggle */}
-          <TouchableOpacity
-            style={styles.floatingBtn}
-            onPress={() => setSaved(!saved)}
-          >
-            <Image
-              source={require('../../assets/icons/bookmark.png')}
-              style={[styles.favButton, saved && styles.favButtonActive]}
+              source={require('../../assets/icons/lapiz.png')}
+              style={styles.editFloatingIcon}
             />
           </TouchableOpacity>
 
@@ -206,6 +201,13 @@ export default function DetalleNoticia() {
         </View>
       </ScrollView>
 
+      {/* Botón guardar */}
+      <View style={styles.footerContainer}>
+        <TouchableOpacity style={styles.guardarBtn} onPress={handleEditar}>
+          <Text style={styles.guardarBtnText}>Guardar</Text>
+        </TouchableOpacity>
+      </View>
+
       <BottomNav />
     </View>
   );
@@ -216,7 +218,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3DBDB0',
     borderBottomLeftRadius: scaleSize(14),
     borderBottomRightRadius: scaleSize(14),
-    paddingBottom: scaleSize(100),
+    paddingBottom: scaleSize(20),
   },
   loadingContainer: {
     flex: 1,
@@ -250,38 +252,40 @@ const styles = StyleSheet.create({
     fontFamily: 'TiltNeon',
     fontSize: scaleFont(18),
   },
-  shareButton: {
-    width: scaleSize(24),
-    height: scaleSize(24),
-    resizeMode: 'contain',
+  closeBtn: {
+    backgroundColor: '#E53935',
+    width: scaleSize(28),
+    height: scaleSize(28),
+    borderRadius: scaleSize(6),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeBtnText: {
+    color: '#FFFFFF',
+    fontFamily: 'TiltNeon',
+    fontSize: scaleFont(13),
+    fontWeight: '700',
   },
   headerImage: {
     width: '100%',
     height: scaleSize(220),
-    borderBottomRightRadius: scaleSize(10),
-    borderBottomLeftRadius: scaleSize(10),
   },
-  floatingBtn: {
+  editFloatingBtn: {
     position: 'absolute',
-    top: scaleSize(20),
-    right: scaleSize(20),
-    padding: scaleSize(10),
-    borderRadius: scaleSize(50),
+    bottom: scaleSize(16),
+    right: scaleSize(16),
+    backgroundColor: '#43B0A7',
+    width: scaleSize(40),
+    height: scaleSize(40),
+    borderRadius: scaleSize(20),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  floatingBtnLeft: {
-    position: 'absolute',
-    top: scaleSize(20),
-    left: scaleSize(20),
-    padding: scaleSize(10),
-    borderRadius: scaleSize(50),
-  },
-  favButton: {
-    width: scaleSize(30),
-    height: scaleSize(30),
+  editFloatingIcon: {
+    width: scaleSize(20),
+    height: scaleSize(20),
     resizeMode: 'contain',
-  },
-  favButtonActive: {
-    tintColor: '#fbff26',
+    tintColor: '#FFFFFF',
   },
   dots: {
     position: 'absolute',
@@ -350,5 +354,22 @@ const styles = StyleSheet.create({
     padding: scaleSize(14),
     borderRadius: scaleSize(10),
     borderTopLeftRadius: scaleSize(0),
+  },
+  footerContainer: {
+    backgroundColor: '#43B0A7',
+    paddingHorizontal: scaleSize(40),
+    paddingVertical: scaleSize(12),
+  },
+  guardarBtn: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: scaleSize(30),
+    paddingVertical: scaleSize(14),
+    alignItems: 'center',
+  },
+  guardarBtnText: {
+    fontFamily: 'TiltNeon',
+    fontSize: scaleFont(16),
+    fontWeight: '600',
+    color: '#43B0A7',
   },
 });

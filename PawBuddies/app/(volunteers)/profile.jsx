@@ -68,6 +68,9 @@ export default function VolunteerProfile() {
   const handleEditarAdoptantes = () => {
     router.push('(volunteers)/registroAdoptantes');
   };
+  const handleRegistrarNoticias = () => {
+    router.push('(edits)/list_noticia');
+  };
 
   if (loading)
     return <Text style={styles.informativeMessages}>Cargando...</Text>;
@@ -96,7 +99,7 @@ export default function VolunteerProfile() {
         <View style={styles.menuContainer}>
           <Text style={styles.gestiones}>Gestiones</Text>
           <ProfileMenuItem action="Registro de animales" onPress={handleRegistroAnimales} />
-          <ProfileMenuItem action="Registro de noticias" />
+          <ProfileMenuItem action="Registro de noticias" onPress={handleRegistrarNoticias}/>
           <ProfileMenuItem action="Editar adoptantes" onPress={handleEditarAdoptantes}/>
           <ProfileMenuItem
             action="Registro de voluntarios"

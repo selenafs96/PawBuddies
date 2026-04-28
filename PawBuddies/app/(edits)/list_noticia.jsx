@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   StyleSheet,
   View,
@@ -11,17 +12,11 @@ import {
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { supabase } from '../../src/lib/supabase';
-import FilterTabs from '../../src/components/FilterTabs';
-import NewsHeader from '../../src/components/NewsHeader';
-import { BottomNav } from '../../src/components/BottomNav';
+import { BackButton } from '../../src/components/BackButton';
 import { scaleFont, scaleSize } from '../../src/constants/layout';
 
-const CATEGORIAS = ['All', 'Adoption', 'News', 'Articles', 'Lost & Found'];
-
-export default function Noticias() {
+export default function NoticiasEdit() {
   const insets = useSafeAreaInsets();
-  const [selectedFilter, setSelectedFilter] = useState('All');
-  const [activeTab, setActiveTab] = useState('news');
   const [noticias, setNoticias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -35,7 +30,6 @@ export default function Noticias() {
       setLoading(true);
       setError(null);
 
-      // JOIN con usuario para traer nombre, apellidos, foto y rol del autor
       const { data, error: supabaseError } = await supabase
         .from('noticia')
         .select(
@@ -59,20 +53,47 @@ export default function Noticias() {
       setNoticias(data || []);
     } catch (err) {
       console.error('Error al cargar noticias:', err.message);
-      setError('No se pudieron cargar las noticias. Inténtalo de nuevo.');
+      setError('No se pudieron cargar las noticias.');
     } finally {
       setLoading(false);
     }
   };
 
-  // NOTA: filtro por categoría pendiente hasta que exista esa columna en la tabla
-  const filteredNoticias = noticias;
+  const handleEliminar = (noticia) => {
+    Alert.alert('Eliminar noticia', `¿Eliminar "${noticia.titulo}"?`, [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Eliminar',
+        style: 'destructive',
+        onPress: () => eliminarNoticia(noticia.id_noticia),
+      },
+    ]);
+  };
+
+  const eliminarNoticia = async (id_noticia) => {
+    try {
+      const { error: supabaseError } = await supabase
+        .from('noticia')
+        .delete()
+        .eq('id_noticia', id_noticia);
+
+      if (supabaseError) throw supabaseError;
+      setNoticias((prev) => prev.filter((n) => n.id_noticia !== id_noticia));
+    } catch (err) {
+      console.error('Error al eliminar:', err.message);
+      Alert.alert('Error', 'No se pudo eliminar la noticia.');
+    }
+  };
 
   const handleNoticiaPress = (noticia) => {
     router.push({
-      pathname: '/(noticias)/[id_noticia]',
+      pathname: '/(edits)/[id_noticia]',
       params: { id_noticia: noticia.id_noticia },
     });
+  };
+
+  const handleCrear = () => {
+    router.push('/(edits)/edit_noticia');
   };
 
   if (loading) {
@@ -95,46 +116,67 @@ export default function Noticias() {
   }
 
   return (
+    // Contenedor raíz
     <View style={styles.container}>
-      <View style={[styles.header, { paddingTop: insets.top }]}>
-        <NewsHeader />
-        <FilterTabs
-          selectedFilter={selectedFilter}
-          onFilterChange={setSelectedFilter}
-          categorias={CATEGORIAS}
-        />
+      {/* Barra superior — paddingTop dinámico con insets */}
+      <View
+        style={[
+          styles.titleContainer,
+          { paddingTop: insets.top + scaleSize(10) },
+        ]}
+      >
+        <BackButton />
+        <Text style={styles.topTitle}>Noticias</Text>
+        <TouchableOpacity
+          onPress={handleCrear}
+          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+        >
+          <Image
+            source={require('../../assets/icons/lapiz.png')}
+            style={styles.editButton}
+          />
+        </TouchableOpacity>
       </View>
 
+      {/* Lista */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={styles.scrollViewContainer}
         contentContainerStyle={styles.scrollContent}
       >
-        {filteredNoticias.length === 0 ? (
+        {noticias.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>No hay noticias disponibles.</Text>
           </View>
         ) : (
-          filteredNoticias.map((item) => (
-            <NoticiaCard
+          noticias.map((item) => (
+            <NoticiaCardEdit
               key={item.id_noticia}
               item={item}
               onPress={() => handleNoticiaPress(item)}
+              onEliminar={() => handleEliminar(item)}
             />
           ))
         )}
       </ScrollView>
 
-      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+      {/* Footer */}
+      <View style={styles.footerContainer}>
+        <TouchableOpacity
+          style={styles.guardarBtn}
+          onPress={() => router.back()}
+        >
+          <Text style={styles.guardarBtnText}>Guardar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
-function NoticiaCard({ item, onPress }) {
+// Card
+function NoticiaCardEdit({ item, onPress, onEliminar }) {
   const [imgError, setImgError] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const [saved, setSaved] = useState(false);
 
   const autor = item.usuario;
   const nombreCompleto = autor
@@ -142,12 +184,8 @@ function NoticiaCard({ item, onPress }) {
     : 'Autor desconocido';
 
   return (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={onPress}
-      activeOpacity={0.85}
-    >
-      {/* Cabecera: avatar + nombre + rol + menú */}
+    <View style={styles.card}>
+      {/* Cabecera con botón eliminar */}
       <View style={styles.cardHeader}>
         <View style={styles.cardHeaderLeft}>
           {autor?.url_foto && !avatarError ? (
@@ -163,90 +201,51 @@ function NoticiaCard({ item, onPress }) {
               </Text>
             </View>
           )}
-          <View>
-            <Text style={styles.authorName}>{nombreCompleto}</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.authorName} numberOfLines={1}>
+              {nombreCompleto}
+            </Text>
             <Text style={styles.authorRole}>{autor?.rol ?? ''}</Text>
           </View>
         </View>
-        {/* "Tres puntos" sin funcionalidad por ahora */}
-        <TouchableOpacity hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <Text style={styles.menuDots}>⋯</Text>
-        </TouchableOpacity>
-      </View>
 
-      {/* Imagen de la noticia */}
-      {item.url_imagen && !imgError ? (
-        <Image
-          source={{ uri: item.url_imagen }}
-          style={styles.cardImage}
-          resizeMode="cover"
-          onError={() => setImgError(true)}
-        />
-      ) : (
-        <View style={styles.cardImagePlaceholder}>
-          <Text style={styles.cardImagePlaceholderText}>Sin imagen</Text>
-        </View>
-      )}
-
-      {/* Botones de acción */}
-      <View style={styles.actionsRow}>
-        <View style={styles.actionsLeft}>
-          {/* Corazón toggle — tintColor para simular estado activo */}
-          <TouchableOpacity
-            onPress={() => setLiked(!liked)}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            <Image
-              source={require('../../assets/icons/fav_empty.png')}
-              style={[styles.actionIcon, liked && styles.actionIconLiked]}
-            />
-          </TouchableOpacity>
-
-          {/* Comentarios sin funcionalidad por ahora */}
-          <TouchableOpacity hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <Image
-              source={require('../../assets/icons/comment.png')}
-              style={styles.actionIcon}
-            />
-          </TouchableOpacity>
-
-          {/* Compartir sin funcionalidad por ahora */}
-          <TouchableOpacity hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <Image
-              source={require('../../assets/icons/share_.png')}
-              style={styles.actionIcon}
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* Guardar toggle — tintColor para simular estado activo */}
         <TouchableOpacity
-          onPress={() => setSaved(!saved)}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          style={styles.deleteBtn}
+          onPress={onEliminar}
+          activeOpacity={0.7}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Image
-            source={require('../../assets/icons/bookmark.png')}
-            style={[styles.actionIcon, saved && styles.actionIconSaved]}
-          />
+          <Text style={styles.deleteBtnText}>X</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Descripción */}
-      <View style={styles.cardBody}>
-        <Text style={styles.cardDescription} numberOfLines={3}>
-          {item.cuerpo}
-        </Text>
-      </View>
-    </TouchableOpacity>
+      {/* Imagen + descripción */}
+      <TouchableOpacity onPress={onPress} activeOpacity={0.85}>
+        {item.url_imagen && !imgError ? (
+          <Image
+            source={{ uri: item.url_imagen }}
+            style={styles.cardImage}
+            resizeMode="cover"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <View style={styles.cardImagePlaceholder}>
+            <Text style={styles.cardImagePlaceholderText}>Sin imagen</Text>
+          </View>
+        )}
+        <View style={styles.cardBody}>
+          <Text style={styles.cardDescription} numberOfLines={3}>
+            {item.cuerpo}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  header: {
     backgroundColor: '#FFFFFF',
   },
   loadingContainer: {
@@ -281,6 +280,26 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(15),
     fontWeight: '600',
   },
+  titleContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: scaleSize(20),
+    paddingBottom: scaleSize(10),
+  },
+  topTitle: {
+    fontFamily: 'TiltNeon',
+    fontSize: scaleFont(18),
+    color: '#222',
+  },
+  editButton: {
+    width: scaleSize(24),
+    height: scaleSize(24),
+    resizeMode: 'contain',
+    tintColor: '#43B0A7',
+  },
   scrollViewContainer: {
     flex: 1,
     backgroundColor: '#43B0A7',
@@ -288,7 +307,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     alignItems: 'center',
     paddingTop: scaleSize(12),
-    paddingBottom: scaleSize(120),
+    paddingBottom: scaleSize(20),
     gap: scaleSize(14),
   },
   emptyContainer: {
@@ -304,7 +323,6 @@ const styles = StyleSheet.create({
     width: '90%',
     backgroundColor: '#FFFFFF',
     borderRadius: scaleSize(16),
-    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: scaleSize(2) },
     shadowOpacity: 0.1,
@@ -322,6 +340,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: scaleSize(10),
+    flex: 1,
+    marginRight: scaleSize(10),
   },
   avatar: {
     width: scaleSize(38),
@@ -350,10 +370,19 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(11),
     color: '#888888',
   },
-  menuDots: {
-    fontSize: scaleFont(20),
-    color: '#888888',
-    lineHeight: scaleFont(20),
+  deleteBtn: {
+    backgroundColor: '#E53935',
+    width: scaleSize(30),
+    height: scaleSize(30),
+    borderRadius: scaleSize(6),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteBtnText: {
+    color: '#FFFFFF',
+    fontFamily: 'TiltNeon',
+    fontSize: scaleFont(13),
+    fontWeight: '700',
   },
   cardImage: {
     width: '100%',
@@ -371,36 +400,32 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(13),
     color: '#999999',
   },
-  actionsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: scaleSize(14),
-    paddingVertical: scaleSize(10),
-  },
-  actionsLeft: {
-    flexDirection: 'row',
-    gap: scaleSize(16),
-  },
-  actionIcon: {
-    width: scaleSize(24),
-    height: scaleSize(24),
-    resizeMode: 'contain',
-  },
-  actionIconLiked: {
-    tintColor: '#43B0A7',
-  },
-  actionIconSaved: {
-    tintColor: '#43B0A7',
-  },
   cardBody: {
     paddingHorizontal: scaleSize(14),
     paddingBottom: scaleSize(14),
+    paddingTop: scaleSize(8),
   },
   cardDescription: {
     fontFamily: 'TiltNeon',
     fontSize: scaleFont(13),
     color: '#666666',
     lineHeight: scaleFont(20),
+  },
+  footerContainer: {
+    backgroundColor: '#43B0A7',
+    paddingHorizontal: scaleSize(40),
+    paddingVertical: scaleSize(12),
+  },
+  guardarBtn: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: scaleSize(30),
+    paddingVertical: scaleSize(14),
+    alignItems: 'center',
+  },
+  guardarBtnText: {
+    fontFamily: 'TiltNeon',
+    fontSize: scaleFont(16),
+    fontWeight: '600',
+    color: '#43B0A7',
   },
 });
