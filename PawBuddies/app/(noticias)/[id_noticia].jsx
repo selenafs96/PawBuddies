@@ -11,12 +11,14 @@ import {
 
 import { scaleFont, scaleSize } from '../../src/constants/layout';
 import { useLocalSearchParams } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BackButton } from '../../src/components/BackButton';
 import { BottomNav } from '../../src/components/BottomNav';
 import { supabase } from '../../src/lib/supabase';
 
 export default function DetalleNoticia() {
   const { id_noticia } = useLocalSearchParams();
+  const insets = useSafeAreaInsets();
 
   const [noticia, setNoticia] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -96,7 +98,7 @@ export default function DetalleNoticia() {
         contentContainerStyle={{ paddingBottom: scaleSize(120) }}
       >
         {/* Barra superior */}
-        <View style={styles.titleContainer}>
+        <View style={[styles.titleContainer, { paddingTop: insets.top + scaleSize(10) }]}>
           <BackButton />
           <Text style={styles.topTitle}>Noticia</Text>
           <TouchableOpacity hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
@@ -242,7 +244,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: scaleSize(20),
-    paddingTop: scaleSize(10),
     paddingBottom: scaleSize(10),
   },
   topTitle: {

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { supabase } from '../../src/lib/supabase';
 import FilterTabs from '../../src/components/FilterTabs';
 import NewsHeader from '../../src/components/NewsHeader';
@@ -18,6 +19,7 @@ import { scaleFont, scaleSize } from '../../src/constants/layout';
 const CATEGORIAS = ['All', 'Adoption', 'News', 'Articles', 'Lost & Found'];
 
 export default function Noticias() {
+  const insets = useSafeAreaInsets();
   const [selectedFilter, setSelectedFilter] = useState('All');
   const [activeTab, setActiveTab] = useState('news');
   const [noticias, setNoticias] = useState([]);
@@ -51,7 +53,7 @@ export default function Noticias() {
           )
         `,
         )
-        .order('id_noticia', { ascending: false });
+        .order('created_at', { ascending: false });
 
       if (supabaseError) throw supabaseError;
       setNoticias(data || []);
@@ -94,7 +96,7 @@ export default function Noticias() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top }]}>
         <NewsHeader />
         <FilterTabs
           selectedFilter={selectedFilter}
