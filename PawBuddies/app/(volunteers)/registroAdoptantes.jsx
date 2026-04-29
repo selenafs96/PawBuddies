@@ -3,6 +3,7 @@ import { Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scaleFont, scaleSize } from '../../src/constants/layout';
 import ScreenHeader from '../../src/components/ScreenHeader';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useUsers } from '../../src/hooks/useUsers';
 import { useEffect } from 'react';
 
@@ -14,6 +15,13 @@ export default function RegistroAdoptantesScreen() {
   const adoptantes = users?.filter(user => user.rol === 'Adoptante');
 
   useEffect(() => {fetchUsers();}, []);
+
+  const handleDetalles = (id_usuario) => {
+      router.push({
+        pathname: '/(volunteers)/detalleAdoptantes',
+        params: { id_usuario },
+      });
+    };
 
   const renderItem = ({ item }) => {
     return (
@@ -30,10 +38,11 @@ export default function RegistroAdoptantesScreen() {
             style={styles.imagen}
           />
 
-          {/* Botón X */}
+          {/* NO NECESARIO */}
+          {/* Botón X 
           <TouchableOpacity style={styles.deleteBtn}>
             <Text style={styles.deleteBtnText}>✕</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
         </View>
 
         {/* Info */}
@@ -43,7 +52,10 @@ export default function RegistroAdoptantesScreen() {
               <Text style={styles.cardNombre}>{item.nombre ?? 'Sin nombre'}</Text>
               <Text style={styles.cardCiudad}>{item.localidad_preferida ?? 'Sin ciudad'}</Text>
             </View>
-            <TouchableOpacity style={styles.detallesBtn}>
+            <TouchableOpacity
+              style={styles.detallesBtn}
+              onPress={() => handleDetalles(item.id_usuario)}
+            >
               <Text style={styles.detallesText}>Detalles</Text>
             </TouchableOpacity>
           </View>
@@ -58,7 +70,7 @@ export default function RegistroAdoptantesScreen() {
 
       {/* Header */}
       <View style={styles.titleContainer}>
-        <ScreenHeader title="Registro de adoptantes" />
+        <ScreenHeader title="Lista de adoptantes" />
       </View>
 
       {/* Lista */}
@@ -76,11 +88,12 @@ export default function RegistroAdoptantesScreen() {
             />
           )}
       </View>
-
-      {/* Barra Guardar fija */}
+      
+      {/* NO NECESARIO */}
+      {/* Barra Guardar fija 
       <Pressable style={[styles.saveBar, { paddingBottom: insets.bottom > 0 ? insets.bottom : scaleSize(16) }]}>
         <Text style={styles.saveText}>Guardar</Text>
-      </Pressable>
+      </Pressable>*/}
 
     </View>
   );
