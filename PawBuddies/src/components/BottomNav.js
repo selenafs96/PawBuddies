@@ -34,26 +34,30 @@ export const BottomNav = () => {
   const isAnimals = activeSection === '(animals)';
 
   const handleProfilePress = async () => {
-    // 1. Obtenemos la sesión actual
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.getSession();
+    const { data: { session }, error } = await supabase.auth.getSession();
 
-    if (error) {
-      console.error('Error al obtener la sesión:', error.message);
+    if (error || !session) {
+      router.push('/login');
       return;
     }
 
-    if (session) {
-      // 2. Si hay sesión, vamos al perfil pasando el ID del usuario logueado
+    // Consultamos el rol del usuario
+    const { data: usuario } = await supabase
+      .from('usuario')
+      .select('rol')
+      .eq('id_usuario', session.user.id)
+      .single();
+
+    if (usuario?.rol === 'Adoptante') {
+      router.push({
+        pathname: '/(adopters)/profile',
+        params: { id_usuario: session.user.id },
+      });
+    } else {
       router.push({
         pathname: '/(volunteers)/profile',
         params: { id_usuario: session.user.id },
       });
-    } else {
-      // 3. Si no hay sesión, al login (ajusta la ruta según tu estructura)
-      router.push('/login');
     }
   };
 
@@ -125,10 +129,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: scaleSize(50),
     position: 'absolute',
-    bottom: scaleSize(6),
-    left: scaleSize(70),
-    right: scaleSize(70),
-    height: scaleSize(50),
+    bottom: scaleSize(10),
+    left: scaleSize(40),
+    right: scaleSize(40),
+    height: scaleSize(64),
     paddingVertical: scaleSize(6),
     paddingHorizontal: scaleSize(16),
     justifyContent: 'space-around',
@@ -150,8 +154,8 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    width: scaleSize(18),
-    height: scaleSize(18),
+    width: scaleSize(22),
+    height: scaleSize(22),
     resizeMode: 'contain',
   },
 
