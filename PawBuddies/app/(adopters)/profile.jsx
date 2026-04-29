@@ -100,7 +100,7 @@ export default function AdopterProfile() {
     const esCodigoPostal = /^\d{4,5}$/.test(localidad.trim());
     if (esCodigoPostal) {
       // Si es solo el C.P., se muestra como "C.P."
-      return `— ${localidad}`;
+      return `${localidad}`;
     }
     // Si contiene guión ya formateado o es texto libre (como la ciudad), se muestra tal cual
     return localidad;
