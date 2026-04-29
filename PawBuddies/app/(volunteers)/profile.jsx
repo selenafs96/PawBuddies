@@ -98,9 +98,9 @@ export default function VolunteerProfile() {
         </View>
         <View style={styles.menuContainer}>
           <Text style={styles.gestiones}>Gestiones</Text>
+          <ProfileMenuItem action="Ver adoptantes" onPress={handleEditarAdoptantes}/>
           <ProfileMenuItem action="Registro de animales" onPress={handleRegistroAnimales} />
           <ProfileMenuItem action="Registro de noticias" onPress={handleRegistrarNoticias}/>
-          <ProfileMenuItem action="Editar adoptantes" onPress={handleEditarAdoptantes}/>
           <ProfileMenuItem
             action="Registro de voluntarios"
             onPress={handleRegistroVoluntarios}
@@ -148,6 +148,6 @@ const createStyles = (insets) =>
     },
     logo: {
       alignSelf: 'center',
-      marginBottom: insets.bottom + scaleSize(50),
+      marginBottom: insets.bottom + scaleSize(60),
     },
   });
