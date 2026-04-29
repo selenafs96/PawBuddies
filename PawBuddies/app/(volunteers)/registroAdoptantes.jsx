@@ -30,10 +30,11 @@ export default function RegistroAdoptantesScreen() {
             style={styles.imagen}
           />
 
-          {/* Botón X */}
+          {/* NO NECESARIO */}
+          {/* Botón X 
           <TouchableOpacity style={styles.deleteBtn}>
             <Text style={styles.deleteBtnText}>✕</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
         </View>
 
         {/* Info */}
@@ -58,7 +59,7 @@ export default function RegistroAdoptantesScreen() {
 
       {/* Header */}
       <View style={styles.titleContainer}>
-        <ScreenHeader title="Registro de adoptantes" />
+        <ScreenHeader title="Lista de adoptantes" />
       </View>
 
       {/* Lista */}
@@ -76,11 +77,12 @@ export default function RegistroAdoptantesScreen() {
             />
           )}
       </View>
-
-      {/* Barra Guardar fija */}
+      
+      {/* NO NECESARIO */}
+      {/* Barra Guardar fija 
       <Pressable style={[styles.saveBar, { paddingBottom: insets.bottom > 0 ? insets.bottom : scaleSize(16) }]}>
         <Text style={styles.saveText}>Guardar</Text>
-      </Pressable>
+      </Pressable>*/}
 
     </View>
   );
