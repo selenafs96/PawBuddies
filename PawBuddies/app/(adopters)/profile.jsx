@@ -34,23 +34,24 @@ export default function AdopterProfile() {
     }
   }, [id_usuario]);
 
-  // ── Favoritos ──────────────────────────────────────────
+  // ── Adopciones ──────────────────────────────────────────
   const fetchFavoritos = async (id) => {
     try {
       const { count, error } = await supabase
-        .from('favorito')
-        .select('id_favorito', { count: 'exact', head: true })
-        .eq('id_usuario', id);
+        .from('adopcion')
+        .select('id_adopcion', { count: 'exact', head: true })
+        .eq('id_usuario', id)
+        .eq('estado_adopcion', 'Aprobada');
 
       if (!error) setNumFavoritos(count ?? 0);
     } catch (err) {
-      console.error('Error al cargar favoritos:', err.message);
+      console.error('Error al cargar adopciones:', err.message);
     }
   };
 
   const handleVerFavoritos = () => {
     router.push({
-      pathname: '/(animals)/AdoptaConfirmScreen',
+      pathname: '/(adopters)/mis_animales',
       params: { id_usuario },
     });
   };
