@@ -94,19 +94,19 @@ export default function AdopterProfile() {
     guardarPreferencia('otros', val);
   };
 
-  // ── Localidad — detecta si es código postal o ciudad ──
+  // Localidad - Ciudad o C.P.
   const formatLocalidad = (localidad) => {
     if (!localidad) return '—';
     const esCodigoPostal = /^\d{4,5}$/.test(localidad.trim());
     if (esCodigoPostal) {
-      // Si es solo CP, lo mostramos como "— CP"
+      // Si es solo el C.P., se muestra como "C.P."
       return `— ${localidad}`;
     }
-    // Si contiene guión ya formateado o es texto libre, lo mostramos tal cual
+    // Si contiene guión ya formateado o es texto libre (como la ciudad), se muestra tal cual
     return localidad;
   };
 
-  // ── Sesión ─────────────────────────────────────────────
+  // Sesión
   const cerrarSesion = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -117,7 +117,7 @@ export default function AdopterProfile() {
   };
 
   const handleOlvideContrasena = () => {
-    // TODO: implementar recuperación de contraseña
+    // TODO: Queda implementar recuperación de contraseña
   };
 
   if (loading)
@@ -152,7 +152,7 @@ export default function AdopterProfile() {
           </View>
         </View>
 
-        {/* Favoritos con botón Ver */}
+        {/* Animales favoritos */}
         <View style={styles.adoptadoCard}>
           <View style={styles.adoptadoLeft}>
             <View style={styles.adoptadoIconContainer}>
@@ -206,7 +206,7 @@ export default function AdopterProfile() {
             </TouchableOpacity>
           </View>
 
-          {/* Ciudad / Código postal */}
+          {/* Ciudad o código postal */}
           <Text style={styles.localidad}>
             {formatLocalidad(users.localidad_preferida)}
             {users.radio_maximo_km ? ` · ${users.radio_maximo_km} km` : ''}
@@ -214,6 +214,7 @@ export default function AdopterProfile() {
         </View>
 
         {/* Documento de propiedad — placeholder */}
+        {/* Modificable cuándo se puedan subir documentos */}
         <TouchableOpacity style={styles.documentoBtn}>
           <Text style={styles.documentoBtnText}>Documento_de_propiedad.pdf</Text>
           <Image
@@ -222,7 +223,7 @@ export default function AdopterProfile() {
           />
         </TouchableOpacity>
 
-        {/* Cuenta — al final, con cerrar sesión dentro */}
+        {/* Cuenta */}
         <View style={styles.menuContainer}>
           <Text style={styles.sectionLabel}>Cuenta</Text>
           <ProfileMenuItem
@@ -261,8 +262,6 @@ const createStyles = (insets) =>
       textAlign: 'center',
       marginTop: scaleSize(40),
     },
-
-    // Usuario
     userCard: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -295,8 +294,6 @@ const createStyles = (insets) =>
       fontSize: scaleFont(13),
       color: '#888',
     },
-
-    // Favoritos card
     adoptadoCard: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -347,8 +344,6 @@ const createStyles = (insets) =>
       color: '#FFFFFF',
       fontWeight: '600',
     },
-
-    // Secciones
     menuContainer: {
       width: '100%',
       padding: scaleSize(10),
@@ -361,8 +356,6 @@ const createStyles = (insets) =>
       color: '#888',
       marginBottom: scaleSize(8),
     },
-
-    // Preferencias
     preferencesRow: {
       flexDirection: 'row',
       gap: scaleSize(20),
@@ -401,8 +394,6 @@ const createStyles = (insets) =>
       fontSize: scaleFont(13),
       color: '#888',
     },
-
-    // Documento
     documentoBtn: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -425,8 +416,6 @@ const createStyles = (insets) =>
       resizeMode: 'contain',
       tintColor: '#43B0A7',
     },
-
-    // Logo
     logo: {
       alignSelf: 'center',
       marginBottom: insets.bottom + scaleSize(50),
