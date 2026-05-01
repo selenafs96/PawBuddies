@@ -24,12 +24,21 @@ import { useAdopcion } from '../../src/hooks/useAdopcion.js';
 export default function AdoptableAnimalDetail() {
   const [userId, setUserId] = useState(null);
   const [esFavorito, setEsFavorito] = useState(false);
+  const [rol, setRol] = useState(null);
 
   useEffect(() => {
     const checkSession = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+
+      const { data } = await supabase
+        .from('usuario')
+        .select('rol')
+        .eq('id_usuario', session.user.id)
+        .single();
+
+      setRol(data.rol);
 
       if (session) {
         setUserId(session.user.id);
@@ -88,13 +97,12 @@ export default function AdoptableAnimalDetail() {
 
     if (userId) {
       toggleFavorito(id_animal, userId);
-      setEsFavorito(!esFavorito)
+      setEsFavorito(!esFavorito);
     }
   };
 
   const handleAdoptame = async () => {
-
-    if(!userId) {
+    if (!userId) {
       router.push('/login');
       return;
     }
@@ -182,9 +190,14 @@ export default function AdoptableAnimalDetail() {
         </View>
         <View style={styles.bottomView}></View>
       </ScrollView>
-      <TouchableOpacity onPress={handleAdoptame} style={styles.adoptameButton}>
-        <Text style={styles.buttonText}>Adóptame</Text>
-      </TouchableOpacity>
+      {rol == 'Adoptante' && (
+        <TouchableOpacity
+          onPress={handleAdoptame}
+          style={styles.adoptameButton}
+        >
+          <Text style={styles.buttonText}>Adóptame</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
