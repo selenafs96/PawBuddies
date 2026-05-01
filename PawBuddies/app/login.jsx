@@ -55,7 +55,6 @@ const handleSignIn = async () => {
   };
 
   const handleSignUp = () => {
-    // TODO: Navegar a pantalla de registro
     router.push('(adopters)/onboarding1');
   };
 

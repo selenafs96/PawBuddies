@@ -39,6 +39,21 @@ export function useAnimals(filtro = 'todos') {
       const data = await AnimalRepository.getByEspecieEstado(especie, estado);
       setAnimals(data);
       setError(null);
+      return data;
+    } catch (err) {
+      console.error('Error cargando animales:', err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchAnimalByEspecieProtectora = async (especie, id_protectora) => {
+    try {
+      const data = await AnimalRepository.getByEspecieProtectora(especie, id_protectora);
+      setAnimals(data);
+      setError(null);
+      return data;
     } catch (err) {
       console.error('Error cargando animales:', err);
       setError(err);
@@ -118,6 +133,7 @@ export function useAnimals(filtro = 'todos') {
     fetchAnimals,
     fetchAnimalById,
     fetchAnimalByEspecieEstado,
+    fetchAnimalByEspecieProtectora,
     updateAnimal,
     deleteAnimal,
     fetchNumeroPerrosProtectora,

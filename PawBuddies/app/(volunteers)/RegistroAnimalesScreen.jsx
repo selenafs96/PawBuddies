@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Pressable,
-  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -16,19 +15,60 @@ import { useRouter } from 'expo-router';
 import { scaleFont, scaleSize } from '../../src/constants/layout.js';
 import { useAnimals } from '../../src/hooks/useAnimals';
 import ScreenHeader from '../../src/components/ScreenHeader.js';
+import { supabase } from '../../src/lib/supabase.js';
+import { useUsers } from '../../src/hooks/useUsers.js';
 
 export default function RegistroAnimalesScreen() {
   const [modoEliminar, setModoEliminar] = useState(false);
+  const [idProtectora, setIdProtectora] = useState('');
+  const [animalesMostrar, setAnimalesMostrar] = useState([]);
+
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
   const [especie, setEspecie] = useState('todos');
-  const { animals, loading, error, fetchAnimalByEspecieEstado, deleteAnimal } =
-    useAnimals();
+  const {
+    animals,
+    loading,
+    error,
+    fetchAnimalByEspecieEstado,
+    deleteAnimal,
+    fetchAnimalByEspecieProtectora,
+  } = useAnimals();
+
+  const { fetchUserById } = useUsers();
 
   useEffect(() => {
-    fetchAnimalByEspecieEstado(especie, 'todos');
-  }, [especie]);
+    const cargarDatosSesion = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session?.user?.id) {
+        const usuario = await fetchUserById(session.user.id);
+
+        if (usuario) {
+          setIdProtectora(usuario.id_protectora);
+        }
+      }
+    };
+    cargarDatosSesion();
+  }, []);
+
+  useEffect(() => {
+    const filtrarAnimales = async () => {
+      if (idProtectora) {
+        let animales = await fetchAnimalByEspecieProtectora(
+          especie,
+          idProtectora,
+        );
+
+        setAnimalesMostrar(animales);
+      }
+    };
+
+    filtrarAnimales();
+  }, [especie, idProtectora]);
 
   const handleSave = async () => {
     try {
@@ -118,6 +158,7 @@ export default function RegistroAnimalesScreen() {
         {/* Filtros de especie */}
         <View style={styles.filtrosRow}>
           <TouchableOpacity
+<<<<<<< HEAD
             style={[styles.addBtn, modoEliminar && styles.filtroBtnActivo]}
             onPress={() => { router.push('/(volunteers)/registroAnimal')}}
           >
@@ -130,6 +171,8 @@ export default function RegistroAnimalesScreen() {
             />
           </TouchableOpacity>
           <TouchableOpacity
+=======
+>>>>>>> 297ddc0d58175209bd3c851d964c7cd6db938b43
             style={[
               styles.filtroBtn,
               especie === 'Perro' && styles.filtroBtnActivo,
@@ -186,7 +229,7 @@ export default function RegistroAnimalesScreen() {
           </View>
         ) : (
           <FlatList
-            data={animals}
+            data={animalesMostrar}
             renderItem={renderItem}
             keyExtractor={(item) => item.id_animal}
             numColumns={2}
