@@ -23,7 +23,8 @@ export default function RegistroAnimalesScreen() {
   const router = useRouter();
 
   const [especie, setEspecie] = useState('todos');
-  const { animals, loading, error, fetchAnimalByEspecieEstado, deleteAnimal } = useAnimals();
+  const { animals, loading, error, fetchAnimalByEspecieEstado, deleteAnimal } =
+    useAnimals();
 
   useEffect(() => {
     fetchAnimalByEspecieEstado(especie, 'todos');
@@ -44,7 +45,6 @@ export default function RegistroAnimalesScreen() {
       alert('Error al guardar: ' + err.message);
     }
   };
-
 
   const handleDelete = async (id_animal) => {
     try {
@@ -70,7 +70,9 @@ export default function RegistroAnimalesScreen() {
         {/* Imagen */}
         <View style={styles.imageWrapper}>
           <Image
-            source={imagen ? { uri: imagen } : require('../../assets/icons/Logo.png')}
+            source={
+              imagen ? { uri: imagen } : require('../../assets/icons/Logo.png')
+            }
             style={styles.imagen}
             resizeMode="cover"
           />
@@ -88,7 +90,9 @@ export default function RegistroAnimalesScreen() {
         {/* Info */}
         <View style={styles.cardInfo}>
           <View style={styles.cardTextCol}>
-            <Text style={styles.cardNombre} numberOfLines={1}>{item.nombre}</Text>
+            <Text style={styles.cardNombre} numberOfLines={1}>
+              {item.nombre}
+            </Text>
             <Text style={styles.cardEdad}>
               {item.edad ? `${item.edad} años` : 'Edad desconocida'}
             </Text>
@@ -114,22 +118,46 @@ export default function RegistroAnimalesScreen() {
         {/* Filtros de especie */}
         <View style={styles.filtrosRow}>
           <TouchableOpacity
-            style={[styles.filtroBtn, especie === 'Perro' && styles.filtroBtnActivo]}
+            style={[styles.addBtn, modoEliminar && styles.filtroBtnActivo]}
+            onPress={() => { router.push('/(volunteers)/registroAnimal')}}
+          >
+            <Image
+              source={require('../../assets/icons/add.svg')}
+              style={[
+                styles.addBtnIcon,
+                modoEliminar && styles.filtroIconoActivo,
+              ]}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.filtroBtn,
+              especie === 'Perro' && styles.filtroBtnActivo,
+            ]}
             onPress={() => setEspecie(especie === 'Perro' ? 'todos' : 'Perro')}
           >
             <Image
               source={require('../../assets/icons/Dog.png')}
-              style={[styles.filtroIcono, especie === 'Perro' && styles.filtroIconoActivo]}
+              style={[
+                styles.filtroIcono,
+                especie === 'Perro' && styles.filtroIconoActivo,
+              ]}
             />
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.filtroBtn, especie === 'Gato' && styles.filtroBtnActivo]}
+            style={[
+              styles.filtroBtn,
+              especie === 'Gato' && styles.filtroBtnActivo,
+            ]}
             onPress={() => setEspecie(especie === 'Gato' ? 'todos' : 'Gato')}
           >
             <Image
               source={require('../../assets/icons/Cat.png')}
-              style={[styles.filtroIcono, especie === 'Gato' && styles.filtroIconoActivo]}
+              style={[
+                styles.filtroIcono,
+                especie === 'Gato' && styles.filtroIconoActivo,
+              ]}
             />
           </TouchableOpacity>
 
@@ -140,7 +168,10 @@ export default function RegistroAnimalesScreen() {
           >
             <Image
               source={require('../../assets/icons/lapiz.png')}
-              style={[styles.lapizBtnIcon, modoEliminar && styles.filtroIconoActivo]}
+              style={[
+                styles.lapizBtnIcon,
+                modoEliminar && styles.filtroIconoActivo,
+              ]}
             />
           </TouchableOpacity>
         </View>
@@ -163,7 +194,9 @@ export default function RegistroAnimalesScreen() {
             contentContainerStyle={styles.listaContent}
             ListEmptyComponent={
               <View style={styles.centrado}>
-                <Text style={styles.errorTexto}>No hay animales registrados</Text>
+                <Text style={styles.errorTexto}>
+                  No hay animales registrados
+                </Text>
               </View>
             }
           />
@@ -172,7 +205,10 @@ export default function RegistroAnimalesScreen() {
 
       {/* Barra Guardar fija */}
       <Pressable
-        style={[styles.saveBar, { paddingBottom: insets.bottom > 0 ? insets.bottom : scaleSize(16) }]}
+        style={[
+          styles.saveBar,
+          { paddingBottom: insets.bottom > 0 ? insets.bottom : scaleSize(16) },
+        ]}
         onPress={handleSave}
       >
         <Image
@@ -195,7 +231,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     paddingVertical: scaleSize(8),
-    marginTop: scaleSize(5),
     marginTop: scaleSize(5),
     width: '100%',
     position: 'relative',
@@ -240,6 +275,20 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     tintColor: '#3DBDB0',
   },
+  addBtn: {
+    position: 'absolute',
+    left: scaleSize(20),
+    backgroundColor: '#e8f7f6',
+    padding: scaleSize(6),
+    borderRadius: scaleSize(14),
+  },
+  addBtnIcon: {
+    width: scaleSize(30),
+    height: scaleSize(30),
+    resizeMode: 'contain',
+    tintColor: '#3DBDB0',
+  },
+
   // ── Lista ──
   listContainer: {
     flex: 1,
@@ -337,10 +386,10 @@ const styles = StyleSheet.create({
     right: 0,
     paddingTop: scaleSize(10),
     paddingHorizontal: scaleSize(20),
-    alignItems: 'center'
+    alignItems: 'center',
   },
   saveButtonImage: {
     width: '100%',
-    height: scaleSize(55)
+    height: scaleSize(55),
   },
 });

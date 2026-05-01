@@ -45,6 +45,16 @@ export const AnimalRepository = {
     return data;
   },
 
+  async add(newAnimal) {
+    const { data, error } = await supabase
+      .from('animal')
+      .insert([newAnimal])
+      .select();
+
+      if(error) throw new Error(error.message);
+      return data;
+  },
+
   // BORRAR
   async delete(id) {
     const { error } = await supabase
