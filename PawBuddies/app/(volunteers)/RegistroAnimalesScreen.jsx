@@ -22,6 +22,7 @@ export default function RegistroAnimalesScreen() {
   const [modoEliminar, setModoEliminar] = useState(false);
   const [idProtectora, setIdProtectora] = useState('');
   const [animalesMostrar, setAnimalesMostrar] = useState([]);
+  const [refreshSignal, setRefreshSignal] = useState(false);
 
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -68,14 +69,14 @@ export default function RegistroAnimalesScreen() {
     };
 
     filtrarAnimales();
-  }, [especie, idProtectora]);
+  }, [especie, idProtectora, refreshSignal]);
 
   const handleSave = async () => {
     try {
       const updates = {
         nombre: form.nombre,
         genero: form.genero,
-        edad: parseInt(form.edad) || 0,
+        edad: Number.parseInt(form.edad) || 0,
         tamano: form.tamano,
         presentacion: form.presentacion,
       };
@@ -91,6 +92,7 @@ export default function RegistroAnimalesScreen() {
       await deleteAnimal(id_animal);
       alert('Animal eliminado');
       await fetchAnimalByEspecieEstado(especie, 'todos');
+      setRefreshSignal(!refreshSignal)
     } catch (err) {
       alert('Error al eliminar: ' + err.message);
     }
@@ -165,7 +167,6 @@ export default function RegistroAnimalesScreen() {
               source={require('../../assets/icons/add.svg')}
               style={[
                 styles.addBtnIcon,
-                modoEliminar && styles.filtroIconoActivo,
               ]}
             />
           </TouchableOpacity>
