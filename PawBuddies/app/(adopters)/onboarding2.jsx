@@ -12,7 +12,6 @@ import Checkbox from 'expo-checkbox';
 import { useShelter } from '../../src/hooks/useShelter';
 import { useRegistroUsuario } from '../../contexts/RegistroUsuarioContext';
 import { scaleFont, scaleSize } from '../../src/constants/layout';
-import { supabase } from '../../src/lib/supabase';
 
 export default function TipoUsuarioScreen({ onVolver }) {
   const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
@@ -105,7 +104,7 @@ export default function TipoUsuarioScreen({ onVolver }) {
                   setIsAdopterChecked(newValue);
                   if (newValue) {
                     setIsVolunteerChecked(false); // Desmarcar el otro
-                    setTipoSeleccionado('Adoptante'); // <--- GUARDAR VALOR
+                    setTipoSeleccionado('Adoptante');
                   } else {
                     setTipoSeleccionado(null);
                   }
@@ -135,16 +134,12 @@ export default function TipoUsuarioScreen({ onVolver }) {
               <Text style={styles.tagText}>Voluntario</Text>
             </View>
             {isVolunteerChecked && (
-              <View style={styles.dropdownContainer}>
+              <View>
                 <Text style={styles.label}>Selecciona la protectora</Text>
                 <Dropdown
                   style={[
-                    styles.dropdown,
                     isFocus && { borderColor: '#3DBDB0' },
                   ]}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
                   data={shelterOptions}
                   search
                   maxHeight={300}

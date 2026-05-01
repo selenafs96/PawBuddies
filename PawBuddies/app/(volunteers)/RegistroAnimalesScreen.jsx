@@ -158,6 +158,19 @@ export default function RegistroAnimalesScreen() {
         {/* Filtros de especie */}
         <View style={styles.filtrosRow}>
           <TouchableOpacity
+            style={[styles.addBtn, modoEliminar && styles.filtroBtnActivo]}
+            onPress={() => { router.push('/(volunteers)/registroAnimal')}}
+          >
+            <Image
+              source={require('../../assets/icons/add.svg')}
+              style={[
+                styles.addBtnIcon,
+                modoEliminar && styles.filtroIconoActivo,
+              ]}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+
             style={[
               styles.filtroBtn,
               especie === 'Perro' && styles.filtroBtnActivo,
@@ -260,7 +273,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingVertical: scaleSize(8),
     marginTop: scaleSize(5),
-    marginTop: scaleSize(5),
     width: '100%',
     position: 'relative',
   },
@@ -304,6 +316,20 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     tintColor: '#3DBDB0',
   },
+  addBtn: {
+    position: 'absolute',
+    left: scaleSize(20),
+    backgroundColor: '#e8f7f6',
+    padding: scaleSize(6),
+    borderRadius: scaleSize(14),
+  },
+  addBtnIcon: {
+    width: scaleSize(30),
+    height: scaleSize(30),
+    resizeMode: 'contain',
+    tintColor: '#3DBDB0',
+  },
+
   // ── Lista ──
   listContainer: {
     flex: 1,

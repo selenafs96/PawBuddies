@@ -75,6 +75,19 @@ export function useAnimals(filtro = 'todos') {
     }
   };
 
+  const addAnimal = async(newAnimal) => {
+    try {
+      const data = await AnimalRepository.add(newAnimal);
+      setAnimals((prev) => ({...prev, ...newAnimal}));
+      setError(null);
+      return data;
+    } catch (err) {
+      console.error('Error añadiendo animal: ', err);
+      setError(err);
+      throw err;
+    }
+  }
+
   const deleteAnimal = async (id) => {
     try {
       await AnimalRepository.delete(id);
@@ -127,5 +140,6 @@ export function useAnimals(filtro = 'todos') {
     numeroPerrosProtectora,
     fetchNumeroGatosProtectora,
     numeroGatosProtectora,
+    addAnimal,
   };
 }
