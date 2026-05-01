@@ -15,6 +15,7 @@ import { useAnimals } from '../../src/hooks/useAnimals.js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Dropdown } from 'react-native-element-dropdown';
 import { supabase } from '../../src/lib/supabase.js';
+import { router } from 'expo-router';
 
 // testId: solo para desarrollo, cuando se renderiza sin navegación
 export default function AnimalRegister() {
@@ -89,6 +90,7 @@ export default function AnimalRegister() {
       };
       await addAnimal(newAnimal);
       alert('Animal registrado');
+      router.push('/');
     } catch (err) {
       alert('Error al guardar: ' + err.message);
     }
