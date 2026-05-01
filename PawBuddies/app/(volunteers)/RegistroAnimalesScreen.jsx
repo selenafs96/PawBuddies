@@ -158,7 +158,6 @@ export default function RegistroAnimalesScreen() {
         {/* Filtros de especie */}
         <View style={styles.filtrosRow}>
           <TouchableOpacity
-<<<<<<< HEAD
             style={[styles.addBtn, modoEliminar && styles.filtroBtnActivo]}
             onPress={() => { router.push('/(volunteers)/registroAnimal')}}
           >
@@ -171,8 +170,7 @@ export default function RegistroAnimalesScreen() {
             />
           </TouchableOpacity>
           <TouchableOpacity
-=======
->>>>>>> 297ddc0d58175209bd3c851d964c7cd6db938b43
+
             style={[
               styles.filtroBtn,
               especie === 'Perro' && styles.filtroBtnActivo,
