@@ -17,12 +17,11 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { supabase } from '../../src/lib/supabase.js';
 import { router } from 'expo-router';
 
-// testId: solo para desarrollo, cuando se renderiza sin navegación
 export default function AnimalRegister() {
   const insets = useSafeAreaInsets();
   const styles = createStyles(insets);
 
-    const [newAnimalForm, setNewAnimalForm] = useState({
+  const [newAnimalForm, setNewAnimalForm] = useState({
     nombre: '',
     genero: '',
     edad: '',
@@ -43,19 +42,19 @@ export default function AnimalRegister() {
       const {
         data: { session },
       } = await supabase.auth.getSession();
-       const userId = session.user.id;
+      const userId = session.user.id;
 
-      const {data, error} = await supabase
+      const { data, error } = await supabase
         .from('usuario')
         .select('id_protectora')
         .eq('id_usuario', userId)
         .single();
 
-        if(data && data.id_protectora) {
-            setIdProtectora(data.id_protectora)
-        } else {
-            console.log('No se encontró id_protectora para este usuario')
-        }
+      if (data && data.id_protectora) {
+        setIdProtectora(data.id_protectora);
+      } else {
+        console.log('No se encontró id_protectora para este usuario');
+      }
     };
     cargarDatosSesion();
   }, []);
@@ -75,6 +74,13 @@ export default function AnimalRegister() {
 
   const handleSave = async () => {
     try {
+      let urlFotos = [];
+
+      if (newAnimalForm.url_foto_2) {
+        urlFotos = [newAnimalForm.url_foto, newAnimalForm.url_foto_2];
+      } else {
+        urlFotos = [newAnimalForm.url_foto];
+      }
       const newAnimal = {
         nombre: newAnimalForm.nombre,
         genero: newAnimalForm.genero,
@@ -85,7 +91,7 @@ export default function AnimalRegister() {
         caracter: newAnimalForm.caracter,
         especie: specieDropdownValue,
         estado: stateDropdownValue,
-        url_foto: newAnimalForm.url_foto ? [newAnimalForm.url_foto] : [],
+        url_foto: urlFotos,
         id_protectora: idProtectora,
       };
       await addAnimal(newAnimal);
@@ -111,7 +117,7 @@ export default function AnimalRegister() {
           </View>
         </View>
         <View style={styles.tealBlock}>
-          <Text style={styles.sectionTitle}>Nombre y foto</Text>
+          <Text style={styles.sectionTitle}>Nombre y fotos</Text>
           <TextInput
             style={styles.inputFull}
             onChangeText={(v) => handleChange('nombre', v)}
@@ -124,8 +130,43 @@ export default function AnimalRegister() {
             placeholder="URL de la imagen"
             placeholderTextColor="#878a8a"
           />
+          <TextInput
+            style={styles.inputFull}
+            onChangeText={(v) => handleChange('url_foto_2', v)}
+            placeholder="URL de la imagen 2 (Opcional)"
+            placeholderTextColor="#878a8a"
+          />
 
           <Text style={styles.sectionTitle}>Sobre el animal</Text>
+          <Dropdown
+            style={styles.dropdown}
+            containerStyle={styles.dropdownListContainer}
+            data={SPECIES}
+            placeholder={'Selecciona la especie...'}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            value={specieDropdownValue}
+            onChange={(item) => {
+              setSpecieDropdownValue(item.value);
+            }}
+          />
+          <View style={styles.dataRow}>
+            <View style={styles.inputCard}>
+              <Text style={styles.inputCardLabel}>Raza</Text>
+              <TextInput
+                style={styles.inputCardValue}
+                onChangeText={(v) => handleChange('raza', v)}
+              />
+            </View>
+                        <View style={styles.inputCard}>
+              <Text style={styles.inputCardLabel}>Tamaño</Text>
+              <TextInput
+                style={styles.inputCardValue}
+                onChangeText={(v) => handleChange('tamano', v)}
+              />
+            </View>
+          </View>
           <View style={styles.dataRow}>
             <View style={styles.inputCard}>
               <Text style={styles.inputCardLabel}>Género</Text>
@@ -142,23 +183,7 @@ export default function AnimalRegister() {
                 onChangeText={(v) => handleChange('edad', v)}
               />
             </View>
-            <View style={styles.inputCard}>
-              <Text style={styles.inputCardLabel}>Tamaño</Text>
-              <TextInput
-                style={styles.inputCardValue}
-                onChangeText={(v) => handleChange('tamano', v)}
-              />
-            </View>
-          </View>
-          <View style={styles.dataRow}>
-            <View style={styles.inputCard}>
-              <Text style={styles.inputCardLabel}>Raza</Text>
-              <TextInput
-                style={styles.inputCardValue}
-                onChangeText={(v) => handleChange('raza', v)}
-              />
-            </View>
-            <View style={styles.inputCard}>
+                        <View style={styles.inputCard}>
               <Text style={styles.inputCardLabel}>Carácter</Text>
               <TextInput
                 style={styles.inputCardValue}
@@ -166,6 +191,7 @@ export default function AnimalRegister() {
               />
             </View>
           </View>
+
           <TextInput
             style={styles.textArea}
             multiline
@@ -175,38 +201,20 @@ export default function AnimalRegister() {
             textAlignVertical="top"
           />
 
-          <View style={styles.dropdownContainer}>
-            <Dropdown
-              style={styles.dropdown}
-              containerStyle={styles.dropdownListContainer}
-              data={SPECIES}
-              placeholder={'Selecciona la especie...'}
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              value={specieDropdownValue}
-              onChange={(item) => {
-                setSpecieDropdownValue(item.value);
-              }}
-            />
-          </View>
-
           <Text style={styles.sectionTitle}>Estado</Text>
-          <View style={styles.dropdownContainer}>
-            <Dropdown
-              style={styles.dropdown}
-              containerStyle={styles.dropdownListContainer}
-              data={STATES}
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={'Selecciona el estado...'}
-              value={stateDropdownValue}
-              onChange={(item) => {
-                setStateDropdownValue(item.value);
-              }}
-            />
-          </View>
+          <Dropdown
+            style={styles.dropdown}
+            containerStyle={styles.dropdownListContainer}
+            data={STATES}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={'Selecciona el estado...'}
+            value={stateDropdownValue}
+            onChange={(item) => {
+              setStateDropdownValue(item.value);
+            }}
+          />
         </View>
         <View style={styles.bottomView} />
       </ScrollView>
@@ -243,7 +251,6 @@ const createStyles = (insets) =>
       backgroundColor: '#FFFFFF',
       alignSelf: 'center',
       width: '100%',
-      maxWidth: 500,
     },
     scrollContent: { flexGrow: 1, paddingTop: insets.top, paddingBottom: 0 },
     titleContainer: {
@@ -395,6 +402,7 @@ const createStyles = (insets) =>
       paddingHorizontal: scaleSize(15),
       paddingVertical: scaleSize(8),
       height: scaleSize(50),
+      marginBottom: scaleSize(10),
     },
     dropdownListContainer: {
       borderRadius: scaleSize(10),

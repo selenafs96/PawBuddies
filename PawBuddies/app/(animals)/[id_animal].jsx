@@ -206,7 +206,6 @@ const createStyles = (insets) =>
   StyleSheet.create({
     mainContainer: {
       flex: 1,
-      backgroundColor: '#FFFFFF',
       width: '100%',
     },
     scrollContainer: {
@@ -215,7 +214,6 @@ const createStyles = (insets) =>
       backgroundColor: '#FFFFFF',
       alignContent: 'center',
       alignSelf: 'center',
-      maxWidth: 500,
     },
     scrollContent: {
       flexGrow: 1,
