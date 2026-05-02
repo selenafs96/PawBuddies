@@ -1,5 +1,14 @@
+
+import EditAnimalScreen from './(animals)/EditAnimalScreen';
+import RegistroAdoptantesScreen from './(volunteers)/registroAdoptantes';
+
+// export default function PawBuddies() {
+//   return <RegistroAdoptantesScreen/>;
+// }
+
+//ESTO ES LO QUE APARECERÁ UNA VEZ TENGAMOS TODAS LAS PANTALLAS CONECTADAS, REDIRIGIRÁ A LAS NOTICIAS AUTOMÁTICAMENTE Y PODREMOS EMPEZAR A NAVEGAR
 import { Redirect } from 'expo-router';
 
-export default function Index() {
-  return <Redirect href="/(noticias)/123" />;
+export default function PawBuddies() {
+  return <Redirect href="/(noticias)/noticias" />;
 }
