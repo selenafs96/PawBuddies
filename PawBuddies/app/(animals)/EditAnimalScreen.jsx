@@ -208,7 +208,7 @@ const createStyles = (insets) =>
     StyleSheet.create({
         mainContainer: { flex: 1, backgroundColor: '#FFFFFF' },
         centeredContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#FFFFFF' },
-        scrollContainer: { flex: 1, backgroundColor: '#FFFFFF', alignSelf: 'center', width: '100%', maxWidth: 500 },
+        scrollContainer: { flex: 1, backgroundColor: '#FFFFFF', alignSelf: 'center', width: '100%'},
         scrollContent: { flexGrow: 1, paddingTop: insets.top, paddingBottom: 0 },
         titleContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFFFF', paddingVertical: scaleSize(8) },
         title: {
