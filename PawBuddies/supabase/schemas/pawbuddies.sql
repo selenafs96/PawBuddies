@@ -28,10 +28,16 @@ CREATE TABLE usuario (
   id_usuario UUID PRIMARY KEY DEFAULT gen_random_uuid(), -- Mirar si con la autentificación de supabase tengo que poner auth.users()
   nombre VARCHAR(100) NOT NULL,
   apellidos TEXT,
-  email TEXT,
+  email TEXT NOT NULL,
   telefono TEXT,
   url_foto TEXT,
   rol TEXT NOT NULL,
+  localidad_preferida TEXT NOT NULL,
+  radio_maximo_km TEXT NOT NULL,
+  descripcion TEXT,
+  perros_propiedad INT,
+  gatos_propiedad INT,
+  otros_propiedad INT,
   id_protectora UUID REFERENCES protectora(id_protectora) ON DELETE CASCADE NOT NULL,
   CONSTRAINT check_rol CHECK (rol IN ('Administrador', 'Voluntario', 'Adoptante'))
 );
@@ -80,6 +86,7 @@ CREATE TABLE animal (
   genero TEXT NOT NULL,
   especie TEXT NOT NULL,
   raza TEXT NOT NULL,
+  tamano TEXT NOT NULL,
   caracter TEXT,
   presentacion TEXT,
   estado TEXT NOT NULL,
@@ -88,7 +95,8 @@ CREATE TABLE animal (
   id_usuario UUID REFERENCES usuario(id_usuario) ON DELETE CASCADE,
   id_colonia UUID REFERENCES colonia(id_colonia) ON DELETE CASCADE,
   CONSTRAINT check_estado CHECK (estado IN ('Adoptable', 'No Adoptable', 'Adoptado')),
-  CONSTRAINT check_especie CHECK (estado IN ('Perro', 'Gato'))
+  CONSTRAINT check_especie CHECK (especie IN ('Perro', 'Gato'))
+  CONSTRAINT check_tamano CHECK(tamano IN ('Grande', 'Mediano', 'Pequeño'))
 );
 
 CREATE TABLE ficha_sanitaria (
@@ -122,4 +130,12 @@ CREATE TABLE adopcion(
   id_usuario UUID REFERENCES usuario(id_usuario) ON DELETE CASCADE NOT NULL,
   id_animal UUID REFERENCES animal(id_animal) ON DELETE CASCADE NOT NULL,
   CONSTRAINT check_estado_adopcion CHECK (estado_adopcion IN ('Solicitada', 'En estudio', 'Aprobada', 'Rechazada', 'Finalizada'))
+);
+
+CREATE TABLE favorito (
+    id_favorito UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+    id_usuario UUID NOT NULL,
+    id_animal UUID NOT NULL,
+    CONSTRAINT fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    CONSTRAINT fk_animal FOREIGN KEY (id_animal)  REFERENCES animal(id_animal) ON DELETE CASCADE
 );

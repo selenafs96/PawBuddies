@@ -34,6 +34,22 @@ export const AnimalRepository = {
     if (error) throw new Error(error.message);
     return data;
   },
+  
+  async getByEspecieProtectora(especie, id_protectora) {
+    let query = supabase.from('animal').select('*');
+
+    if (id_protectora && id_protectora !== 'todos') {
+      query = query.eq('id_protectora', id_protectora);
+    }
+
+    if (especie && especie !== 'todos') {
+      query = query.eq('especie', especie);
+    }
+
+    const { data, error } = await query;
+    if (error) throw new Error(error.message);
+    return data;
+  },
 
   // ACTUALIZAR
   async update(id, updates) {
@@ -45,6 +61,16 @@ export const AnimalRepository = {
     return data;
   },
 
+  async add(newAnimal) {
+    const { data, error } = await supabase
+      .from('animal')
+      .insert([newAnimal])
+      .select();
+
+      if(error) throw new Error(error.message);
+      return data;
+  },
+
   // BORRAR
   async delete(id) {
     const { error } = await supabase
@@ -52,5 +78,64 @@ export const AnimalRepository = {
       .delete()
       .eq('id_animal', id);
     if (error) throw new Error(error.message);
+  },
+
+  async getConteoPerrosProtectora(id_usuario) {
+    try {
+      // 1. Obtenemos el id_protectora del usuario
+      const { data: usuario, error: userError } = await supabase
+        .from('usuario')
+        .select('id_protectora')
+        .eq('id_usuario', id_usuario)
+        .single();
+
+      if (userError || !usuario?.id_protectora) {
+        throw new Error('No se encontró la protectora del usuario');
+      }
+
+      // 2. Contamos los perros en la tabla 'animal' que pertenecen a esa protectora
+      // Usamos { count: 'exact', head: true } para que no traiga los datos, solo el número
+      const { count, error: countError } = await supabase
+        .from('animal')
+        .select('*', { count: 'exact', head: true })
+        .eq('id_protectora', usuario.id_protectora)
+        .eq('especie', 'Perro'); // Ajusta 'especie' y 'Perro' según tus nombres en la DB
+
+      if (countError) throw countError;
+
+      return count; // Devuelve el número total
+    } catch (error) {
+      console.error('Error en la consulta:', error.message);
+      return 0;
+    }
+  },
+  async getConteoGatosProtectora(id_usuario) {
+    try {
+      // 1. Obtenemos el id_protectora del usuario
+      const { data: usuario, error: userError } = await supabase
+        .from('usuario')
+        .select('id_protectora')
+        .eq('id_usuario', id_usuario)
+        .single();
+
+      if (userError || !usuario?.id_protectora) {
+        throw new Error('No se encontró la protectora del usuario');
+      }
+
+      // 2. Contamos los perros en la tabla 'animal' que pertenecen a esa protectora
+      // Usamos { count: 'exact', head: true } para que no traiga los datos, solo el número
+      const { count, error: countError } = await supabase
+        .from('animal')
+        .select('*', { count: 'exact', head: true })
+        .eq('id_protectora', usuario.id_protectora)
+        .eq('especie', 'Gato');
+
+      if (countError) throw countError;
+
+      return count; // Devuelve el número total
+    } catch (error) {
+      console.error('Error en la consulta:', error.message);
+      return 0;
+    }
   },
 };
