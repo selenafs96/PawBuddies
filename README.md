@@ -19,7 +19,7 @@ El servicio está orientado principalmente a tres segmentos interconectados:
 
 Pantallas de carga:
 <hr />
-<img width="524" height="1136" alt="1" src="https://github.com/user-attachments/assets/19dac789-e5ad-47c4-89f6-323636bc8b86" />
+<img width="393" height="852" alt="1" src="https://github.com/user-attachments/assets/19dac789-e5ad-47c4-89f6-323636bc8b86" />
 
 
 Login:
