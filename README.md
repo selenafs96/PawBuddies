@@ -18,9 +18,12 @@ El servicio está orientado principalmente a tres segmentos interconectados:
 - Ciudadanía (adoptantes): Personas interesadas en adoptar o colaborar, que buscan un catálogo actualizado y un proceso de interacción fluido y transparente.
 
 Pantallas de carga:
-<img width="500" height="518" alt="image" src="https://github.com/user-attachments/assets/44a8d369-4367-4439-97e6-fbb551822cf1" />
+<hr />
+<img width="1572" height="3408" alt="1" src="https://github.com/user-attachments/assets/19dac789-e5ad-47c4-89f6-323636bc8b86" />
+
 
 Login:
+<hr />
 <img width="272" height="578" alt="image" src="https://github.com/user-attachments/assets/52980f2d-45aa-4c1c-b515-407d7cd058d7" />
 
 Onboarding:
