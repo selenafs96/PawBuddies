@@ -17,43 +17,74 @@ El servicio está orientado principalmente a tres segmentos interconectados:
 - Voluntarios y gestores: Usuarios críticos que necesitan reducir su carga administrativa diaria y acceder a la información en tiempo real desde cualquier ubicación.
 - Ciudadanía (adoptantes): Personas interesadas en adoptar o colaborar, que buscan un catálogo actualizado y un proceso de interacción fluido y transparente.
 
-Pantallas de carga:
 <hr />
+
+
+Pantalla de carga:
+<br />
 <img width="236" height="511" alt="1" src="https://github.com/user-attachments/assets/19dac789-e5ad-47c4-89f6-323636bc8b86" />
+<img width="236" height="511" alt="2" src="https://github.com/user-attachments/assets/cf0e3c15-2896-4c7e-9726-b1ed805a0a75" />
+
+
+
+
+Noticias:
+<br />
+<img width="236" height="511" alt="3" src="https://github.com/user-attachments/assets/ace04ad6-3817-40fc-bc16-11adfe99653e" />
+<img width="236" height="511" alt="4" src="https://github.com/user-attachments/assets/50e43f36-2304-4cdb-be88-a898a6c255bd" />
+
+
+
+
+Adopción:
+<br />
+<img width="236" height="511" alt="5" src="https://github.com/user-attachments/assets/08f1a26a-f4b7-4d3b-ad01-e02fdf067f57" />
+<img width="236" height="511" alt="7" src="https://github.com/user-attachments/assets/7ae1058d-e039-454a-b243-11f8c715c087" />
+<img width="236" height="511" alt="8" src="https://github.com/user-attachments/assets/8a8dab4b-77ef-4d15-9ac0-a9dad00cf069" />
+<img width="236" height="511" alt="9" src="https://github.com/user-attachments/assets/03085d97-5a8e-4e00-a705-686c55d7a031" />
+
 
 
 Login:
-<hr />
-<img width="272" height="578" alt="image" src="https://github.com/user-attachments/assets/52980f2d-45aa-4c1c-b515-407d7cd058d7" />
+<br />
+<img width="236" height="511" alt="6" src="https://github.com/user-attachments/assets/356ce745-7a31-4da8-8902-3cdf019925c0" />
+
+
+
 
 Onboarding:
-<img width="276" height="582" alt="image" src="https://github.com/user-attachments/assets/72006ecf-7c6e-45f3-8bf4-5be09e66197f" />
-<img width="232" height="495" alt="image" src="https://github.com/user-attachments/assets/1ecba901-672a-45e9-ba96-2f5d9940b1eb" />
-<img width="255" height="556" alt="image" src="https://github.com/user-attachments/assets/7d7d1771-1c78-4cd0-9730-7794aa52fd68" />
-<img width="258" height="553" alt="image" src="https://github.com/user-attachments/assets/5f60a882-ea6c-4729-ab00-3e7130a69bf4" />
-<img width="258" height="553" alt="image" src="https://github.com/user-attachments/assets/29d0a6a7-5afd-4567-964a-6c11452b12b1" />
-
-Noticias:
-<img width="238" height="510" alt="image" src="https://github.com/user-attachments/assets/44684eab-baca-422b-8010-01408ab8684f" />
-<img width="234" height="499" alt="image" src="https://github.com/user-attachments/assets/3d566084-c614-476e-9c2d-4b490fb8cdbc" />
-
-Adopción:
-<img width="200" height="422" alt="image" src="https://github.com/user-attachments/assets/8991c3af-370f-4f40-b1a8-b860225b41a2" />
-<img width="244" height="515" alt="image" src="https://github.com/user-attachments/assets/0bbf807b-079a-4ea4-9c02-4a1805639e4f" />
-<img width="244" height="506" alt="image" src="https://github.com/user-attachments/assets/8c3eb3f4-220a-460a-a1b4-8daafd3099f0" />
-<img width="242" height="508" alt="image" src="https://github.com/user-attachments/assets/fafad84b-1799-47b2-a91f-dd953185c589" />
-<img width="236" height="511" alt="image" src="https://github.com/user-attachments/assets/3268d971-0e49-4ce5-bded-26cba14347da" />
-
-<img width="250" height="532" alt="image" src="https://github.com/user-attachments/assets/c41de3ae-c5d0-4b07-9e30-64a8506b6579" />
+<br />
+<img width="236" height="511" alt="Onboarding 1" src="https://github.com/user-attachments/assets/6f9a0b7b-4bfe-416b-b545-1c3b59688b18" />
+<img width="236" height="511" alt="Onboarding 2" src="https://github.com/user-attachments/assets/34cf5904-3567-4c94-9469-f5bc4996fb1c" />
+<img width="236" height="511" alt="Onboarding 3" src="https://github.com/user-attachments/assets/f37f88db-d9f3-4db6-8b6e-5a6320a8907a" />
+<img width="236" height="511" alt="Onboarding Adoptante" src="https://github.com/user-attachments/assets/10608bc5-8707-4838-94a7-5f359c3bc69d" />
+<img width="236" height="511" alt="Onboarding completo" src="https://github.com/user-attachments/assets/ae26d71c-6589-4e6d-bf1b-cd877167d56e" />
 
 
-Funcionalidades para voluntarios:
-<img width="268" height="556" alt="image" src="https://github.com/user-attachments/assets/6a889497-5711-4d5f-9fa5-706740251416" />
-<img width="248" height="549" alt="image" src="https://github.com/user-attachments/assets/77715c0c-949b-4243-b6fa-4588ec91b139" />
 
 
-Gestión de animales:
-<img width="252" height="554" alt="image" src="https://github.com/user-attachments/assets/75256a6f-287b-4f4c-a076-79f1fd7876af" />
+Perfil voluntario:
+<br />
+<img width="236" height="511" alt="10" src="https://github.com/user-attachments/assets/03fdba88-1a52-4c0e-b0a1-0979d8c9d82f" />
+<img width="236" height="511" alt="11" src="https://github.com/user-attachments/assets/8f8091fe-81c5-4e82-95f5-c9bc1f63554e" />
+<img width="236" height="511" alt="12" src="https://github.com/user-attachments/assets/28411cb9-b6ad-4741-be6c-8b3601f01542" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
